@@ -1,0 +1,6 @@
+App Client Client Id: 734373271881121802
+App Client Secret: doPO9_BZNSg19NDB4IJAX9_bcW9szeta
+
+Bot User Name: Brady's List Bot#7882
+Bot Token: NzM0MzczMjcxODgxMTIxODAy.XxRARQ.Q4YvJWTVNtohpRxVhSPbMiZ0nBM
+Perms: 201571329
