@@ -8,9 +8,9 @@ from discord.ext import commands
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-bot = commands.Bot(command_prefix="##", case_insensitive=True)
+bot = commands.Bot(command_prefix="##", case_insensitive=True, name="ChatNoteBot")
 
-class ChatNoteCommands(Cog, name="ChatNote Commands"):
+class ChatNoteCommands(Cog, name="ChatNote"):
     @commands.command(
         help="Adds a new note to your current notebook, or the specified notebook",
         brief="Adds a note to a notebook"
@@ -18,10 +18,6 @@ class ChatNoteCommands(Cog, name="ChatNote Commands"):
     async def note(self, ctx, *, text):
         note_text = text.strip()
         await ctx.channel.send("Noted: " + note_text)
-
-    # @commands.command(pass_context=True)
-    # async def help(self, ctx, *args):
-    #     return await commands.bot.DefaultHelpCommand(ctx, *args)
 
 @bot.event
 async def on_ready():
@@ -35,6 +31,7 @@ async def on_ready():
 
 # bot.remove_command("help")
 bot.add_cog(ChatNoteCommands())
+bot.help_command.cog = bot.cogs["ChatNote"]
 
 bot.run(DISCORD_TOKEN)
 
