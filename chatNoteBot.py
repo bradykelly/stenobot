@@ -22,6 +22,13 @@ class ChatNoteCommands(Cog, name="ChatNote"):
     @Cog.listener()
     async def on_ready(self):
 
+        # List guilds this bot is connected to.
+        guild_count = 0
+        for guild in self.bot.guilds:
+            print(f"- {guild.id} (name: {guild.name})")
+            guild_count += 1
+        print(f"{self.bot.user} has connected to Discord! In " + str(guild_count) + " guilds.")  
+
         # Greet on each available channel.
         text_channel_list = []
         for guild in self.bot.guilds:
@@ -30,50 +37,28 @@ class ChatNoteCommands(Cog, name="ChatNote"):
                     text_channel_list.append(channel)
 
         for channel in text_channel_list:
-            await channel.send(f"{self.bot.user} is ready and waiting.")
+            await channel.send(f"{self.bot.user} is ready and waiting.")     
 
-        # List guilds this bot is connected to.
-        guild_count = 0
-        for guild in self.bot.guilds:
-            print(f"- {guild.id} (name: {guild.name})")
-            guild_count += 1
-        print(f"{self.bot.user} has connected to Discord! In " + str(guild_count) + " guilds.")   
-
-    @Cog.listener()
-    async def on_command_error(self, ctx, error):
-        # Ignore commands with local error handlers.
-        if hasattr(ctx.command, "on_error"):
-            return
-
-        # Prevent any cogs with an overwritten cog_command_error being handled here
-        cog = ctx.cog
-        if cog:
-            if cog.get_overriden_method(cog.cog_command_error) is not None:
-                return
-
-        # Check for original exceptions raised and sent to CommandInvokeError. 
-        # If nothing is found we keep the exception passed to on_command_error.
-        error = getattr(error, 'original', error)
-
-        print(f"Ignoring exception in command {ctx.command}", file=sys.stderr)        
-
-    @commands.command(
-        help="Adds a new note to your current notebook, or the specified notebook",
-        brief="Adds a note to a notebook"
+    @commands.group(
+        help="Commands to help you manage your ChatNote notebook",
+        brief="Manage your notebook"
     )
-    async def note(self, ctx, action, *, text):
-        note_text = text.strip()
-        await ctx.channel.send(f"{action}: " + note_text)
+    async def note(self, ctx):
+        if ctx.invoked_subcommand is None:
+            await ctx.channel.send("First layer")
 
-    @note.error
-    async def note_handler(self, ctx, error):
-        if isinstance(error, MissingRequiredArgument):
-            if error.param.name == "action":
-                await ctx.send(f"{bot.command_prefix}note [add|find|list|delete] [text]")
+    @note.command(
+        help="Add some text to your current notebook",
+        brief="<text to add>"
+    )
+    async def add(self, ctx, text):
+        note_text = text.strip() 
+        await ctx.channel.send(r"add \"" + note_text + "\"")
 
-
-
-
+    @add.error
+    async def add_handler(self, ctx, error):
+        if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
+            await ctx.send_help("add")
 
 
 bot.add_cog(ChatNoteCommands(bot))
