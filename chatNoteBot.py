@@ -47,11 +47,35 @@ class ChatNoteCommands(Cog, name="ChatNote"):
         brief="Add text to a notebook",
         usage="[notebook-name] <text-to-add>: Notebook-name (optional) must be a single word"
     )
-    async def add(self, ctx,  text):
-        note_text = text.strip() 
-        # For now we always use the default notebook name, used when None is passed.
-        backend.insert_note(ctx.message.author.id, text, None) 
-        await ctx.channel.send(r"note added: " + note_text)
+    async def add(self, ctx,  notebook=None, *, text=None):
+        if (notebook is not None):
+            notebook = notebook.strip()        
+        if text is not None:
+            text = text.strip() 
+        backend.insert_note(ctx.message.author.id, text, notebook) 
+        await ctx.channel.send(r"note added: " + text)
+
+    @add.error
+    async def add_handler(self, ctx, error):
+        if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
+            await ctx.channel.send(f"Usage: {bot.command_prefix}note add <text-to-add>")
+
+    # List command
+    @note.command(
+        help="Lists all notes in yoour current notebook, or a named notebook",
+        brief="Lists all notes",
+        usage="[notebook-name]: Notebook-name (optional) must be a single word"
+    )
+    async def list(self, ctx, notebook=None):
+        if (notebook is None):
+            notebook = backend.DEFAULT_NOTEBOOK
+        notebook = notebook.strip() 
+        notes = backend.get_notes(ctx.message.author.id, notebook)
+        note_count = 0
+        for note in notes:            
+            await ctx.channel.send(f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}")
+            note_count += 1
+        await ctx.channel.send(f"{note_count} note(s) in '{notebook}'")
 
     # leave command
     @commands.command(hidden=True)
@@ -60,11 +84,7 @@ class ChatNoteCommands(Cog, name="ChatNote"):
         channel = ctx.message.author.channel
         await channel.leave()
 
-    @add.error
-    async def add_handler(self, ctx, error):
-        # TODO Find out why send_help didn't work.
-        if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
-            await ctx.channel.send(f"Usage: {bot.command_prefix}note add <text-to-add>")
+
 
 
 bot.add_cog(ChatNoteCommands(bot))
