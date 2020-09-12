@@ -1,3 +1,4 @@
+from asyncio.base_events import Server
 import discord
 import os
 import sys
@@ -34,7 +35,7 @@ class ChatNoteCommands(Cog, name="ChatNote"):
     @commands.group(
         help="Commands to help you manage your ChatNote notebook",
         brief="Manage your notebook",
-        usage=f"[add | find | list | del] text. Default is add."
+        usage=f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     )
     async def note(self, ctx):
         if ctx.invoked_subcommand is None:
@@ -42,27 +43,28 @@ class ChatNoteCommands(Cog, name="ChatNote"):
 
     # Add command
     @note.command(
-        help="Adds some text to your current notebook, or a named notebook",
-        brief="Adds text to a notebook",
-        usage="<text to add>"
+        help="Adds <text-to-add> to your current notebook, or a named notebook",
+        brief="Add text to a notebook",
+        usage="[notebook-name] <text-to-add>: Notebook-name (optional) must be a single word"
     )
-    async def add(self, ctx, text):
+    async def add(self, ctx,  text):
         note_text = text.strip() 
         # For now we always use the default notebook name, used when None is passed.
         backend.insert_note(ctx.message.author.id, text, None) 
         await ctx.channel.send(r"note added: " + note_text)
 
     # leave command
-    @commands.command()
+    @commands.command(hidden=True)
     async def leave(self, ctx):
-        #await bot.leave_server(ctx.message.server)
-        await ctx.message.author.guild.leave()
+        server = ctx.message.server
+        channel = ctx.message.author.channel
+        await channel.leave()
 
     @add.error
     async def add_handler(self, ctx, error):
         # TODO Find out why send_help didn't work.
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
-            await ctx.channel.send(f"Usage: {bot.command_prefix}note add <text>")
+            await ctx.channel.send(f"Usage: {bot.command_prefix}note add <text-to-add>")
 
 
 bot.add_cog(ChatNoteCommands(bot))

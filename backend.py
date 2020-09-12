@@ -18,7 +18,7 @@ def close_cursor(cursor):
     if (cursor.connection):
         cursor.connection.close()
 
-def insert_note(userId, text, notebook=None):
+def insert_note(userId, text, notebook=None):    
     if notebook is None:
         notebook = DEFAULT_NOTEBOOK
     insert_sql = """INSERT INTO 'notes' 
