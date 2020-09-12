@@ -30,16 +30,6 @@ class ChatNoteCommands(Cog, name="ChatNote"):
             guild_count += 1
         print(f"{self.bot.user} has connected to Discord! In " + str(guild_count) + " guilds.")  
 
-        # # Greet on each available channel.
-        # text_channel_list = []
-        # for guild in self.bot.guilds:
-        #     for channel in guild.channels:
-        #         if (channel.type.name == "text"):
-        #             text_channel_list.append(channel)
-
-        # for channel in text_channel_list:            
-        #     await channel.send(f"{self.bot.user} is ready and waiting.")     
-
     # 'note' command group
     @commands.group(
         help="Commands to help you manage your ChatNote notebook",
@@ -52,7 +42,7 @@ class ChatNoteCommands(Cog, name="ChatNote"):
 
     # Add command
     @note.command(
-        help="Adds some text to your current notebook, or the named notebook",
+        help="Adds some text to your current notebook, or a named notebook",
         brief="Adds text to a notebook",
         usage="<text to add>"
     )
