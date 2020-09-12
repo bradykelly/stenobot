@@ -52,6 +52,12 @@ class ChatNoteCommands(Cog, name="ChatNote"):
         backend.insert_note(ctx.message.author.id, text, None) 
         await ctx.channel.send(r"note added: " + note_text)
 
+    # leave command
+    @commands.command()
+    async def leave(self, ctx):
+        #await bot.leave_server(ctx.message.server)
+        await ctx.message.author.guild.leave()
+
     @add.error
     async def add_handler(self, ctx, error):
         # TODO Find out why send_help didn't work.
