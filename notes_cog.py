@@ -1,5 +1,4 @@
 import discord
-from common import BOT_NAME
 import dal
 import common
 from datetime import datetime
