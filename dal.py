@@ -60,3 +60,19 @@ def get_notes(userId, notebook=None):
     finally:
         close_cursor(cursor)
 
+def delete_note(userId, noteId):
+    del_sql = """DELETE 
+                    FROM notes 
+                    WHERE UserId = ?
+                        AND Id = ?"""
+    values = (userId, noteId)
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        cursor.execute(del_sql, values)
+        conn.commit()
+    except Exception as ex:
+        err = sys.exc_info()[0]
+    finally:
+        close_cursor(cursor)
+

@@ -1,4 +1,5 @@
 import discord
+from common import BOT_NAME
 import dal
 import common
 from datetime import datetime
@@ -29,7 +30,7 @@ class NoteCommands(Cog, name="NoteCommands"):
     async def on_ready(self):
         print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")  
 
-    # 'note' command group
+    # 'note' command
     @commands.group(
         help="Commands to help you manage your ChatNote notebook",
         brief="Use your notebook",
@@ -39,26 +40,24 @@ class NoteCommands(Cog, name="NoteCommands"):
         if ctx.invoked_subcommand is None:
             await ctx.channel.send("First layer")
 
-    # Add command
+    # 'add command
     @note.command(
         help="Add <text-to-add> to your current notebook, or a named notebook",
         brief="Add text to a notebook",
         usage="[notebook-name] <text-to-add>: Notebook-name (optional) must be a single word"
     )
-    async def add(self, ctx, text=None, notebook=None):
+    async def add(self, ctx, text, notebook=None):
         if (notebook is not None):
             notebook = notebook.strip()        
-        if text is not None:
-            text = text.strip() 
         dal.insert_note(ctx.message.author.id, text, notebook) 
         await self.show_message_embed(ctx, r"note added: " + text)
 
     @add.error
     async def add_handler(self, ctx, error):
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
-            await ctx.channel.send(f"Usage: {self.bot.command_prefix}note add <text-to-add>")
+            await self.show_message_embed(ctx, f"{self.bot.command_prefix}note add <text-to-add>", "Usage")
 
-    # List command
+    # 'list' command
     @note.command(
         help="List all notes in your current notebook, or a named notebook",
         brief="List all notes",
@@ -79,7 +78,7 @@ class NoteCommands(Cog, name="NoteCommands"):
         list_text += "\n" + f"{note_count} note(s) in '{notebook}'"
         await self.show_message_embed(ctx, list_text, f"Notes in {notebook}")
 
-    # del command
+    # 'del' command
     @note.command(
         help="Delete a note from your notebooks",
         brief="Delete note",
@@ -88,14 +87,29 @@ class NoteCommands(Cog, name="NoteCommands"):
     )
     async def delnote(self, ctx, note_id):
         del_id = int(note_id)
+        dal.delete_note(ctx.author.id, del_id)
+        await self.show_message_embed(ctx, f"Note #{del_id} deleted")
 
     @delnote.error
     async def delnote_handler(self, ctx, error):
         if isinstance(error, MissingRequiredArgument) and error.param.name == "note_id":
-            usage = f"Usage: {self.bot.command_prefix}note del <note_id>"
-            await ctx.channel.send(usage)
+            usage = f"{self.bot.command_prefix}note del <note_id>"
+            await self.show_message_embed(ctx, usage, "Usage")
 
-    # leave command
+    @commands.command(
+        help="Shows the About info for this bot",
+        brief="Shows About info",
+        name="about"
+    )
+    async def show_about(self, ctx):
+        msg = "No help text was found"        
+        with open("about.txt", "r") as f:
+            about = f.read()
+            if about is not None:
+                about = about.strip()
+            await self.show_message_embed(ctx, about, f"About {common.BOT_NAME}")
+            
+    # 'leave' command
     @commands.command(
         hidden=True
     )
