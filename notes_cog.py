@@ -6,6 +6,8 @@ from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import MissingRequiredArgument
 from discord.ext import commands
 
+NOTE_COMMANDS = ["add", "list", "del", "find"]
+
 class NoteCommands(Cog, name="NoteCommands"):
     
     def __init__(self, bot):
@@ -18,13 +20,21 @@ class NoteCommands(Cog, name="NoteCommands"):
             guild_count += 1
         return guild_count
 
-    async def show_message_embed(self, ctx: commands.Context, message, title=None):
+    async def show_message_embed(self, ctx, message, title=None):
         if title is None:
             title = f"Command Output"
-        em = discord.Embed(title=title, description=message, colour=0xBD362F)
-        #em.set_footer("ChatNote (c) 2020 Erisia")
+        em = discord.Embed(title=title, description="```\n" + message + "\n```", colour=0xBD362F)
+        em.set_footer(text="ChatNote (c) 2020 Erisia")
         em.timestamp = datetime.utcnow()
         await ctx.send(embed=em)
+
+    async def show_message_code(self, ctx, message, title=None):
+        msg = "```\n"
+        if title is not None:
+            msg += title + "\n\n"
+        msg += message
+        msg += "\n```"
+        await ctx.send(msg)
 
     @Cog.listener()
     async def on_ready(self):
@@ -34,29 +44,28 @@ class NoteCommands(Cog, name="NoteCommands"):
     @commands.group(
         help="Commands to help you manage your ChatNote notebook",
         brief="Use your notebook",
-        usage= f"{common.COMMAND_PREFIX}note [add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
+        usage= f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     )
     async def note(self, ctx):
-        if ctx.invoked_subcommand is None:
-            await self.show_message_embed(ctx, ctx.command.usage, "Usage")
+        if ctx.invoked_subcommand is None: # or ctx.invoked_subcommand not in NOTE_COMMANDS:
+            await self.show_message_code(ctx, ctx.command.usage, "Usage")
 
-    # 'add command
+    # 'add' command
     @note.command(
         help="Add <text-to-add> to your current notebook, or a named notebook",
         brief="Add text to a notebook",
-        usage="[notebook-name] <text-to-add>: Notebook-name (optional) must be a single word"
+        usage="<text-to-add> [notebook-name]: Name of a notebook to add a note to. Default is 'Main'"
     )
     async def add(self, ctx, text, notebook=None):
         if (notebook is not None):
             notebook = notebook.strip()        
         dal.insert_note(ctx.message.author.id, text, notebook) 
-        await self.show_message_embed(ctx, r"note added: " + text)
+        await self.show_message_code(ctx, r"note added: " + text)
 
     @add.error
     async def add_handler(self, ctx, error):
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
-            await self.show_message_embed(ctx, f"{self.bot.command_prefix}note add <text-to-add>", "Usage")
-
+            await self.show_message_code(ctx, f"{self.bot.command_prefix}note {ctx.command.name} {ctx.command.usage}", "Usage")
     # 'list' command
     @note.command(
         help="List all notes in your current notebook, or a named notebook",
@@ -75,7 +84,7 @@ class NoteCommands(Cog, name="NoteCommands"):
             list_text += msg + "\n"
             note_count += 1
         list_text += "\n" + f"{note_count} note(s) in '{notebook}'"
-        await self.show_message_embed(ctx, list_text, f"Notes in {notebook}")
+        await self.show_message_code(ctx, list_text, f"Notes in {notebook}")
 
     # 'del' command
     @note.command(
@@ -87,13 +96,13 @@ class NoteCommands(Cog, name="NoteCommands"):
     async def delnote(self, ctx, note_id):
         del_id = int(note_id)
         dal.delete_note(ctx.author.id, del_id)
-        await self.show_message_embed(ctx, f"Note #{del_id} deleted")
+        await self.show_message_code(ctx, f"Note #{del_id} deleted")
 
     @delnote.error
     async def delnote_handler(self, ctx, error):
         if isinstance(error, MissingRequiredArgument) and error.param.name == "note_id":
-            usage = f"{self.bot.command_prefix}note del <note_id>"
-            await self.show_message_embed(ctx, usage, "Usage")
+            usage = f"{self.bot.command_prefix}note {ctx.command.name} <note_id>"
+            await self.show_message_code(ctx, usage, "Usage")
 
     @commands.command(
         help="Show the About info for this bot",
@@ -106,7 +115,7 @@ class NoteCommands(Cog, name="NoteCommands"):
             about = f.read()
             if about is not None:
                 about = about.strip()
-            await self.show_message_embed(ctx, about, f"About {common.BOT_NAME}")
+            await self.show_message_code(ctx, about, f"About {common.BOT_NAME}")
             
     # 'leave' command
     @commands.command(
