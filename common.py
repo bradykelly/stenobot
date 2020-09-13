@@ -1,2 +1,3 @@
 BOT_NAME = "ChatNoteBot"
 DEFAULT_NOTEBOOK = "Main"
+COMMAND_PREFIX = "##"

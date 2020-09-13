@@ -11,6 +11,7 @@ class NoteCommands(Cog, name="NoteCommands"):
     
     def __init__(self, bot):
         self.bot = bot
+        self.note_usage = f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     
     def get_guild_count(self):
         guild_count = 0
@@ -30,15 +31,15 @@ class NoteCommands(Cog, name="NoteCommands"):
     async def on_ready(self):
         print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")  
 
-    # 'note' command
+    # 'note' command    
     @commands.group(
         help="Commands to help you manage your ChatNote notebook",
         brief="Use your notebook",
-        usage=f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
+        usage= f"{common.COMMAND_PREFIX}note [add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     )
     async def note(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.channel.send("First layer")
+            await self.show_message_embed(ctx, ctx.command.usage, "Usage")
 
     # 'add command
     @note.command(
@@ -72,7 +73,6 @@ class NoteCommands(Cog, name="NoteCommands"):
         list_text = ""
         for note in notes:   
             msg = f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}"
-            #await ctx.channel.send(msg)
             list_text += msg + "\n"
             note_count += 1
         list_text += "\n" + f"{note_count} note(s) in '{notebook}'"
@@ -97,8 +97,8 @@ class NoteCommands(Cog, name="NoteCommands"):
             await self.show_message_embed(ctx, usage, "Usage")
 
     @commands.command(
-        help="Shows the About info for this bot",
-        brief="Shows About info",
+        help="Show the About info for this bot",
+        brief="Show About info",
         name="about"
     )
     async def show_about(self, ctx):
