@@ -3,8 +3,18 @@
 		"path": "$ROOTPATH$\\notes_cog.py",
 		"bookmarks": [
 			{
-				"line": 52,
+				"line": 19,
+				"column": 14,
+				"label": ""
+			},
+			{
+				"line": 53,
 				"column": 41,
+				"label": ""
+			},
+			{
+				"line": 79,
+				"column": 13,
 				"label": ""
 			}
 		]

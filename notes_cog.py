@@ -1,5 +1,6 @@
 import discord
 import dal
+import common
 from datetime import datetime
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import MissingRequiredArgument
@@ -18,7 +19,7 @@ class NoteCommands(Cog, name="NoteCommands"):
 
     async def show_message_embed(self, ctx: commands.Context, message, title=None):
         if title is None:
-            title = "Command Feedback"
+            title = f"Command Output"
         em = discord.Embed(title=title, description=message, colour=0xBD362F)
         #em.set_footer("ChatNote (c) 2020 Erisia")
         em.timestamp = datetime.utcnow()
@@ -50,7 +51,7 @@ class NoteCommands(Cog, name="NoteCommands"):
         if text is not None:
             text = text.strip() 
         dal.insert_note(ctx.message.author.id, text, notebook) 
-        await self.show_message_embed(ctx.channel, r"note added: " + text)
+        await self.show_message_embed(ctx, r"note added: " + text)
 
     @add.error
     async def add_handler(self, ctx, error):
@@ -65,14 +66,18 @@ class NoteCommands(Cog, name="NoteCommands"):
     )
     async def list(self, ctx, notebook=None):
         if (notebook is None):
-            notebook = dal.DEFAULT_NOTEBOOK
+            notebook = common.DEFAULT_NOTEBOOK
         notebook = notebook.strip() 
         notes = dal.get_notes(ctx.message.author.id, notebook)
         note_count = 0
-        for note in notes:            
-            await ctx.channel.send(f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}")
+        list_text = ""
+        for note in notes:   
+            msg = f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}"
+            #await ctx.channel.send(msg)
+            list_text += msg + "\n"
             note_count += 1
-        await ctx.channel.send(f"{note_count} note(s) in '{notebook}'")
+        list_text += "\n" + f"{note_count} note(s) in '{notebook}'"
+        await self.show_message_embed(ctx, list_text, f"Notes in {notebook}")
 
     # del command
     @note.command(

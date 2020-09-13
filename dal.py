@@ -2,10 +2,9 @@ import sqlite3
 import sys
 from datetime import datetime
 from note import Note
+import common
 
 #TODO: Proper exception handling
-
-DEFAULT_NOTEBOOK = "Main"
 
 sqlite_connection = None
 cursor = None   
@@ -23,7 +22,7 @@ def close_cursor(cursor):
 
 def insert_note(userId, text, notebook=None):    
     if notebook is None:
-        notebook = DEFAULT_NOTEBOOK
+        notebook = common.DEFAULT_NOTEBOOK
     insert_sql = """INSERT INTO 'notes' 
                     ('Time', 'UserId', 'Notebook', 'Text') 
                     VALUES(?, ?, ?, ?);"""
@@ -40,7 +39,7 @@ def insert_note(userId, text, notebook=None):
 
 def get_notes(userId, notebook=None):
     if notebook is None:
-        notebook = DEFAULT_NOTEBOOK
+        notebook = common.DEFAULT_NOTEBOOK
     select_sql = """SELECT Id, Time, Text 
                     FROM notes
                     WHERE UserId = ?
