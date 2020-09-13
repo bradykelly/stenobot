@@ -1,6 +1,5 @@
 import sqlite3
 import sys
-from sqlite3.dbapi2 import Cursor
 from datetime import datetime
 from note import Note
 
