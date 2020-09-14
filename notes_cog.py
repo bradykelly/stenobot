@@ -5,40 +5,23 @@ from datetime import datetime
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import MissingRequiredArgument
 from discord.ext import commands
+from chat_note_cog import ChatNoteCog
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
-class NoteCommands(Cog, name="NoteCommands"):
+class NoteCommands(ChatNoteCog, name="NoteCommands"):
     
     def __init__(self, bot):
         self.bot = bot
-        self.note_usage = f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     
     def get_guild_count(self):
+        '''
+        Gets the number of guilds this bot is connected to
+        '''
         guild_count = 0
         for guild in self.bot.guilds:
             guild_count += 1
         return guild_count
-
-    async def show_message_embed(self, ctx, message, title=None):
-        if title is None:
-            title = f"Command Output"
-        em = discord.Embed(title=title, description="```\n" + message + "\n```", colour=0xBD362F)
-        em.set_footer(text="ChatNote (c) 2020 Erisia")
-        em.timestamp = datetime.utcnow()
-        await ctx.send(embed=em)
-
-    async def show_message_code(self, ctx, message, title=None):
-        msg = "```\n"
-        if title is not None:
-            msg += title + "\n\n"
-        msg += message
-        msg += "\n```"
-        await ctx.send(msg)
-
-    @Cog.listener()
-    async def on_ready(self):
-        print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")  
 
     # 'note' command    
     @commands.group(
@@ -47,8 +30,11 @@ class NoteCommands(Cog, name="NoteCommands"):
         usage= f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     )
     async def note(self, ctx):
+        '''
+        The root command for the Note group
+        '''
         if ctx.invoked_subcommand is None: # or ctx.invoked_subcommand not in NOTE_COMMANDS:
-            await self.show_message_code(ctx, ctx.command.usage, "Usage")
+            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
 
     # 'add' command
     @note.command(
@@ -57,15 +43,21 @@ class NoteCommands(Cog, name="NoteCommands"):
         usage="<text-to-add> [notebook-name]: Name of a notebook to add a note to. Default is 'Main'"
     )
     async def add(self, ctx, text, notebook=None):
+        '''
+        Writes a note to a notebook
+        '''
         if (notebook is not None):
             notebook = notebook.strip()        
         dal.insert_note(ctx.message.author.id, text, notebook) 
-        await self.show_message_code(ctx, r"note added: " + text)
+        await self.show_message_codeblock(ctx, r"note added: " + text)
 
     @add.error
     async def add_handler(self, ctx, error):
+        '''
+        Error handler for the 'add' command
+        '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
-            await self.show_message_code(ctx, f"{self.bot.command_prefix}note {ctx.command.name} {ctx.command.usage}", "Usage")
+            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
     # 'list' command
     @note.command(
         help="List all notes in your current notebook, or a named notebook",
@@ -73,6 +65,9 @@ class NoteCommands(Cog, name="NoteCommands"):
         usage="[notebook-name]: Notebook-name (optional) must be a single word"
     )
     async def list(self, ctx, notebook=None):
+        '''
+        Lists all notes in the default notebook or a named notebook
+        '''
         if (notebook is None):
             notebook = common.DEFAULT_NOTEBOOK
         notebook = notebook.strip() 
@@ -84,7 +79,7 @@ class NoteCommands(Cog, name="NoteCommands"):
             list_text += msg + "\n"
             note_count += 1
         list_text += "\n" + f"{note_count} note(s) in '{notebook}'"
-        await self.show_message_code(ctx, list_text, f"Notes in {notebook}")
+        await self.show_message_codeblock(ctx, list_text, f"Notes in {notebook}")
 
     # 'del' command
     @note.command(
@@ -94,29 +89,22 @@ class NoteCommands(Cog, name="NoteCommands"):
         name="del"
     )
     async def delnote(self, ctx, note_id):
+        '''
+        Deletes a note, by note_id, from the notebook it is in
+        '''
         del_id = int(note_id)
         dal.delete_note(ctx.author.id, del_id)
-        await self.show_message_code(ctx, f"Note #{del_id} deleted")
+        await self.show_message_codeblock(ctx, f"Note #{del_id} deleted")
 
     @delnote.error
     async def delnote_handler(self, ctx, error):
+        '''
+        Error hanlder for the 'delnote' command
+        '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "note_id":
             usage = f"{self.bot.command_prefix}note {ctx.command.name} <note_id>"
-            await self.show_message_code(ctx, usage, "Usage")
-
-    @commands.command(
-        help="Show the About info for this bot",
-        brief="Show About info",
-        name="about"
-    )
-    async def show_about(self, ctx):
-        msg = "No help text was found"        
-        with open("about.txt", "r") as f:
-            about = f.read()
-            if about is not None:
-                about = about.strip()
-            await self.show_message_code(ctx, about, f"About {common.BOT_NAME}")
-            
+            await self.show_message_codeblock(ctx, usage, "Usage")
+           
     # 'leave' command
     @commands.command(
         hidden=True
