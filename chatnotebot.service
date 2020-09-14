@@ -1,0 +1,14 @@
+[Unit]
+Description=ChatNoteBot
+After=multi-user.target
+[Service]
+WorkingDirectory=/home/projects/chatnotebot
+User=chatnotebot
+Group=chatnotebot
+ExecStart=/usr/bin/python3 /home/projects/chatnotebot/bot.py --no-prompt
+Type=idle
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
