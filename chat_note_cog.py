@@ -1,5 +1,6 @@
 
 import discord
+from discord.ext.commands.errors import CommandNotFound
 import common
 from datetime import datetime
 from discord.ext import commands
@@ -44,7 +45,12 @@ class ChatNoteCog(Cog):
         '''
         Prints details of a new Discord connection
         '''
-        print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")  
+        print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")
+
+    @Cog.listener()
+    async def on_command_error(self, ctx, error)  :
+        if isinstance(error, CommandNotFound):
+            hlp = await ctx.send_help()
 
     @commands.command(
         help="Show the About info for this bot",

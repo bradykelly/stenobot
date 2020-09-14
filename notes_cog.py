@@ -3,13 +3,13 @@ import dal
 import common
 from datetime import datetime
 from discord.ext.commands.cog import Cog
-from discord.ext.commands.errors import MissingRequiredArgument
+from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chat_note_cog import ChatNoteCog
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
-class NoteCommands(ChatNoteCog, name="NoteCommands"):
+class NoteCommands(ChatNoteCog, name="ChatNote Commands"):
     
     def __init__(self, bot):
         self.bot = bot
@@ -33,7 +33,15 @@ class NoteCommands(ChatNoteCog, name="NoteCommands"):
         '''
         The root command for the Note group
         '''
-        if ctx.invoked_subcommand is None: # or ctx.invoked_subcommand not in NOTE_COMMANDS:
+        if ctx.invoked_subcommand is None or (ctx.invoked_subcommand is not None and ctx.invoked_subcommand.name not in NOTE_COMMANDS):
+            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
+
+    @note.error
+    async def note_handler(self, ctx, error):
+        '''
+        Error handler for all commands
+        '''
+        if isinstance(error, CommandNotFound):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
 
     # 'add' command
