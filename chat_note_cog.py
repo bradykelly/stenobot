@@ -20,7 +20,7 @@ class ChatNoteCog(Cog):
 
     async def show_message_embed(self, ctx, message, title=None):
         '''
-        Shows the user information in an embed
+        Shows the user a message in an embed
         '''
         if title is None:
             title = f"Command Output"
@@ -50,7 +50,14 @@ class ChatNoteCog(Cog):
     @Cog.listener()
     async def on_command_error(self, ctx, error)  :
         if isinstance(error, CommandNotFound):
-            hlp = await ctx.send_help()
+            await ctx.send_help()
+
+    @Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        if message.content.startswith(">--"):
+            return
 
     @commands.command(
         help="Show the About info for this bot",
