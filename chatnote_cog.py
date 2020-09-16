@@ -6,8 +6,10 @@ from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 
-class ChatNoteCog(Cog):
-
+class ChatNoteCommands(Cog):
+    '''
+    Base class for all cogs in the ChatNoteBot
+    '''
     def __init__(self, bot):
         self.bot = bot
 

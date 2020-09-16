@@ -1,6 +1,6 @@
 import os
 import common
-from notes_cog import NoteCommands
+from note_cog import NoteCommands
 from dotenv import load_dotenv
 from discord.ext import commands
 
