@@ -42,31 +42,6 @@ class ChatNoteCommands(Cog):
         msg += "\n```"
         await ctx.send(msg)
 
-    @Cog.listener()
-    async def on_ready(self):
-        '''
-        Prints details of a new Discord connection
-        '''
-        print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")
 
-    @Cog.listener()
-    async def on_command_error(self, ctx, error)  :
-        if isinstance(error, CommandNotFound):
-            await ctx.send_help()
 
-    @commands.command(
-        help="Show the About info for this bot",
-        brief="Show About info",
-        name="about"
-    )
-    async def show_about(self, ctx):
-        '''
-        Shows the about info for this bot
-        '''     
-        with open("about.txt", "r") as f:
-            about = f.read()
-            if about is not None:
-                about = about.strip()
-            else:
-                about = "No help text was found on file"
-            await self.show_message_codeblock(ctx, about, f"About {common.BOT_NAME}")
+

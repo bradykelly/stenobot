@@ -76,3 +76,17 @@ def delete_note(userId, noteId):
     finally:
         close_cursor(cursor)
 
+def set_prefix(prefix):
+    update_sql = """UPDATE config
+                        SET command_prefix = "
+                        WHERE Id = 1"""
+    values = (prefix)
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        cursor.execute(update_sql, values)
+        conn.commit()
+    except Exception as ex:
+        err = sys.exc_info()[0]
+    finally:
+        close_cursor(cursor)

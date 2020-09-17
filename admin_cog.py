@@ -1,9 +1,11 @@
 import dal
 import common
+import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chatnote_cog import ChatNoteCommands
+
 
 class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
     '''
@@ -21,10 +23,5 @@ class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
         '''
         Sets the command prefix for this bot
         '''     
-        with open("about.txt", "r") as f:
-            about = f.read()
-            if about is not None:
-                about = about.strip()
-            else:
-                about = "No help text was found on file"
-            await self.show_message_codeblock(ctx, about, f"About {common.BOT_NAME}")        
+        dal.set_prefix(prefix.strip())
+      

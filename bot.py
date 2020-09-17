@@ -1,6 +1,7 @@
 import os
 import common
 from note_cog import NoteCommands
+from misc_cog import MiscCommands
 from dotenv import load_dotenv
 from discord.ext import commands
 
@@ -17,6 +18,7 @@ async def on_message(message):
         return
     await bot.process_commands(message)
 
+bot.add_cog(MiscCommands(bot))
 bot.add_cog(NoteCommands(bot))
 bot.help_command.cog = bot.cogs["ChatNote Commands"]
 

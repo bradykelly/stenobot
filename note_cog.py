@@ -14,15 +14,6 @@ class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
     def __init__(self, bot):
         self.bot = bot
     
-    def get_guild_count(self):
-        '''
-        Gets the number of guilds this bot is connected to
-        '''
-        guild_count = 0
-        for guild in self.bot.guilds:
-            guild_count += 1
-        return guild_count
-
     # 'note' command    
     @commands.group(
         help="Commands to help you manage your ChatNote notebook",
