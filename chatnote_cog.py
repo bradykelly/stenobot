@@ -54,13 +54,6 @@ class ChatNoteCommands(Cog):
         if isinstance(error, CommandNotFound):
             await ctx.send_help()
 
-    @Cog.listener()
-    async def on_message(self, message):
-        if message.author.bot:
-            return
-        if message.content.startswith(">--"):
-            return
-
     @commands.command(
         help="Show the About info for this bot",
         brief="Show About info",

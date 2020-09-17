@@ -1,7 +1,5 @@
-import discord
 import dal
 import common
-from datetime import datetime
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
@@ -11,7 +9,7 @@ NOTE_COMMANDS = ["add", "list", "del", "find"]
 
 class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
     '''
-    Cog for the 'note' command and subcommans
+    Cog for the 'note' command and subcommands
     '''
     def __init__(self, bot):
         self.bot = bot
