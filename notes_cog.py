@@ -7,7 +7,7 @@ from chatnote_cog import ChatNoteCommands
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
-class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
+class NotesCommands(ChatNoteCommands, name="Notes Commands"):
     '''
     Cog for the 'note' command and subcommands
     '''
@@ -57,6 +57,7 @@ class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
         '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
+            
     # 'list' command
     @note.command(
         help="List all notes in your current notebook, or a named notebook",

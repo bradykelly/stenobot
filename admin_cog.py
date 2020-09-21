@@ -17,7 +17,8 @@ class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
     @commands.command(
         help="Set the command prefix for this bot",
         brief="Set command prefix",
-        name="prefix"
+        name="prefix",
+        category="ChatNote"
     )
     async def set_prefix(self, ctx, prefix):
         '''

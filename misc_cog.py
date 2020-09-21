@@ -5,7 +5,7 @@ from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chatnote_cog import ChatNoteCommands
 
-class MiscCommands(ChatNoteCommands):
+class MiscCommands(ChatNoteCommands, name="Misc. Commands"):
     '''
     Cog for misc commands and events
     '''
@@ -21,7 +21,8 @@ class MiscCommands(ChatNoteCommands):
     @commands.command(
         help="Show the About info for this bot",
         brief="Show About info",
-        name="about"
+        name="about",
+        category="ChatNote"
     )
     async def show_about(self, ctx):
         '''

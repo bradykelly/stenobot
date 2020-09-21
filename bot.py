@@ -1,9 +1,10 @@
 import os
 import common
-from note_cog import NoteCommands
+from notes_cog import NotesCommands
 from misc_cog import MiscCommands
 from dotenv import load_dotenv
 from discord.ext import commands
+from books_cog import BooksCommands
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
@@ -18,9 +19,10 @@ async def on_message(message):
         return
     await bot.process_commands(message)
 
+bot.add_cog(NotesCommands(bot))
+bot.add_cog(BooksCommands(bot))
 bot.add_cog(MiscCommands(bot))
-bot.add_cog(NoteCommands(bot))
-bot.help_command.cog = bot.cogs["ChatNote Commands"]
+bot.help_command.cog = bot.cogs["Notes Commands"]
 
 bot.run(DISCORD_TOKEN)
 

@@ -20,7 +20,10 @@ def close_cursor(cursor):
     if (cursor.connection):
         cursor.connection.close()
 
-def insert_note(userId, text, notebook=None):    
+def insert_note(userId, text, notebook=None):   
+    '''
+    Insert a note into a named notebook or the default notebook
+    ''' 
     if notebook is None:
         notebook = common.DEFAULT_NOTEBOOK
     insert_sql = """INSERT INTO 'notes' 
@@ -38,6 +41,9 @@ def insert_note(userId, text, notebook=None):
         close_cursor(cursor)
 
 def get_notes(userId, notebook=None):
+    '''
+    Gets all notes in a named notebook or the default notebook
+    ''' 
     if notebook is None:
         notebook = common.DEFAULT_NOTEBOOK
     select_sql = """SELECT Id, Time, Text 
@@ -61,6 +67,9 @@ def get_notes(userId, notebook=None):
         close_cursor(cursor)
 
 def delete_note(userId, noteId):
+    '''
+    Deletes a note by Id from whatever notebook is in
+    ''' 
     del_sql = """DELETE 
                     FROM notes 
                     WHERE UserId = ?
@@ -77,6 +86,9 @@ def delete_note(userId, noteId):
         close_cursor(cursor)
 
 def set_prefix(prefix):
+    """
+    Sets the global command prefix
+    """
     update_sql = """UPDATE config
                         SET command_prefix = "
                         WHERE Id = 1"""
@@ -90,3 +102,26 @@ def set_prefix(prefix):
         err = sys.exc_info()[0]
     finally:
         close_cursor(cursor)
+
+def get_books(userId):
+    """
+    List all notebooks for a given user
+    """
+    select_sql = """SELECT count(*) Num, Notebook 
+                    FROM notes
+                    WHERE UserId = ?
+                    GROUP BY Notebook"""
+    values = (userId, )
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        cursor.execute(select_sql, values)
+        rows = cursor.fetchall()
+        books = []
+        for row in rows:
+            books.append((row["num"], row["notebook"]))
+        return books
+    except Exception as e:
+        err = sys.exc_info()[0]
+    finally:
+        close_cursor(cursor)        
