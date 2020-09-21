@@ -29,7 +29,7 @@ def insert_note(userId, text, notebook=None):
     insert_sql = """INSERT INTO 'notes' 
                     ('Time', 'UserId', 'Notebook', 'Text') 
                     VALUES(?, ?, ?, ?);"""
-    values = (datetime.now(), userId, notebook.lower(), text)
+    values = (datetime.now(), userId, notebook.strip().lower(), text)
     cursor = None
     try:
         conn, cursor = open_cursor()
@@ -50,7 +50,7 @@ def get_notes(userId, notebook=None):
                     FROM notes
                     WHERE UserId = ?
                     and Notebook = ?;"""
-    values = (userId, notebook.lower())
+    values = (userId, notebook.strip().lower())
     cursor = None
     try:
         conn, cursor = open_cursor()
@@ -125,3 +125,30 @@ def get_books(userId):
         err = sys.exc_info()[0]
     finally:
         close_cursor(cursor)        
+
+    def del_notebook(userId, notebook):
+        """
+        Deletes a notebook.
+        """
+        count_sql = """SELECT count(*) Count
+                        FROM notes
+                        WHERE Notebook = ? 
+                            and UserId = ?"""
+        delete_sql = """DELETE 
+                        FROM notes
+                        WHERE Notebook = ? 
+                            and UserId = ?"""
+        values = (notebook.strip().lower(), userId)
+        cursor = None
+        try:
+            conn, cursor = open_cursor()
+            cursor.execute(count_sql, values)
+            row = cursor.fetchone()
+            count = row["Count"]
+            if count > 0:
+                ret = cursor.execute(delete_sql, values)
+            return count
+        except Exception as e:
+            err = sys.exc_info()[0]
+        finally:
+            close_cursor(cursor)  

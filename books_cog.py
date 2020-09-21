@@ -61,4 +61,30 @@ class BooksCommands(ChatNoteCommands, name="Notebook Commands"):
         '''
         if isinstance(error, MissingRequiredArgument):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
-            
+
+    # 'del' command
+    @books.command(
+        help="Delete a notebook. I.e. Delete all notes in the notebook",
+        brief="Delete a notebook",
+        usage="[name]: Name of a notebook to delete",
+        name="del",
+        aliases=["delete"]
+    )
+    async def del_book(self, ctx, name):
+        '''
+        Deletes a notebook
+        '''
+        count = dal.del_notebook(ctx.message.author.id, name)
+
+        if count > 0:
+            await self.show_message_codeblock(ctx, f"Notebook '{name}' deleted' ", "Delete Noteboook")
+        else:
+            await self.show_message_codeblock(ctx, f"Notebook :'{name}' doesn't exist", "Delete Noteboook")
+
+    @del_book.error
+    async def del_book_handler(self, ctx, error):
+        '''
+        Error handler for the 'del' command
+        '''
+        if isinstance(error, MissingRequiredArgument):
+            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")

@@ -15,8 +15,6 @@ bot = commands.Bot(command_prefix=common.COMMAND_PREFIX, case_insensitive=True, 
 async def on_message(message):
     if message.author.bot:
         return
-    if message.content.startswith(">--"):
-        return
     await bot.process_commands(message)
 
 bot.add_cog(NotesCommands(bot))
