@@ -85,19 +85,42 @@ def delete_note(userId, noteId):
     finally:
         close_cursor(cursor)
 
-def set_prefix(prefix):
+def set_prefixes(guildId, prefixes):
     """
-    Sets the global command prefix
+    Sets the command prefixes for a given guild
     """
-    update_sql = """UPDATE config
-                        SET command_prefix = "
-                        WHERE Id = 1"""
-    values = (prefix)
+    upsert_sql = """INSERT INTO guild_config(guildId, commandPrefixes)
+                        VALUES(?, ?)
+                        ON CONFLICT(guildId) DO UPDATE SET commandPrefixes = excluded.commandPrefixes;"""
+    values = (guildId, prefixes)
     cursor = None
     try:
         conn, cursor = open_cursor()
-        cursor.execute(update_sql, values)
+        cursor.execute(upsert_sql, values)
         conn.commit()
+    except Exception as ex:
+        err = sys.exc_info()[0]
+    finally:
+        close_cursor(cursor)
+
+def get_prefixes(guildId):
+    """
+    Gets the command prefixes for a given guild
+    """
+    select_sql = """SELECT commandPrefixes 
+                    FROM guild_config
+                    WHERE guildId = ?;"""
+    values = (guildId,)
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        rows = cursor.fetchone()
+        if rows is None:
+            return None
+        else:
+            prefString = rows["commandPrefixes"]
+            prefList = prefString.split(";")
+            return prefList
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
@@ -126,29 +149,29 @@ def get_books(userId):
     finally:
         close_cursor(cursor)        
 
-    def del_notebook(userId, notebook):
-        """
-        Deletes a notebook.
-        """
-        count_sql = """SELECT count(*) Count
-                        FROM notes
-                        WHERE Notebook = ? 
-                            and UserId = ?"""
-        delete_sql = """DELETE 
-                        FROM notes
-                        WHERE Notebook = ? 
-                            and UserId = ?"""
-        values = (notebook.strip().lower(), userId)
-        cursor = None
-        try:
-            conn, cursor = open_cursor()
-            cursor.execute(count_sql, values)
-            row = cursor.fetchone()
-            count = row["Count"]
-            if count > 0:
-                ret = cursor.execute(delete_sql, values)
-            return count
-        except Exception as e:
-            err = sys.exc_info()[0]
-        finally:
-            close_cursor(cursor)  
+def del_notebook(userId, notebook):
+    """
+    Deletes a notebook.
+    """
+    count_sql = """SELECT count(*) Count
+                    FROM notes
+                    WHERE Notebook = ? 
+                        and UserId = ?"""
+    delete_sql = """DELETE 
+                    FROM notes
+                    WHERE Notebook = ? 
+                        and UserId = ?"""
+    values = (notebook.strip().lower(), userId)
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        cursor.execute(count_sql, values)
+        row = cursor.fetchone()
+        count = row["Count"]
+        if count > 0:
+            cursor.execute(delete_sql, values)
+        return count
+    except Exception as e:
+        err = sys.exc_info()[0]
+    finally:
+        close_cursor(cursor) 

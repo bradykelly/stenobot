@@ -15,14 +15,22 @@ class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
         self.bot = bot
 
     @commands.command(
-        help="Set the command prefix for this bot",
+        help="Set the command prefix for the current guild",
         brief="Set command prefix",
         name="prefix",
-        category="ChatNote"
+        aliases=["pref", "prefixes"]
     )
-    async def set_prefix(self, ctx, prefix):
+    async def set_prefix(self, ctx, prefixes):
         '''
-        Sets the command prefix for this bot
+        Sets the command prefixes for this bot
         '''     
-        dal.set_prefix(prefix.strip())
+        dal.set_prefixes(ctx.guild.id, prefixes)
+
+    @set_prefix.error
+    async def del_book_handler(self, ctx, error):
+        '''
+        Error handler for the 'del' command
+        '''
+        if isinstance(error, MissingRequiredArgument):
+            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")        
       

@@ -17,7 +17,7 @@ class ChatNoteCommands(Cog):
         '''
         Contructs a formatted usage string for a command.
         '''
-        usg = f"{self.bot.command_prefix}{ctx.command.name} {ctx.command.usage}"
+        usg = f"{ctx.prefix}{ctx.command.name} {ctx.command.usage}"
         return usg
 
     async def show_message_embed(self, ctx, message, title=None):

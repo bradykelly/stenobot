@@ -102,7 +102,7 @@ class NotesCommands(ChatNoteCommands, name="Notes Commands"):
         Error hanlder for the 'delnote' command
         '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "note_id":
-            usage = f"{self.bot.command_prefix}note {ctx.command.name} <note_id>"
+            usage = f"{ctx.prefix}{ctx.command.name} <note_id>"
             await self.show_message_codeblock(ctx, usage, "Usage")
            
     # 'leave' command
