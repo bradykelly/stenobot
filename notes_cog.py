@@ -7,7 +7,7 @@ from chatnote_cog import ChatNoteCommands
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
-class NotesCommands(ChatNoteCommands, name="Notes Commands"):
+class NotesCommands(ChatNoteCommands, name="Notes"):
     '''
     Cog for the 'note' command and subcommands
     '''
@@ -16,7 +16,7 @@ class NotesCommands(ChatNoteCommands, name="Notes Commands"):
     
     # 'note' command    
     @commands.group(
-        help="Commands to help you manage your ChatNote notebook",
+        help="Commands to help you manage your ChatNote notes",
         brief="Use your notebook",
         usage= f"[add | find | list | del] [text]: Default is 'add'. For add, 'text' is required"
     )
@@ -38,8 +38,8 @@ class NotesCommands(ChatNoteCommands, name="Notes Commands"):
     # 'add' command
     @note.command(
         help="Add <text-to-add> to your current notebook, or a named notebook",
-        brief="Add text to a notebook",
-        usage="<text-to-add> [notebook-name]: Name of a notebook to add a note to. Default is 'Main'"
+        brief="Add a note",
+        description="<text-to-add> [notebook-name]: Name of a notebook to add a note to. Default is 'Main'"
     )
     async def add(self, ctx, text, notebook=None):
         '''
@@ -84,7 +84,7 @@ class NotesCommands(ChatNoteCommands, name="Notes Commands"):
     # 'del' command
     @note.command(
         help="Delete a note from your notebooks",
-        brief="Delete note",
+        brief="Delete a note",
         usage="<note_id>: Id of the note to delete. Required",
         name="del"
     )

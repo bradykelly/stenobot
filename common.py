@@ -1,3 +1,4 @@
 BOT_NAME = "ChatNoteBot"
+CSV_SEPARATOR = ";"
 DEFAULT_NOTEBOOK = "Main"
 DEFAULT_PREFIXES = [">-"]

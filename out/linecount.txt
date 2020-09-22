@@ -1,0 +1,36 @@
+===============================================================================
+EXTENSION NAME : linecount
+EXTENSION VERSION : 0.1.7
+-------------------------------------------------------------------------------
+count time : 2020-09-21 21:27:23
+count workspace : d:\Python Projects\NoteBot
+total files : 24
+total code lines : 769
+total comment lines : 169
+total blank lines : 73
+
+.env, code is 1, comment is 0, blank is 0.
+.gitignore, code is 3, comment is 0, blank is 0.
+__pycache__\books_cog.cpython-37.pyc, it is a binary file.
+__pycache__\chatnote_cog.cpython-37.pyc, it is a binary file.
+__pycache__\common.cpython-37.pyc, it is a binary file.
+__pycache__\dal.cpython-37.pyc, it is a binary file.
+__pycache__\misc_cog.cpython-37.pyc, it is a binary file.
+__pycache__\note.cpython-37.pyc, it is a binary file.
+__pycache__\notes_cog.cpython-37.pyc, it is a binary file.
+about.txt, code is 6, comment is 0, blank is 2.
+admin_cog.py, code is 22, comment is 9, blank is 4.
+books_cog.py, code is 57, comment is 24, blank is 9.
+bot.py, code is 35, comment is 0, blank is 8.
+chatnote_cog.py, code is 26, comment is 12, blank is 9.
+chatnotebot.service, code is 13, comment is 0, blank is 1.
+common.py, code is 3, comment is 0, blank is 0.
+dal.py, code is 123, comment is 10, blank is 15.
+discord_creds.txt, code is 5, comment is 0, blank is 1.
+misc_cog.py, code is 33, comment is 12, blank is 4.
+note.py, code is 30, comment is 0, blank is 8.
+notebooks.db, it is a binary file.
+notes_cog.py, code is 79, comment is 29, blank is 11.
+README.md, code is 2, comment is 1, blank is 1.
+requirements.txt, code is 331, comment is 72, blank is 0.
+===============================================================================

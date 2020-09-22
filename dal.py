@@ -85,14 +85,16 @@ def delete_note(userId, noteId):
     finally:
         close_cursor(cursor)
 
-def set_prefixes(guildId, prefixes):
+def set_prefixes(guildId, guildName, userId, prefixList):
     """
     Sets the command prefixes for a given guild
     """
-    upsert_sql = """INSERT INTO guild_config(guildId, commandPrefixes)
-                        VALUES(?, ?)
+    upsert_sql = """INSERT INTO guild_config(guildId, name, setAt, setBy, commandPrefixes)
+                        VALUES(?, ?, ?, ?, ?)
                         ON CONFLICT(guildId) DO UPDATE SET commandPrefixes = excluded.commandPrefixes;"""
-    values = (guildId, prefixes)
+    setAt = datetime.datetime.now()
+    prefString = common.CSV_SEPARATOR.join(prefixList)
+    values = (guildId, guildName, setAt, userId, prefString)
     cursor = None
     try:
         conn, cursor = open_cursor()
@@ -119,7 +121,7 @@ def get_prefixes(guildId):
             return None
         else:
             prefString = rows["commandPrefixes"]
-            prefList = prefString.split(";")
+            prefList = prefString.split(common.CSV_SEPARATOR)
             return prefList
     except Exception as ex:
         err = sys.exc_info()[0]
@@ -149,7 +151,7 @@ def get_books(userId):
     finally:
         close_cursor(cursor)        
 
-def del_notebook(userId, notebook):
+def del_book(userId, notebook):
     """
     Deletes a notebook.
     """

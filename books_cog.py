@@ -7,9 +7,9 @@ from chatnote_cog import ChatNoteCommands
 
 BOOKS_COMMANDS = ["list", "rename", "del"]
 
-class BooksCommands(ChatNoteCommands, name="Notebook Commands"):
+class BooksCommands(ChatNoteCommands, name="Notebook"):
     '''
-    Cog for the 'note' command and subcommands
+    Cog for the 'book' command and subcommands
     '''
     def __init__(self, bot):
         self.bot = bot
@@ -74,7 +74,7 @@ class BooksCommands(ChatNoteCommands, name="Notebook Commands"):
         '''
         Deletes a notebook
         '''
-        count = dal.del_notebook(ctx.message.author.id, name)
+        count = dal.del_book(ctx.message.author.id, name)
 
         if count > 0:
             await self.show_message_codeblock(ctx, f"Notebook '{name}' deleted' ", "Delete Noteboook")

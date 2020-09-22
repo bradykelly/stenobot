@@ -1,3 +1,4 @@
+import discord
 import dal
 import common
 from discord.ext.commands.cog import Cog
@@ -5,7 +6,7 @@ from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chatnote_cog import ChatNoteCommands
 
-class MiscCommands(ChatNoteCommands, name="Misc. Commands"):
+class MiscCommands(ChatNoteCommands, name="Misc."):
     '''
     Cog for misc commands and events
     '''
@@ -33,7 +34,7 @@ class MiscCommands(ChatNoteCommands, name="Misc. Commands"):
             if about is not None:
                 about = about.strip()
             else:
-                about = "No help text was found on file"
+                about = "No About text was found on file"
             await self.show_message_codeblock(ctx, about, f"About {common.BOT_NAME}")
 
     @Cog.listener()
@@ -41,6 +42,9 @@ class MiscCommands(ChatNoteCommands, name="Misc. Commands"):
         '''
         Prints details of a new Discord connection
         '''
+        await self.bot.change_presence(activity = discord.Activity(
+                          type = discord.ActivityType.custom,
+                          name = 'Taking notes...'))
         print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")
 
     @Cog.listener()

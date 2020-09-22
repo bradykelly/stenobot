@@ -1,0 +1,169 @@
+{
+    "extension": "linecount",
+    "version": "0.1.7",
+    "workspace": "d:\\Python Projects\\NoteBot",
+    "linecount": [
+        {
+            "version": "0.1.7",
+            "counttime": "2020-09-21 21:27:23",
+            "filesum": 24,
+            "codesum": 769,
+            "commentsum": 169,
+            "blanksum": 73,
+            "filelist": [
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".env"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": ".gitignore"
+                },
+                {
+                    "filename": "__pycache__\\books_cog.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\chatnote_cog.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\common.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\dal.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\misc_cog.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\note.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\notes_cog.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 2,
+                    "code": 6,
+                    "comment": 0,
+                    "filename": "about.txt"
+                },
+                {
+                    "blank": 4,
+                    "code": 22,
+                    "comment": 9,
+                    "filename": "admin_cog.py"
+                },
+                {
+                    "blank": 9,
+                    "code": 57,
+                    "comment": 24,
+                    "filename": "books_cog.py"
+                },
+                {
+                    "blank": 8,
+                    "code": 35,
+                    "comment": 0,
+                    "filename": "bot.py"
+                },
+                {
+                    "blank": 9,
+                    "code": 26,
+                    "comment": 12,
+                    "filename": "chatnote_cog.py"
+                },
+                {
+                    "blank": 1,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "chatnotebot.service"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "common.py"
+                },
+                {
+                    "blank": 15,
+                    "code": 123,
+                    "comment": 10,
+                    "filename": "dal.py"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "discord_creds.txt"
+                },
+                {
+                    "blank": 4,
+                    "code": 33,
+                    "comment": 12,
+                    "filename": "misc_cog.py"
+                },
+                {
+                    "blank": 8,
+                    "code": 30,
+                    "comment": 0,
+                    "filename": "note.py"
+                },
+                {
+                    "filename": "notebooks.db",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 11,
+                    "code": 79,
+                    "comment": 29,
+                    "filename": "notes_cog.py"
+                },
+                {
+                    "blank": 1,
+                    "code": 2,
+                    "comment": 1,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 0,
+                    "code": 331,
+                    "comment": 72,
+                    "filename": "requirements.txt"
+                }
+            ]
+        }
+    ]
+}

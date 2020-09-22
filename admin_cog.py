@@ -6,10 +6,9 @@ from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chatnote_cog import ChatNoteCommands
 
-
-class NoteCommands(ChatNoteCommands, name="ChatNote Commands"):
+class NoteCommands(ChatNoteCommands, name="Admin"):
     '''
-    Cog for admin commands
+    Cog for various admin commands
     '''
     def __init__(self, bot):
         self.bot = bot
