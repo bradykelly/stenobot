@@ -209,6 +209,202 @@
                     "filename": "small_embed_help.py"
                 }
             ]
+        },
+        {
+            "version": "0.1.7",
+            "counttime": "2020-09-23 20:25:40",
+            "filesum": 30,
+            "codesum": 1026,
+            "commentsum": 189,
+            "blanksum": 132,
+            "filelist": [
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".env"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": ".gitignore"
+                },
+                {
+                    "filename": "__pycache__\\common.cpython-38.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 3,
+                    "code": 7,
+                    "comment": 1,
+                    "filename": "about.txt"
+                },
+                {
+                    "blank": 1,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "chatnotebot.service"
+                },
+                {
+                    "blank": 0,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "cnb.code-workspace"
+                },
+                {
+                    "blank": 3,
+                    "code": 21,
+                    "comment": 9,
+                    "filename": "cogs\\admin_cog.py"
+                },
+                {
+                    "blank": 9,
+                    "code": 58,
+                    "comment": 24,
+                    "filename": "cogs\\books_cog.py"
+                },
+                {
+                    "blank": 9,
+                    "code": 26,
+                    "comment": 12,
+                    "filename": "cogs\\chatnote_cog.py"
+                },
+                {
+                    "blank": 8,
+                    "code": 51,
+                    "comment": 2,
+                    "filename": "cogs\\help_cog.py"
+                },
+                {
+                    "blank": 4,
+                    "code": 34,
+                    "comment": 12,
+                    "filename": "cogs\\misc_cog.py"
+                },
+                {
+                    "blank": 11,
+                    "code": 79,
+                    "comment": 29,
+                    "filename": "cogs\\notes_cog.py"
+                },
+                {
+                    "blank": 0,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "common.py"
+                },
+                {
+                    "blank": 5,
+                    "code": 20,
+                    "comment": 7,
+                    "filename": "data\\db\\build.sql"
+                },
+                {
+                    "filename": "data\\db\\notebooks.db",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "data\\discord_creds.txt"
+                },
+                {
+                    "filename": "data\\images\\bot_image.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 16,
+                    "code": 47,
+                    "comment": 7,
+                    "filename": "full_embed_help.py"
+                },
+                {
+                    "blank": 2,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "launcher.py"
+                },
+                {
+                    "blank": 16,
+                    "code": 62,
+                    "comment": 0,
+                    "filename": "lib\\bot\\__init__.py"
+                },
+                {
+                    "filename": "lib\\bot\\__pycache__\\__init__.cpython-38.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 1,
+                    "code": 2,
+                    "comment": 0,
+                    "filename": "lib\\db\\__init__.py"
+                },
+                {
+                    "filename": "lib\\db\\__pycache__\\__init__.cpython-38.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "lib\\db\\__pycache__\\dal.cpython-38.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 25,
+                    "code": 162,
+                    "comment": 11,
+                    "filename": "lib\\db\\dal.py"
+                },
+                {
+                    "blank": 8,
+                    "code": 30,
+                    "comment": 0,
+                    "filename": "note.py"
+                },
+                {
+                    "blank": 8,
+                    "code": 43,
+                    "comment": 2,
+                    "filename": "old_bot.py"
+                },
+                {
+                    "blank": 1,
+                    "code": 2,
+                    "comment": 1,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 0,
+                    "code": 331,
+                    "comment": 72,
+                    "filename": "requirements.txt"
+                },
+                {
+                    "blank": 1,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "small_embed_help.py"
+                }
+            ]
         }
     ]
 }

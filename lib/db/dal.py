@@ -5,6 +5,7 @@ from sqlite3 import connect
 from datetime import datetime
 from note import Note
 import common
+from apscheduler.triggers.cron import CronTrigger
 
 #TODO: Proper exception handling
 
@@ -24,6 +25,13 @@ def with_commit(func):
 def build():         
     if isfile(BUILD_PATH) and not isfile(DB_PATH):
         scriptexec(BUILD_PATH)
+
+def commit():
+    if sqlite_connection:
+        sqlite_connection.commit()
+
+def autosave(scheduler):
+    scheduler.add_job(commit, CronTrigger(second=0))
 
 def field(command, *values):
     cursor.execute(command, tuple(*values))
