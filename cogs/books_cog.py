@@ -1,22 +1,23 @@
-import dal
 import common
+from lib.db import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
-from chatnote_cog import ChatNoteCommands
+from cogs.chatnote_cog import ChatNoteCommands
 
 BOOKS_COMMANDS = ["list", "rename", "del"]
 
 class BooksCommands(ChatNoteCommands, name="Notebook"):
     '''
-    Cog for the 'book' command and subcommands
+    Cog for the 'book' command group
     '''
     def __init__(self, bot):
         self.bot = bot
     
     # 'books' command group
     @commands.group(
-        help="Commands to help you manage your ChatNote notebooks",
+        title="Commands to help you manage your ChatNote notebooks",
+        help="Default is 'list'. For 'del', 'name' is required. For rename, 'name' and 'new-name' are required",
         brief="Manage your notebooks",
         usage= f"[list | rename | del] [name] [new-name]: Default is 'list'. For 'del', 'name' is required. For rename, 'name' and 'new-name' are required"
     )
@@ -66,7 +67,7 @@ class BooksCommands(ChatNoteCommands, name="Notebook"):
     @books.command(
         help="Delete a notebook. I.e. Delete all notes in the notebook",
         brief="Delete a notebook",
-        usage="[name]: Name of a notebook to delete",
+        usage="<name>: Name of the notebook to delete",
         name="del",
         aliases=["delete"]
     )

@@ -1,9 +1,9 @@
-import dal
 import common
+from lib.db import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
-from chatnote_cog import ChatNoteCommands
+from cogs.chatnote_cog import ChatNoteCommands
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 

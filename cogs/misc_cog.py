@@ -1,23 +1,20 @@
 import discord
-import dal
 import common
+from lib.db import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
-from chatnote_cog import ChatNoteCommands
+from cogs.chatnote_cog import ChatNoteCommands
 
 class MiscCommands(ChatNoteCommands, name="Misc."):
     '''
     Cog for misc commands and events
     '''
-    def get_guild_count(self):
+    def get_guilds(self):
         '''
-        Gets the number of guilds this bot is connected to
+        Gets the guilds this bot is connected to
         '''
-        guild_count = 0
-        for guild in self.bot.guilds:
-            guild_count += 1
-        return guild_count
+        return self.bot.guilds
 
     @commands.command(
         help="Show the About info for this bot",
@@ -45,7 +42,7 @@ class MiscCommands(ChatNoteCommands, name="Misc."):
         await self.bot.change_presence(activity = discord.Activity(
                           type = discord.ActivityType.custom,
                           name = 'Taking notes...'))
-        print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(self.get_guild_count()) + " guild(s).")
+        print(f"{self.bot.user} ({self.bot.user.id}) has connected to Discord! In " + str(len(self.get_guilds())) + " guild(s).")
 
     @Cog.listener()
     async def on_command_error(self, ctx, error)  :

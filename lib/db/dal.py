@@ -1,16 +1,64 @@
 import sqlite3
 import sys
+from os.path import isfile
+from sqlite3 import connect
 from datetime import datetime
 from note import Note
 import common
 
 #TODO: Proper exception handling
 
+DB_PATH = "./data/db/notebooks.db"
+BUILD_PATH = "./data/db/build.sql"
+
 sqlite_connection = None
 cursor = None   
 
+def with_commit(func):
+    def inner(*args, **kwargs):
+        func(*args, **kwargs)
+        if sqlite_connection:
+            sqlite_connection.commit()
+
+#@with_commit
+def build():         
+    if isfile(BUILD_PATH) and not isfile(DB_PATH):
+        scriptexec(BUILD_PATH)
+
+def field(command, *values):
+    cursor.execute(command, tuple(*values))
+    if (fetch := cursor.fetchone()) is not None:
+        return fetch[0]
+
+def record(command, *values):
+    cursor.execute(command, tuple(*values))
+    return cursor.fetchone()
+
+def records(command, *values):
+    cursor.execute(command, tuple(*values))
+    return cursor.fetchall()
+
+def column(command, *values):
+    cursor.execute(command, tuple(*values))
+    return [item[0] for item in cursor.fetchall()]
+
+def execute(command, *values):
+    cursor.execute(command, tuple(*values))
+
+def execmany(command, valueSet):
+    cursor.executemany(command, valueSet)
+
+@with_commit
+def scriptexec(path):
+    with open(path, "r", encoding="utf-8") as script:
+        cursor.executescript(script.read())
+
 def open_cursor():
-    sqlite_connection = sqlite3.connect("notebooks.db", detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+    sqlite_connection = connect(
+        DB_PATH, 
+        check_same_thread=False, 
+        detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
+    )
     sqlite_connection.row_factory = sqlite3.Row
     cursor = sqlite_connection.cursor()
     return cursor.connection, cursor

@@ -1,21 +1,24 @@
 import os
+from typing import List
 import common
-import dal
+import lib.db.dal as dal
+from discord.ext.commands.cog import Cog
+from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
+from discord.ext import commands
 from full_embed_help import EmbedHelpCommand
 from small_embed_help import MyNewHelp
-from help_cog import HelpCommands
-from notes_cog import NotesCommands
-from misc_cog import MiscCommands
+from cogs.help_cog import HelpCommands
+from cogs.notes_cog import NotesCommands
 from dotenv import load_dotenv
 from discord.ext import commands
-from books_cog import BooksCommands
-from notes_cog import NotesCommands
-from misc_cog import MiscCommands
+from cogs.books_cog import BooksCommands
+from cogs.notes_cog import NotesCommands
+from cogs.misc_cog import MiscCommands
 
 load_dotenv()
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 
-async def _prefix_callable(bot, message):
+async def _prefix_callable(bot, message) -> List[str]:
     """ 
     Determines the list of command prefixes for the current guild
     """

@@ -1,15 +1,15 @@
 {
     "extension": "linecount",
     "version": "0.1.7",
-    "workspace": "d:\\Python Projects\\NoteBot",
+    "workspace": "d:\\Python Projects\\ChatNote\\ChatNoteBot",
     "linecount": [
         {
             "version": "0.1.7",
-            "counttime": "2020-09-21 21:27:23",
-            "filesum": 24,
-            "codesum": 769,
-            "commentsum": 169,
-            "blanksum": 73,
+            "counttime": "2020-09-22 22:26:41",
+            "filesum": 31,
+            "codesum": 891,
+            "commentsum": 181,
+            "blanksum": 98,
             "filelist": [
                 {
                     "blank": 0,
@@ -52,6 +52,20 @@
                     "comment": 0
                 },
                 {
+                    "filename": "__pycache__\\full_embed_help.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "filename": "__pycache__\\help_cog.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
                     "filename": "__pycache__\\misc_cog.cpython-37.pyc",
                     "isbinaryfile": true,
                     "blank": 0,
@@ -73,13 +87,20 @@
                     "comment": 0
                 },
                 {
+                    "filename": "__pycache__\\small_embed_help.cpython-37.pyc",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
                     "blank": 2,
                     "code": 6,
                     "comment": 0,
                     "filename": "about.txt"
                 },
                 {
-                    "blank": 4,
+                    "blank": 3,
                     "code": 22,
                     "comment": 9,
                     "filename": "admin_cog.py"
@@ -92,8 +113,8 @@
                 },
                 {
                     "blank": 8,
-                    "code": 35,
-                    "comment": 0,
+                    "code": 43,
+                    "comment": 2,
                     "filename": "bot.py"
                 },
                 {
@@ -110,13 +131,19 @@
                 },
                 {
                     "blank": 0,
-                    "code": 3,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "cnb.code-workspace"
+                },
+                {
+                    "blank": 0,
+                    "code": 4,
                     "comment": 0,
                     "filename": "common.py"
                 },
                 {
                     "blank": 15,
-                    "code": 123,
+                    "code": 125,
                     "comment": 10,
                     "filename": "dal.py"
                 },
@@ -127,8 +154,20 @@
                     "filename": "discord_creds.txt"
                 },
                 {
+                    "blank": 16,
+                    "code": 47,
+                    "comment": 7,
+                    "filename": "full_embed_help.py"
+                },
+                {
+                    "blank": 9,
+                    "code": 42,
+                    "comment": 3,
+                    "filename": "help_cog.py"
+                },
+                {
                     "blank": 4,
-                    "code": 33,
+                    "code": 37,
                     "comment": 12,
                     "filename": "misc_cog.py"
                 },
@@ -162,6 +201,12 @@
                     "code": 331,
                     "comment": 72,
                     "filename": "requirements.txt"
+                },
+                {
+                    "blank": 1,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "small_embed_help.py"
                 }
             ]
         }

@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: bot.py",
+            "name": "Python: launcher.py",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/bot.py",
+            "program": "${workspaceFolder}/launcher.py",
             "console": "integratedTerminal",
             "justMyCode": false
         }
