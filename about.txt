@@ -1,4 +1,4 @@
-I created ChatNote to allow a Discord user to quickly take notes while chatting. 
+I created ChatNote to allow a Discord member to quickly take notes while chatting. 
 I always found myself rushing to make notes on /in text files and or paper, and then losing the notes. 
 
 Design and implementation of the bot were inspired by this video tutorial: https://www.youtube.com/playlist?list=PLYeOw6sTSy6ZGyygcbta7GcpI8a5-Cooc

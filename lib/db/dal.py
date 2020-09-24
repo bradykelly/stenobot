@@ -186,7 +186,7 @@ def get_prefixes(guildId):
 
 def get_books(userId):
     """
-    List all notebooks for a given user
+    List all notebooks for a given member
     """
     select_sql = """SELECT count(*) Num, Notebook 
                     FROM notes
