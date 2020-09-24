@@ -9,12 +9,12 @@ from datetime import date, datetime
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from discord.ext.commands.errors import BadArgument, CommandNotFound, MissingRequiredArgument
+from discord.ext.commands.errors import BadArgument, CommandNotFound, CommandOnCooldown, MissingRequiredArgument
 from discord import Embed, File
 from discord.ext.commands import Bot as BotBase
 from lib.db import dal
 
-COGS = [path.split("\\")[-1][:-3] for path in glob("../cogs/*.py")]
+COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 class Ready(object):
@@ -86,17 +86,24 @@ class Bot(BotBase):
         await self.stdout.send("An error occurred")
         raise
 
-    async def on_command_error(self, ctx, error):
+    async def on_command_error(self, ctx, error: Exception):
         if(any([isinstance(error, ex) for ex in IGNORED_EXCEPTIONS])):
             pass
+
         elif isinstance(error, MissingRequiredArgument):
             await ctx.send("One or more required arguments are missing")
-        elif isinstance(error.original, HTTPException):
-            await ctx.send("Unable to send message")
-        elif isinstance(error.original, Forbidden):
-            await ctx.send("I do not have permission to do that.")
-        else:
-            raise error
+
+        elif isinstance(error, CommandOnCooldown):
+            await ctx.send(f"That command is on {str(error.cooldown.type).split('.')[-1]} cooldown. Please try again in {error.retry_after:,.2f} seconds.")
+
+        elif hasattr(error, "original_error"):
+
+            # elif isinstance(error.original_error, HTTPException):
+            #     await ctx.send("Unable to send message")
+            if isinstance(error.original_error, Forbidden):
+                await ctx.send("I do not have permission to do that.")
+            else:
+                raise error
 
     async def on_ready(self):
         if not self.ready:
