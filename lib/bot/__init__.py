@@ -1,17 +1,21 @@
 from asyncio import sleep
 import os
+
+from discord.errors import Forbidden, HTTPException
+from discord.ext.commands.context import Context
 import common
 from glob import glob
 from datetime import date, datetime 
 from dotenv import load_dotenv
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
-from discord.ext.commands.errors import CommandNotFound
+from discord.ext.commands.errors import BadArgument, CommandNotFound, MissingRequiredArgument
 from discord import Embed, File
 from discord.ext.commands import Bot as BotBase
 from lib.db import dal
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("../cogs/*.py")]
+IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 class Ready(object):
     def __init__(self):
@@ -59,6 +63,14 @@ class Bot(BotBase):
         print("Running bot...")
         super().run(self.DISCORD_TOKEN, reconnect=True)
 
+    async def process_commands(self, message):
+        ctx = await self.get_context(message, cls=Context)
+        if self.ready:
+            if ctx.command is not None and ctx.guild is not None:
+                await self.invoke(ctx)
+        else:
+            await ctx.send("Not ready for commands")
+
     async def rules_reminder(self):
         await self.stdout.send("Don't forget the rules!")
 
@@ -75,10 +87,14 @@ class Bot(BotBase):
         raise
 
     async def on_command_error(self, ctx, error):
-        if isinstance(error, CommandNotFound):
+        if(any([isinstance(error, ex) for ex in IGNORED_EXCEPTIONS])):
             pass
-        elif hasattr(error, "original_error"):
-            raise error.original_error
+        elif isinstance(error, MissingRequiredArgument):
+            await ctx.send("One or more required arguments are missing")
+        elif isinstance(error.original, HTTPException):
+            await ctx.send("Unable to send message")
+        elif isinstance(error.original, Forbidden):
+            await ctx.send("I do not have permission to do that.")
         else:
             raise error
 
