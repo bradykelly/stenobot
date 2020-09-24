@@ -15,11 +15,17 @@ class Fun(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name="hello", brief="Say hello to the member", aliases=["hi"])
+    @command(name="hello", 
+            aliases=["hi"],
+            brief="Say hello to the member", 
+            help="Say hello to the member")
     async def say_hello(self, ctx):
         await ctx.send(f"Hello {ctx.author.mention}!")
 
-    @command(name="dice", brief="Roll the bot's dice", aliases=["roll"])
+    @command(name="dice", 
+            aliases=["roll"], 
+            brief="Roll the bot's dice",
+            help="`roll a*b` will roll a `b` sided die `a` times")
     @cooldown(1, 60, BucketType.user)
     async def roll_dice(self, ctx, die_string: str):
         dice, value = (int(term) for term in die_string.split("d"))
@@ -29,7 +35,10 @@ class Fun(Cog):
         else:
             await ctx.send("I can't roll that many dice. Please try a lower number.")
 
-    @command(name="slap", brief="Slap another member", aliases=["hit"])
+    @command(name="slap",
+            aliases=["hit"], 
+            brief="Slap another member",
+            help="Slap `<member>`")
     async def slap_member(self, ctx, member: Member, *, reason: Optional[str] = "no reason"):
         await ctx.send(f"{ctx.author.display_name} slapped {member.mention} for {reason}")
         
@@ -47,7 +56,10 @@ class Fun(Cog):
     async def echo_message(self, ctx, *, message: str):
         await ctx.send(f"{ctx.author.display_name} said: {message}")
 
-    @command(name="fact", brief="Get an animal fact", aliases=[])
+    @command(name="fact", 
+            aliases=[],
+            brief="Get an animal fact",
+            help="Get a random fact about `<animal>`")
     @cooldown(3, 60, BucketType.guild)
     async def animal_fact(self, ctx, animal: str):
         if (animal := animal.lower()) in ("dog", "cat", "panda", "fox", "bird", "koala"):
