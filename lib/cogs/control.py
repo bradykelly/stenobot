@@ -1,20 +1,24 @@
-from typing import List
-from discord.ext.commands.errors import CheckFailure
-from lib.db import dal
 import discord
+import common
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.core import command, has_permissions
+from discord.ext.commands.errors import CheckFailure
+from typing import List
+from lib.db import dal
 
 class Control(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name="prefix")
+    @command(name="prefix", 
+            aliases=[], 
+            brief="Set this bot's command prefix",
+            help="Sets the command prefixes based on `<prefixes>`, a list of prefixes separated by semi-colons, e.g. `!;??;+;->`")
     @has_permissions(manage_guild=True)
-    async def set_prefixes(self, ctx, prefixes: List[str]):
+    async def set_prefixes(self, ctx, prefixes):
         filtered = []
-        for pref in prefixes:
+        for pref in prefixes.split(common.CSV_SEPARATOR):
             if len(pref) > 5:
                 await ctx.send(f"The prefix '{pref}' exceeds the maximum length of 5 charactors.")
             else:

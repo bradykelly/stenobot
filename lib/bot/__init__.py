@@ -21,7 +21,8 @@ IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
     prefixes = dal.get_prefixes(message.guild.id)
-    return when_mentioned_or(*prefixes)(bot, message)
+    ret = when_mentioned_or(*prefixes)(bot, message)
+    return ret
 
 class Ready(object):
     def __init__(self):
@@ -114,7 +115,8 @@ class Bot(BotBase):
         if not self.ready:
             self.guild = self.get_guild(common.MY_GUILD_ID)
             self.stdout = self.get_channel(common.MSG_CHANNEL)
-            self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
+            #TODO Uncomment
+            #self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
             self.scheduler.start()
             
             # embed = Embed(title="Now online!", description=f"{common.BOT_NAME} is online and ready to take notes.", 

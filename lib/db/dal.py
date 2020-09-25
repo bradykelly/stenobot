@@ -31,8 +31,10 @@ def commit():
     if sqlite_connection:
         sqlite_connection.commit()
 
+#TODO Uncomment - messing with debugging
 def autosave(scheduler):
-    scheduler.add_job(commit, CronTrigger(second=0))
+    #scheduler.add_job(commit, CronTrigger(second=0))
+    pass
 
 def field(command, *values):
     cursor.execute(command, tuple(*values))
@@ -146,10 +148,10 @@ def set_prefixes(guildId, guildName, userId, prefixList):
     """
     Sets the command prefixes for a given guild
     """
-    upsert_sql = """INSERT INTO guild_config(guildId, name, setAt, setBy, commandPrefixes)
+    upsert_sql = """INSERT INTO guild_config(guildId, name, setTime, setByUserId, commandPrefixes)
                         VALUES(?, ?, ?, ?, ?)
                         ON CONFLICT(guildId) DO UPDATE SET commandPrefixes = excluded.commandPrefixes;"""
-    setAt = datetime.datetime.now()
+    setAt = datetime.now()
     prefString = common.CSV_SEPARATOR.join(prefixList)
     values = (guildId, guildName, setAt, userId, prefString)
     cursor = None
@@ -162,7 +164,7 @@ def set_prefixes(guildId, guildName, userId, prefixList):
     finally:
         close_cursor(cursor)
 
-def get_prefixes(guildId):# -> List[str]:
+def get_prefixes(guildId):
     """
     Gets the command prefixes for a given guild
     """
