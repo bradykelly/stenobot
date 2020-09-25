@@ -12,7 +12,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from discord.ext.commands.errors import BadArgument, CommandNotFound, CommandOnCooldown, MissingRequiredArgument
 from discord import Embed, File
-from discord.ext.commands import Bot as BotBase, commands
+from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import when_mentioned_or, has_permissions
 from lib.db import dal
 
@@ -20,8 +20,8 @@ COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
-    prefixes = dal.get_prefix(message.guild.id)
-    return when_mentioned_or(common.DEFAULT_PREFIXES)(bot, message)
+    prefixes = dal.get_prefixes(message.guild.id)
+    return when_mentioned_or(*prefixes)(bot, message)
 
 class Ready(object):
     def __init__(self):
@@ -47,7 +47,7 @@ class Bot(BotBase):
 
         dal.autosave(self.scheduler)
         super().__init__(
-            command_prefix=self.PREFIX,
+            command_prefix=get_prefix,
             owner_ids=common.OWNER_IDS, 
             name=common.BOT_NAME, 
             description=f"{common.BOT_NAME}. Your note taking bot."
@@ -79,20 +79,6 @@ class Bot(BotBase):
     async def rules_reminder(self):
         await self.stdout.send("Don't forget the rules!")
 
-    @commands(name="prefix")
-    @has_permissions(manage_guild=True)
-    async def set_prefixes(self, ctx, prefixes: List[str]):
-        filtered = []
-        for pref in prefixes:
-            if len(pref) > 5:
-                await ctx.send(f"The prefix '{pref}' exceeds the maximum length of 5 charactors.")
-            else:
-                filtered.append(pref)
-
-        dal.set_prefixes(ctx.guild.id,ctx.guild.name, ctx.author.id, filtered)
-        pref_string = ", ".join(filtered)
-        await ctx.send(f"Prefixes set to {pref_string}")
-
     async def on_connect(self):
         print("Bot connected")
 
@@ -102,7 +88,7 @@ class Bot(BotBase):
     async def on_error(self, err, *args, **kwargs):
         if err == "on_command_error":
             await args[0].send("Something went wrong")
-        await self.stdout.send("An error occurred")
+        await self.stdout.send(f"An error occurred: {str(err)}")
         raise
 
     async def on_command_error(self, ctx, error: Exception):

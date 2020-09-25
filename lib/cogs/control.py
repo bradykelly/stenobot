@@ -1,12 +1,33 @@
+from typing import List
+from discord.ext.commands.errors import CheckFailure
+from lib.db import dal
 import discord
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
-from discord.ext.commands.core import command
-
+from discord.ext.commands.core import command, has_permissions
 
 class Control(Cog):
     def __init__(self, bot):
         self.bot = bot
+
+    @command(name="prefix")
+    @has_permissions(manage_guild=True)
+    async def set_prefixes(self, ctx, prefixes: List[str]):
+        filtered = []
+        for pref in prefixes:
+            if len(pref) > 5:
+                await ctx.send(f"The prefix '{pref}' exceeds the maximum length of 5 charactors.")
+            else:
+                filtered.append(pref)
+
+        dal.set_prefixes(ctx.guild.id,ctx.guild.name, ctx.author.id, filtered)
+        pref_string = ", ".join(filtered)
+        await ctx.send(f"Prefixes set to {pref_string}")
+
+    @set_prefixes.error
+    async def set_prefixes_error(self, ctx, error):
+        if isinstance(error, CheckFailure):
+            await ctx.send("You need Guild Admin permissions to change prefixes.")
 
     @command(name="leave",
                 aliases=[],

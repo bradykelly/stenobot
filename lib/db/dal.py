@@ -3,6 +3,7 @@ import sys
 from os.path import isfile
 from sqlite3 import connect
 from datetime import datetime
+from typing import List
 from note import Note
 import common
 from apscheduler.triggers.cron import CronTrigger
@@ -161,17 +162,18 @@ def set_prefixes(guildId, guildName, userId, prefixList):
     finally:
         close_cursor(cursor)
 
-def get_prefixes(guildId):
+def get_prefixes(guildId):# -> List[str]:
     """
     Gets the command prefixes for a given guild
     """
     select_sql = """SELECT commandPrefixes 
                     FROM guild_config
                     WHERE guildId = ?;"""
-    values = (guildId,)
+    values = (str(guildId), )
     cursor = None
     try:
         conn, cursor = open_cursor()
+        cursor.execute(select_sql, values)
         rows = cursor.fetchone()
         if rows is None:
             return None
