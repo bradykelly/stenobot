@@ -19,7 +19,7 @@ def syntax(command):
 class HelpMenu(ListPageSource):
     def __init__(self, ctx, data):
         self.ctx = ctx
-        super().__init__(data, per_page=3)
+        super().__init__(data, per_page=6)
 
     async def write_page(self, menu, fields=[]):
         offset = (menu.current_page * self.per_page) + 1
