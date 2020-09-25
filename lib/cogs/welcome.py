@@ -1,5 +1,5 @@
 from discord.ext.commands import Cog
-from discord.ext.commands import Commands
+from lib.db import dal
 
 
 class Welcome(Cog):
@@ -9,10 +9,16 @@ class Welcome(Cog):
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
-            self.bot.ready.ready_up("welcome")
+            self.bot.cogs_ready.ready_up("welcome")
 
     @Cog.listener()
     async def on_member_join(self, member):
+        channelName = dal.field("""select notification_channel
+                                    from guild_config
+                                    where guildId = ?""", member.guild.id)
+        channelId = dal.field("""select channelId from channelIds
+                                where guildId = ?
+                                    and name =?""", member.guild.id, channelName)
         pass
 
     @Cog.listener()

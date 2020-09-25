@@ -46,7 +46,6 @@ class Bot(BotBase):
         load_dotenv()
         self.DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")  
 
-        dal.autosave(self.scheduler)
         super().__init__(
             command_prefix=get_prefix,
             owner_ids=common.OWNER_IDS, 

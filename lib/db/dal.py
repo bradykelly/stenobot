@@ -13,56 +13,9 @@ from apscheduler.triggers.cron import CronTrigger
 DB_PATH = "./data/db/notebooks.db"
 BUILD_PATH = "./data/db/build.sql"
 
-sqlite_connection = None
-cursor = None   
-
-def with_commit(func):
-    def inner(*args, **kwargs):
-        func(*args, **kwargs)
-        if sqlite_connection:
-            sqlite_connection.commit()
-
-#@with_commit
 def build():         
     if isfile(BUILD_PATH) and not isfile(DB_PATH):
         scriptexec(BUILD_PATH)
-
-def commit():
-    if sqlite_connection:
-        sqlite_connection.commit()
-
-#TODO Uncomment - messing with debugging
-def autosave(scheduler):
-    #scheduler.add_job(commit, CronTrigger(second=0))
-    pass
-
-def field(command, *values):
-    cursor.execute(command, tuple(*values))
-    if (fetch := cursor.fetchone()) is not None:
-        return fetch[0]
-
-def record(command, *values):
-    cursor.execute(command, tuple(*values))
-    return cursor.fetchone()
-
-def records(command, *values):
-    cursor.execute(command, tuple(*values))
-    return cursor.fetchall()
-
-def column(command, *values):
-    cursor.execute(command, tuple(*values))
-    return [item[0] for item in cursor.fetchall()]
-
-def execute(command, *values):
-    cursor.execute(command, tuple(*values))
-
-def execmany(command, valueSet):
-    cursor.executemany(command, valueSet)
-
-@with_commit
-def scriptexec(path):
-    with open(path, "r", encoding="utf-8") as script:
-        cursor.executescript(script.read())
 
 def open_cursor():
     sqlite_connection = connect(
@@ -78,6 +31,77 @@ def close_cursor(cursor):
     cursor.close()
     if (cursor.connection):
         cursor.connection.close()
+
+def field(command, *values):
+    try:
+        conn, cursor = open_cursor()
+        cursor.execute(command, tuple(*values))
+        if (fetch := cursor.fetchone()) is not None:
+            return fetch[0]
+    finally:
+        close_cursor(cursor)
+
+def record(command, *values):
+    conn, cursor = open_cursor()
+    try:
+        cursor.execute(command, tuple(*values))
+        return cursor.fetchone()
+    except Exception as ex:
+        raise #LOG
+
+def records(command, *values):
+    conn, cursor = open_cursor()
+    try:
+        cursor.execute(command, tuple(*values))
+        return cursor.fetchall()
+    except Exception as ex:
+        raise #LOG
+    finally:
+        close_cursor(cursor)
+
+def column(command, *values):
+    conn, cursor = open_cursor()
+    try:
+        cursor.execute(command, tuple(*values))
+        return [item[0] for item in cursor.fetchall()]
+    except Exception as ex:
+        raise #LOG
+    finally:
+        close_cursor(cursor)
+
+def execute(command, *values):
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        cursor.execute(command, tuple(*values))
+        conn.commit()
+    except Exception as ex:
+        raise #LOG 
+    finally:
+        close_cursor(cursor)
+    
+def execmany(command, valueSet):
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        cursor.executemany(command, valueSet)
+        conn.commit()
+    except Exception as ex:
+        raise #LOG
+    finally:
+        close_cursor(cursor)
+
+def scriptexec(path):
+    cursor = None
+    try:
+        conn, cursor = open_cursor()
+        with open(path, "r", encoding="utf-8") as script:
+            cursor.executescript(script.read())
+        conn.commit()
+    except Exception as ex:
+        raise #LOG
+    finally:
+        close_cursor(cursor)
 
 def insert_note(userId, text, notebook=None):   
     '''
@@ -97,7 +121,7 @@ def insert_note(userId, text, notebook=None):
     except:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor)
+        close_cursor()
 
 def get_notes(userId, notebook=None):
     '''
@@ -123,7 +147,7 @@ def get_notes(userId, notebook=None):
     except:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor)
+        close_cursor()
 
 def delete_note(userId, noteId):
     '''
@@ -142,7 +166,7 @@ def delete_note(userId, noteId):
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor)
+        close_cursor()
 
 def set_prefixes(guildId, guildName, userId, prefixList):
     """
@@ -162,7 +186,7 @@ def set_prefixes(guildId, guildName, userId, prefixList):
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor)
+        close_cursor()
 
 def get_prefixes(guildId):
     """
@@ -186,7 +210,7 @@ def get_prefixes(guildId):
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor)
+        close_cursor()
 
 def get_books(userId):
     """
@@ -209,7 +233,7 @@ def get_books(userId):
     except Exception as e:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor)        
+        close_cursor()        
 
 def del_book(userId, notebook):
     """
@@ -236,4 +260,4 @@ def del_book(userId, notebook):
     except Exception as e:
         err = sys.exc_info()[0]
     finally:
-        close_cursor(cursor) 
+        close_cursor() 
