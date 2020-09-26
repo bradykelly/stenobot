@@ -35,7 +35,7 @@ def close_cursor(cursor):
 def field(command, *values):
     try:
         conn, cursor = open_cursor()
-        cursor.execute(command, tuple(*values))
+        cursor.execute(command, tuple(values))
         if (fetch := cursor.fetchone()) is not None:
             return fetch[0]
     finally:
@@ -44,7 +44,7 @@ def field(command, *values):
 def record(command, *values):
     conn, cursor = open_cursor()
     try:
-        cursor.execute(command, tuple(*values))
+        cursor.execute(command, tuple(values))
         return cursor.fetchone()
     except Exception as ex:
         raise #LOG
@@ -62,7 +62,7 @@ def records(command, *values):
 def column(command, *values):
     conn, cursor = open_cursor()
     try:
-        cursor.execute(command, tuple(*values))
+        cursor.execute(command, tuple(values))
         return [item[0] for item in cursor.fetchall()]
     except Exception as ex:
         raise #LOG
@@ -73,7 +73,7 @@ def execute(command, *values):
     cursor = None
     try:
         conn, cursor = open_cursor()
-        cursor.execute(command, tuple(*values))
+        cursor.execute(command, tuple(values))
         conn.commit()
     except Exception as ex:
         raise #LOG 
@@ -121,7 +121,7 @@ def insert_note(userId, text, notebook=None):
     except:
         err = sys.exc_info()[0]
     finally:
-        close_cursor()
+        close_cursor(cursor)
 
 def get_notes(userId, notebook=None):
     '''
@@ -147,7 +147,7 @@ def get_notes(userId, notebook=None):
     except:
         err = sys.exc_info()[0]
     finally:
-        close_cursor()
+        close_cursor(cursor)
 
 def delete_note(userId, noteId):
     '''
@@ -166,7 +166,7 @@ def delete_note(userId, noteId):
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
-        close_cursor()
+        close_cursor(cursor)
 
 def set_prefixes(guildId, guildName, userId, prefixList):
     """
@@ -186,7 +186,7 @@ def set_prefixes(guildId, guildName, userId, prefixList):
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
-        close_cursor()
+        close_cursor(cursor)
 
 def get_prefixes(guildId):
     """
@@ -210,7 +210,7 @@ def get_prefixes(guildId):
     except Exception as ex:
         err = sys.exc_info()[0]
     finally:
-        close_cursor()
+        close_cursor(cursor)
 
 def get_books(userId):
     """
@@ -233,7 +233,7 @@ def get_books(userId):
     except Exception as e:
         err = sys.exc_info()[0]
     finally:
-        close_cursor()        
+        close_cursor(cursor)        
 
 def del_book(userId, notebook):
     """
@@ -260,4 +260,4 @@ def del_book(userId, notebook):
     except Exception as e:
         err = sys.exc_info()[0]
     finally:
-        close_cursor() 
+        close_cursor(cursor) 
