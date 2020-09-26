@@ -23,7 +23,7 @@ class Welcome(Cog):
 
     @Cog.listener()
     async def on_member_join(self, member): 
-        dal.execute("INSERT INTO epx(userId) VALUES (?)", member.id)       
+        dal.execute("INSERT INTO exp(userId) VALUES (?)", member.id)       
         channelId = self.get_notification_channelId(member.guild.id)
         #TODO Get intro channel id from db
         await self.bot.get_channel(channelId).send(f"Welcome to ** {member.guild.name} ** {member.mention}! \
