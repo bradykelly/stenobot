@@ -55,8 +55,12 @@ class Bot(BotBase):
 
     def setup(self):
         for cog in COGS:
-            self.load_extension(f"lib.cogs.{cog}")
-            print(f"{cog} loaded")
+            try:
+                self.load_extension(f"lib.cogs.{cog}")
+            except Exception as ex:
+                print(f"Could not load extension {cog}")
+            else:
+                print(f"{cog} loaded")
         print("Setup complete")
 
     def run(self, version):
