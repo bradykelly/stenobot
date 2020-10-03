@@ -17,11 +17,15 @@ from discord.ext.commands import when_mentioned_or, has_permissions
 from lib.db import dal
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+COGS.remove("chatnotebasecog")
 IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
     prefixes = dal.get_prefixes(message.guild.id)
-    ret = when_mentioned_or(*prefixes)(bot, message)
+    if prefixes is None:
+        ret = when_mentioned_or( common.DEFAULT_PREFIXES)
+    else:
+        ret = when_mentioned_or(*prefixes)(bot, message)
     return ret
 
 class Ready(object):
@@ -55,6 +59,8 @@ class Bot(BotBase):
 
     def setup(self):
         for cog in COGS:
+            if cog == "chatnotebasecog":
+                continue
             try:
                 self.load_extension(f"lib.cogs.{cog}")
             except Exception as ex:
@@ -120,7 +126,7 @@ class Bot(BotBase):
             self.stdout = self.get_channel(common.MSG_CHANNEL)
             #TODO Uncomment
             #self.scheduler.add_job(self.rules_reminder, CronTrigger(day_of_week=0, hour=12, minute=0, second=0))
-            self.scheduler.start()
+            #self.scheduler.start()
             
             # embed = Embed(title="Now online!", description=f"{common.BOT_NAME} is online and ready to take notes.", 
             #                 color=0xFF0000, timestamp=datetime.utcnow(), icon_url=self.guild.icon_url)
@@ -137,7 +143,7 @@ class Bot(BotBase):
             # await channel.send(file=File("./data/images/bot_image.png"))
 
             while not self.cogs_ready.all_ready():
-                await sleep(0, 5)
+                await sleep(0.5)
             await self.stdout.send("Now online!")
 
             self.ready = True

@@ -4,7 +4,7 @@ from os.path import isfile
 from sqlite3 import connect
 from datetime import datetime
 from typing import List
-from note import Note
+from lib.models.note import Note
 import common
 from apscheduler.triggers.cron import CronTrigger
 

@@ -1,7 +1,8 @@
+from lib import bot
 from discord.errors import Forbidden
 from discord.ext.commands import Cog
 from lib.db import dal
-
+import common
 
 class Welcome(Cog):
     def __init__(self, bot):
@@ -25,9 +26,15 @@ class Welcome(Cog):
     async def on_member_join(self, member): 
         dal.execute("INSERT INTO exp(userId) VALUES (?) ON CONFLICT DO NOTHING", member.id)       
         if chan := self.get_notification_channel(member.guild.id):
-            await chan.send(f"Welcome to ** {member.guild.name} ** {member.mention}! Head over to {'Introductions'} and make yourself known.")
+            if member.guild.id != common.PY_GUILD_ID:
+                await chan.send(f"Welcome to ** {member.guild.name} ** {member.display_name}! Head over to {'Introductions'} and make yourself known.")
+            else:
+                altChan = self.bot.get_channel(759163418799505409)
+                altChan.send(f"Welcome to ** {member.guild.name} ** {member.display_name}! Head over to {'Introductions'} and make yourself known.")
         try:
-            await member.send(f"Welcome to ** {member.guild.name} **! Enjoy your stay!")
+            #TODO Check which guild I'm in.
+            #await member.send(f"Welcome to ** {member.guild.name} **! Enjoy your stay!")
+            pass
         except Forbidden:
             raise #LOG
 
@@ -35,7 +42,10 @@ class Welcome(Cog):
     async def on_member_remove(self, member):
         dal.execute("DELETE FROM exp WHERE userId = ?", member.id)
         if chan := self.get_notification_channel(member.guild.id):
-            await chan.send(f"{member.display_name} has left {member.guild.name}")
-
+            if member.guild.id != common.PY_GUILD_ID:
+                await chan.send(f"{member.display_name} has left {member.guild.name}")
+            else:
+                altChan = self.bot.get_channel(759163418799505409)
+                altChan.send(f"{member.display_name} has left {member.guild.name}")
 def setup(bot):
     bot.add_cog(Welcome(bot))

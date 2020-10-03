@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"powershell.codeFormatting.addWhitespaceAroundPipe": true
+		"powershell.codeFormatting.addWhitespaceAroundPipe": true,
+		"python.pythonPath": "D:\\ProgramData\\Anaconda3\\python.exe"
 	}
 }
