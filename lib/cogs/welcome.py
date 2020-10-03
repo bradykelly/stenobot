@@ -5,6 +5,8 @@ from lib.db import dal
 import common
 
 class Welcome(Cog):
+    """Listeners for when a member joins or leaves the guild"""
+    
     def __init__(self, bot):
         self.bot = bot
 

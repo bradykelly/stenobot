@@ -8,11 +8,13 @@ from typing import List
 from lib.db import dal
 
 class Control(Cog):
+    """Commands to control users and the bot"""
+
     def __init__(self, bot):
         self.bot = bot
 
     @command(name="prefix", 
-            aliases=[], 
+            aliases=["prefixes"], 
             brief="Set this bot's command prefix",
             help="Sets the command prefixes based on `<prefixes>`, a list of prefixes separated by semi-colons, e.g. `!;??;+;->`")
     @has_permissions(manage_guild=True)
