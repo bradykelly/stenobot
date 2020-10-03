@@ -17,7 +17,7 @@ from discord.ext.commands import when_mentioned_or, has_permissions
 from lib.db import dal
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
-COGS.remove("chatnotebasecog")
+COGS.remove("chatnote_base_cog")
 IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
@@ -59,8 +59,6 @@ class Bot(BotBase):
 
     def setup(self):
         for cog in COGS:
-            if cog == "chatnotebasecog":
-                continue
             try:
                 self.load_extension(f"lib.cogs.{cog}")
             except Exception as ex:
