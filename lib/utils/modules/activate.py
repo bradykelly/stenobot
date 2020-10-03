@@ -19,11 +19,11 @@ async def gateway(ctx):
             )
         elif (rc := ctx.bot.get_channel(rc_id)) is None:
             await ctx.send(
-                f"{ctx.bot.cross} The gateway module could not be activated as the rules channel does not exist or can not be accessed by Solaris."
+                f"{ctx.bot.cross} The gateway module could not be activated as the rules channel does not exist or can not be accessed by ChatNoteBot."
             )
         elif ctx.guild.get_role(br_id) is None:
             await ctx.send(
-                f"{ctx.bot.cross} The gateway module could not be activated as the blocking role does not exist or can not be accessed by Solaris."
+                f"{ctx.bot.cross} The gateway module could not be activated as the blocking role does not exist or can not be accessed by ChatNoteBot."
             )
         else:
             gm = await rc.send(

@@ -66,7 +66,7 @@ async def system__logchannel(bot, channel, value):
 
 async def system__adminrole(bot, channel, value):
     """The admin role
-    The role used to denote which members can configure Solaris. Alongside server administrators, only members with this role can use any of Solaris' configuration commands. Upon selecting a new channel, ChatNoteBot will delete the one that was created during the first time setup should it still exist."""
+    The role used to denote which members can configure ChatNoteBot. Alongside server administrators, only members with this role can use any of ChatNoteBot's configuration commands. Upon selecting a new channel, ChatNoteBot will delete the one that was created during the first time setup should it still exist."""
     if not isinstance(value, discord.Role):
         await channel.send(f"{bot.cross} The admin role must be a Discord role in this server.")
     elif value.name == "@everyone":
@@ -75,7 +75,7 @@ async def system__adminrole(bot, channel, value):
         await channel.send(f"{bot.cross} The here role can not be used as the admin role.")
     elif value.position > channel.guild.me.top_role.position:
         await channel.send(
-            f"{bot.cross} The given role can not be used as the admin role as it is above Solaris' top role in the role hierarchy."
+            f"{bot.cross} The given role can not be used as the admin role as it is above ChatNoteBot's top role in the role hierarchy."
         )
     else:
         await bot.db.execute("UPDATE guild_config SET admin_role_id = ? WHERE guildId = ?", value.id, channel.guild.id)
@@ -135,7 +135,7 @@ async def gateway__blockingrole(bot, channel, value):
         await channel.send(f"{bot.cross} The here role can not be used as the blocking role.")
     elif value.position >= channel.guild.me.top_role.position:
         await channel.send(
-            f"{bot.cross} The given role can not be used as the blocking role as it is above Solaris' top role in the role hierarchy."
+            f"{bot.cross} The given role can not be used as the blocking role as it is above ChatNoteBot's top role in the role hierarchy."
         )
     else:
         await bot.db.execute("UPDATE gateway SET blocking_role_id = ? WHERE guildId = ?", value.id, channel.guild.id)

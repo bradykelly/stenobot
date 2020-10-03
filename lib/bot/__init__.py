@@ -1,7 +1,7 @@
 from asyncio import sleep
 import os
 from typing import List
-from ..db import db
+from lib import db
 
 from discord.errors import Forbidden, HTTPException
 from discord.ext.commands.context import Context
@@ -19,6 +19,7 @@ from lib.db import dal
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 COGS.remove("chatnote_base_cog")
+COGS.remove("help")
 IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
@@ -47,7 +48,7 @@ class Bot(BotBase):
         self.cogs_ready = Ready()
         self.guild = None
         self.scheduler = AsyncIOScheduler()
-        self.db = dal.
+        self.db = dal
 
         load_dotenv()
         self.DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")  
