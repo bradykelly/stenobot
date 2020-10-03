@@ -4,7 +4,7 @@ from os.path import isfile
 from sqlite3 import connect
 from datetime import datetime
 from typing import List
-from lib.models.note import Note
+from lib.models import note
 import common
 from apscheduler.triggers.cron import CronTrigger
 
@@ -204,7 +204,7 @@ def get_prefixes(guildId):
         if rows is None:
             return None
         else:
-            prefString = rows["commandPrefixes"]
+            prefString = rows["command_prefixes"]
             prefList = prefString.split(common.CSV_SEPARATOR)
             return prefList
     except Exception as ex:

@@ -1,11 +1,10 @@
-from asyncio import sleep
 import os
+import common
 from typing import List
 from lib import db
-
+from asyncio import sleep
 from discord.errors import Forbidden, HTTPException
 from discord.ext.commands.context import Context
-import common
 from glob import glob
 from datetime import date, datetime 
 from dotenv import load_dotenv
@@ -16,6 +15,7 @@ from discord import Embed, File
 from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import when_mentioned_or, has_permissions
 from lib.db import dal
+from lib.utils.embed import EmbedConstructor
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 COGS.remove("chatnote_base_cog")
@@ -24,7 +24,7 @@ IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 def get_prefix(bot, message):
     prefixes = dal.get_prefixes(message.guild.id)
     if prefixes is None:
-        ret = when_mentioned_or( common.DEFAULT_PREFIXES)
+        ret = when_mentioned_or(common.DEFAULT_PREFIXES)
     else:
         ret = when_mentioned_or(*prefixes)(bot, message)
     return ret
@@ -48,6 +48,7 @@ class Bot(BotBase):
         self.guild = None
         self.scheduler = AsyncIOScheduler()
         self.db = dal
+        self.embed = EmbedConstructor(self)
 
         load_dotenv()
         self.DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")  
@@ -62,8 +63,6 @@ class Bot(BotBase):
     def setup(self):
         for cog in COGS:
             try:
-                if cog == "help":
-                    x = 1
                 self.load_extension(f"lib.cogs.{cog}")
             except Exception as ex:
                 print(f"Could not load extension {cog}")
@@ -101,7 +100,7 @@ class Bot(BotBase):
         if err == "on_command_error":
             await args[0].send("Something went wrong")
         await self.stdout.send(f"An error occurred: {str(err)}")
-        raise
+        raise err
 
     async def on_command_error(self, ctx, error: Exception):
         if(any([isinstance(error, ex) for ex in IGNORED_EXCEPTIONS])):

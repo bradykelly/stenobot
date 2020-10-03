@@ -115,7 +115,8 @@ class Help(commands.Cog):
         help="Help with anything ChatNoteBot. Passing a command name or alias through will show help with that specific command, while passing no arguments will bring up a general command overview.",
     )
     async def help_command(self, ctx, *, cmd: t.Optional[t.Union[converters.Command, str]]):
-        prefix = await self.bot.prefix(ctx.guild)
+        #prefix = await self.bot.prefix(ctx.guild)
+        prefix = ctx.prefix
 
         if isinstance(cmd, str):
             await ctx.send(f"{self.bot.cross} ChatNoteBot has no commands or aliases with that name.")
