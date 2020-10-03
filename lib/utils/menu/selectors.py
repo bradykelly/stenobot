@@ -2,7 +2,8 @@
 
 from asyncio import TimeoutError
 from datetime import timedelta
-from ..chron import chron, long_delta
+from lib.utils import chron
+from lib.utils.chron import long_delta
 
 class Selector:
     def __init__(self, menu, selection, *, timeout=300.0, auto_exit=True, check=None):
@@ -41,7 +42,7 @@ class Selector:
         except TimeoutError:
             await self.menu.timeout(long_delta(timedelta(seconds=self.timeout)))
         else:
-            if (r := reaction.emoji.name) == "exit" and self.auto_exit):
+            if (r := reaction.emoji.name) == "exit" and self.auto_exit:
                 await self.menu.stop()
             else:
                 return reaction

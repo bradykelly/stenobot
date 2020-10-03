@@ -1,6 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/utils/menu/menus.py
 
-from .selectors import selectors
+from lib.utils.menu import selectors
 
 
 class Menu:

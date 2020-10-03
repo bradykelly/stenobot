@@ -1,6 +1,7 @@
 # From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/bot/cogs/help.py
 
 import datetime as dt
+from lib.utils.menu import menus
 import typing as t
 from collections import defaultdict
 from discord.ext import commands
@@ -11,7 +12,7 @@ class HelpMenu(menu.MultiPageMenu):
     def __init__(self, ctx, pagemaps):
         super().__init__(ctx, pagemaps, timeout=120.0)
 
-class ConfigHelpMenu(menu.NumberedSelectionMenu):
+class ConfigHelpMenu(menus.NumberedSelectionMenu):
     def __init__(self, ctx):
         pagemap = {
             "header": "Help",
@@ -171,3 +172,7 @@ class Help(commands.Cog):
                 )
 
             await HelpMenu(ctx, pagemaps).start()        
+
+
+def setup(bot):
+    bot.add_cog(Help(bot))            
