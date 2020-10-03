@@ -34,7 +34,7 @@ async def gateway(ctx):
                 await gm.add_reaction(emoji)
 
             await ctx.bot.db.execute(
-                "UPDATE gateway SET Active = 1, GateMessageID = ? WHERE GuildID = ?", gm.id, ctx.guild.id
+                "UPDATE gateway SET Active = 1, GateMessageID = ? WHERE guildId = ?", gm.id, ctx.guild.id
             )
             await ctx.send(f"{ctx.bot.tick} The gateway module has been activated.")
             lc = await retrieve.log_channel(ctx.bot, ctx.guild)

@@ -91,7 +91,7 @@ def admin_role_is_set():
 
 class AuthorCanNotConfigure(CustomCheckFailure):
     def __init__(self):
-        super().__init__("You are not able to configure Solaris.")
+        super().__init__("You are not able to configure ChatNoteBot.")
 
 
 def author_can_configure():

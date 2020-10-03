@@ -19,7 +19,6 @@ from lib.db import dal
 
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 COGS.remove("chatnote_base_cog")
-COGS.remove("help")
 IGNORED_EXCEPTIONS = (CommandNotFound, BadArgument)
 
 def get_prefix(bot, message):
