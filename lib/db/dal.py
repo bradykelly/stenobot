@@ -192,7 +192,7 @@ def get_prefixes(guildId):
     """
     Gets the command prefixes for a given guild
     """
-    select_sql = """SELECT commandPrefixes 
+    select_sql = """SELECT command_prefixes 
                     FROM guild_config
                     WHERE guildId = ?;"""
     values = (str(guildId), )

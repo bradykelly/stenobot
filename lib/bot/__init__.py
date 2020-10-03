@@ -1,6 +1,7 @@
 from asyncio import sleep
 import os
 from typing import List
+from ..db import db
 
 from discord.errors import Forbidden, HTTPException
 from discord.ext.commands.context import Context
@@ -46,6 +47,7 @@ class Bot(BotBase):
         self.cogs_ready = Ready()
         self.guild = None
         self.scheduler = AsyncIOScheduler()
+        self.db = dal.
 
         load_dotenv()
         self.DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")  
