@@ -1,8 +1,9 @@
-from chatnotebot.bot import bot
+import common
 from discord.errors import Forbidden
 from discord.ext.commands import Cog
 from chatnotebot.db import dal
-import common
+from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.bot import bot
 
 class Welcome(Cog):
     """Listeners for when a member joins or leaves the guild"""
@@ -21,8 +22,9 @@ class Welcome(Cog):
 
     @Cog.listener()
     async def on_ready(self):
-        if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("welcome")
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)
 
     @Cog.listener()
     async def on_member_join(self, member): 

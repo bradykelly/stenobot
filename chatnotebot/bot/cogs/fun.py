@@ -1,3 +1,4 @@
+from chatnotebot.bot.cogs.gateway import Synchronise
 from aiohttp import request
 from typing import Optional
 from discord import Member, Embed
@@ -91,8 +92,10 @@ class Fun(Cog):
 
     @Cog.listener()
     async def on_ready(self):
-        if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("fun")
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)
+
 
 def setup(bot):
     bot.add_cog(Fun(bot))

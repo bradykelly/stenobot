@@ -1,3 +1,4 @@
+from chatnotebot.models.note import Note
 import sqlite3
 import sys
 from os.path import isfile

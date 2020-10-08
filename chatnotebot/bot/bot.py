@@ -4,9 +4,11 @@ import os
 import subprocess as sp
 import time
 import discord
+import common
 from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
+from chatnotebot.db import db
 from chatnotebot import Config, utils
 from chatnotebot.db import dal
 from chatnotebot.utils import loc
@@ -22,7 +24,7 @@ class Bot(commands.Bot):
         self._dynamic = "./chatnotebot/data/dynamic"
         self._static = "./chatnotebot/data/static"
         self.scheduler = AsyncIOScheduler()
-        self.db = dal
+        self.db = db.Database(self)
         self.embed = utils.EmbedConstructor(self)
         self.emoji = EmojiGetter(self)
         self.loc = CodeCounter()
@@ -72,9 +74,8 @@ class Bot(commands.Bot):
     async def on_connect(self):
         if not self.ready.booted:
             print(f" Connected to Discord (latency: {self.latency*1000:,.0f} ms).")
-            # TODO Use Solaris Database class
-            #await self.db.connect()
-            #print(" Connected to database.")
+            await self.db.connect()
+            print(" Connected to database.")
 
     async def on_resumed(self):
         print("Bot resumed.")
@@ -113,11 +114,12 @@ class Bot(commands.Bot):
 
     async def prefix(self, guild):
         if guild is not None:
-            return await self.db.field("SELECT Prefix FROM system WHERE GuildID = ?", guild.id)
+            prefixes = await self.db.field("SELECT commandPrefixes FROM guild_config WHERE GuildID = ?", guild.id)
+            return prefixes.split(common.CSV_SEPARATOR)
 
     async def command_prefix(self, bot, msg):
-        prefix = await self.prefix(msg.guild)
-        return commands.when_mentioned_or(prefix or Config.DEFAULT_PREFIX)(bot, msg)
+        prefixes = await self.prefix(msg.guild)
+        return commands.when_mentioned_or(prefixes or Config.DEFAULT_PREFIX)(bot, msg)
 
     async def process_commands(self, msg):
         ctx = await self.get_context(msg, cls=commands.Context)

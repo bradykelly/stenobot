@@ -1,5 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+from chatnotebot.bot.cogs.gateway import Synchronise
 import os
 import datetime as dt
 import typing as t
@@ -64,11 +65,12 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.bot.remove_command("help")
-
+        
     @Cog.listener()
     async def on_ready(self):
-        if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("help")
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)
 
     @staticmethod
     async def basic_syntax(ctx, cmd, prefix):

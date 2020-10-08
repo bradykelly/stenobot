@@ -1,3 +1,4 @@
+from chatnotebot.bot.cogs.gateway import Synchronise
 from chatnotebot.bot.chatnote_base_cog import ChatNoteBaseCog
 import common
 from chatnotebot.db import dal
@@ -106,10 +107,11 @@ class Notes(ChatNoteBaseCog):
             usage = f"{ctx.prefix}{ctx.command.name} <note_id>"
             await self.show_message_codeblock(ctx, usage, "Usage")    
 
-    @Cog.listener()
+    @commands.Cog.listener()
     async def on_ready(self):
-        if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("notes")    
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)    
 
 
 def setup(bot):

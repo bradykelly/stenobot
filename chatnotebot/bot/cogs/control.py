@@ -6,6 +6,7 @@ from discord.ext.commands.core import command, has_permissions
 from discord.ext.commands.errors import CheckFailure
 from typing import List
 from chatnotebot.db import dal
+from chatnotebot.bot.cogs.gateway import Synchronise
 
 class Control(Cog):
     """Commands to control users and the bot"""
@@ -41,20 +42,6 @@ class Control(Cog):
         if isinstance(error, CheckFailure):
             await ctx.send("You need Guild Admin permissions to change prefixes.")
 
-# Already defined in Meta cog.
-    # @command(name="leave",
-    #             aliases=[],
-    #             brief="Leave a guild",
-    #             help="Permanently leave the guild with id `[id]`")
-    # @commands.is_owner()
-    # async def leave(self, ctx, *, guild_id):
-    #     guild = discord.utils.get(self.bot.guilds, id=guild_id)
-    #     if guild is None:
-    #         await ctx.send("I don't recognize that guild.")
-    #         return
-    #     await self.bot.leave_guild(guild)
-    #     await ctx.send(f":ok_hand: I have left guild: {guild.name} ({guild.id})")
-
     @command(name="logout",
                 aliases=[],
                 brief="Log out from Discord",
@@ -62,11 +49,12 @@ class Control(Cog):
     @commands.is_owner()
     async def logout(self, ctx):
         self.bot.logout(ctx)
-
-    @Cog.listener()
+        
+    @commands.Cog.listener()
     async def on_ready(self):
-        if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("control")
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)
 
 def setup(bot):
     bot.add_cog(Control(bot))        

@@ -1,32 +1,84 @@
---
--- File generated with SQLiteStudio v3.2.1 on Wed Sep 23 14:28:38 2020
---
--- Text encoding used: UTF-8
---
-PRAGMA foreign_keys = off;
-BEGIN TRANSACTION;
+-- From Solaris: https://github.com/parafoxia/Solaris
 
--- Table: guild_config
-CREATE TABLE guild_config (
-    guildId         STRING (18) PRIMARY KEY,
-    name            STRING      UNIQUE
-                                NOT NULL,
-    setTime         DATETIME    NOT NULL,
-    setByUserId     STRING      NOT NULL,
-    commandPrefixes STRING      NOT NULL
+CREATE TABLE IF NOT EXISTS bot (
+    Key text PRIMARY KEY,
+    Value text
 );
 
+INSERT OR IGNORE INTO bot VALUES ("last commit", CURRENT_TIMESTAMP);
 
--- Table: notes
-CREATE TABLE notes (
-    Id       INTEGER  PRIMARY KEY AUTOINCREMENT,
-    Time     DATETIME NOT NULL,
-    UserId   STRING   NOT NULL,
-    Notebook STRING   NOT NULL
-                      DEFAULT Main,
-    Text     TEXT     NOT NULL
+CREATE TABLE IF NOT EXISTS errors (
+    Ref text PRIMARY KEY,
+    ErrorTime text DEFAULT CURRENT_TIMESTAMP,
+    Cause text,
+    Traceback text
 );
 
+CREATE TABLE IF NOT EXISTS guild_config (
+    GuildID integer PRIMARY KEY,
+    RunFTS integer DEFAULT 0,
+    Prefix text DEFAULT ">>",
+    DefaultLogChannelID integer,
+    LogChannelID integer,
+    DefaultAdminRoleID interger,
+    AdminRoleID integer
+);
 
-COMMIT TRANSACTION;
-PRAGMA foreign_keys = on;
+-- gateway
+
+CREATE TABLE IF NOT EXISTS gateway (
+	GuildID integer PRIMARY KEY,
+	Active integer DEFAULT 0,
+	RulesChannelID integer,
+	GateMessageID integer,
+	BlockingRoleID integer,
+	MemberRoleIDs text,
+	ExceptionRoleIDs text,
+	WelcomeChannelID integer,
+	GoodbyeChannelID integer,
+	Timeout integer,
+	GateText text,
+	WelcomeText text,
+	WelcomeBotText text,
+	GoodbyeText text,
+	GoodbyeBotText text
+);
+
+CREATE TABLE IF NOT EXISTS entrants (
+	GuildID integer,
+	UserID integer,
+	Timeout text,
+	PRIMARY KEY (GuildID, UserID)
+);
+
+CREATE TABLE IF NOT EXISTS accepted (
+	GuildID integer,
+	UserID integer,
+	PRIMARY KEY (GuildID, UserID)
+);
+
+-- warn
+
+CREATE TABLE IF NOT EXISTS warn (
+	GuildID integer PRIMARY KEY,
+	WarnRoleID integer,
+	MaxPoints integer,
+	MaxStrikes interger
+);
+
+CREATE TABLE IF NOT EXISTS warntypes (
+	GuildID integer,
+	WarnType text,
+	Points integer,
+	PRIMARY KEY (GuildID, WarnType)
+);
+
+CREATE TABLE IF NOT EXISTS warns (
+	WarnID text PRIMARY KEY,
+	GuildID integer,
+	UserID integer,
+	ModID integer,
+	WarnTime text DEFAULT CURRENT_TIMESTAMP,
+	WarnType text,
+	Comment text
+);
