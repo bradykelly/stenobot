@@ -1,4 +1,4 @@
-from lib import bot
+from chatnotebot.bot import bot
 from discord.errors import Forbidden
 from discord.ext.commands import Cog
 from chatnotebot.db import dal

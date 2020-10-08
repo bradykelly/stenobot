@@ -4,7 +4,7 @@ import re
 
 import discord
 from discord.ext import commands
-from lib.utils import Search
+from chatnotebot.utils import Search
 
 
 class User(commands.Converter):

@@ -15,10 +15,10 @@
 # from discord.ext.commands import Bot as BotBase
 # from discord.ext.commands import when_mentioned_or, has_permissions
 # from db import dal
-# from lib.utils.embed import EmbedConstructor
-# from lib.utils.emoji import EmojiGetter
-# from lib.utils.loc import CodeCounter
-# from lib.utils.presence import PresenceSetter
+# from chatnotebot.utils.embed import EmbedConstructor
+# from chatnotebot.utils.emoji import EmojiGetter
+# from chatnotebot.utils.loc import CodeCounter
+# from chatnotebot.utils.presence import PresenceSetter
 from .bot import Bot
 
 # COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]

@@ -1,6 +1,6 @@
 import discord
 import common
-from lib.db import dal
+from chatnotebot.db import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands

@@ -3,7 +3,7 @@
 import datetime as dt
 from time import strftime
 
-from lib.utils import string
+from chatnotebot.utils import string
 
 
 def sys_time():

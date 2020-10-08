@@ -1,11 +1,12 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+import os
 import datetime as dt
 import typing as t
 from collections import defaultdict
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
-from lib.utils import checks, chron, converters, menu, modules, string
+from chatnotebot.utils import checks, chron, converters, menu, modules, string
 
 
 class HelpMenu(menu.MultiPageMenu):

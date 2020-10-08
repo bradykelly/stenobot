@@ -1,6 +1,6 @@
 #From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/utils/modules/activate.py
 
-from ..modules import retrieve
+from chatnotebot.utils.modules import retrieve
 
 async def gateway(ctx):
     async with ctx.typing():

@@ -4,14 +4,14 @@ from os.path import isfile
 from sqlite3 import connect
 from datetime import datetime
 from typing import List
-from lib.models import note
+from chatnotebot.models import note
 import common
 from apscheduler.triggers.cron import CronTrigger
 
 #TODO: Proper exception handling
 
-DB_PATH = "./data/db/notebooks.db"
-BUILD_PATH = "./data/db/build.sql"
+DB_PATH = "chatnotebot/data/dynamic/notebooks.db"
+BUILD_PATH = "chatnotebot/data/static/build.sql"
 
 def build():         
     if isfile(BUILD_PATH) and not isfile(DB_PATH):

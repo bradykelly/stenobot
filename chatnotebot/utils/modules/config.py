@@ -4,9 +4,9 @@ import discord
 from os import getenv
 from dotenv import load_dotenv
 from typing import Final
-from ...utils import string
-from ..modules import retrieve
-from ....common import common
+from chatnotebot.utils import string
+from chatnotebot.utils.modules import retrieve
+import common
 
 MAX_PREFIX_LEN = 5
 

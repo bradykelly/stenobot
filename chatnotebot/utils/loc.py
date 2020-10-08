@@ -4,7 +4,7 @@ import os
 
 from pygount import SourceAnalysis
 
-from lib.utils import ROOT_DIR
+from chatnotebot.utils import ROOT_DIR
 
 
 class CodeCounter:

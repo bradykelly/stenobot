@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from discord import Embed
-from lib.utils import DEFAULT_EMBED_COLOUR
+from chatnotebot.utils import DEFAULT_EMBED_COLOUR
 
 
 class EmbedConstructor:

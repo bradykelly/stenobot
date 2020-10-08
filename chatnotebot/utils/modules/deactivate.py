@@ -1,4 +1,4 @@
-from . import activate, config, deactivate, retrieve
+from chatnotebot.utils.modules import activate, config, deactivate, retrieve
 
 import discord
 from chatnotebot.utils.modules import retrieve

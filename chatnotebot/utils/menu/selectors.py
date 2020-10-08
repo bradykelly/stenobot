@@ -2,9 +2,9 @@
 
 from asyncio import TimeoutError
 from datetime import timedelta
-from lib.utils.emoji import ALTERNATIVES
-from lib.utils import emoji
-from lib.utils import chron
+from chatnotebot.utils.emoji import ALTERNATIVES
+from chatnotebot.utils import emoji
+from chatnotebot.utils import chron
 
 
 class Selector:

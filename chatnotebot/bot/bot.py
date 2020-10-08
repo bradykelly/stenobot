@@ -10,21 +10,24 @@ from discord.ext import commands
 from chatnotebot import Config, utils
 from chatnotebot.db import dal
 from chatnotebot.utils import loc
-
+from chatnotebot.utils.emoji import EmojiGetter
+from chatnotebot.utils.loc import CodeCounter
+from chatnotebot.utils.presence import PresenceSetter
+from chatnotebot.utils.ready import Ready
 
 class Bot(commands.Bot):
     def __init__(self, version):
         self.version = version
-        self._cogs = [p.stem for p in Path(".").glob("../cogs/*.py")]
+        self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py")]
         self._dynamic = "./chatnotebot/data/dynamic"
         self._static = "./chatnotebot/data/static"
         self.scheduler = AsyncIOScheduler()
         self.db = dal
         self.embed = utils.EmbedConstructor(self)
-        self.emoji = utils.EmojiGetter(self)
-        self.loc = utils.CodeCounter()
-        self.presence = utils.PresenceSetter(self)
-        self.ready = utils.Ready(self)
+        self.emoji = EmojiGetter(self)
+        self.loc = CodeCounter()
+        self.presence = PresenceSetter(self)
+        self.ready = Ready(self)
 
         self.loc.count()
 
@@ -34,8 +37,14 @@ class Bot(commands.Bot):
         print("Running setup...")
 
         for cog in self._cogs:
-            self.load_extension(f"solaris.bot.cogs.{cog}")
-            print(f" Loaded `{cog}` cog.")
+            if cog.lower() in ["gateway"]:
+                continue
+            try:
+                self.load_extension(f"chatnotebot.bot.cogs.{cog}")
+            except Exception as ex:
+                print(f"Error loading {cog}: {str(ex.args)}")
+            else:
+                print(f" Loaded `{cog}` cog.")
 
         print("Setup complete.")
 
@@ -63,8 +72,9 @@ class Bot(commands.Bot):
     async def on_connect(self):
         if not self.ready.booted:
             print(f" Connected to Discord (latency: {self.latency*1000:,.0f} ms).")
-            await self.db.connect()
-            print(" Connected to database.")
+            # TODO Use Solaris Database class
+            #await self.db.connect()
+            #print(" Connected to database.")
 
     async def on_resumed(self):
         print("Bot resumed.")
@@ -80,9 +90,10 @@ class Bot(commands.Bot):
             self.scheduler.start()
             print(f" Scheduler started ({len(self.scheduler.get_jobs()):,} job(s)).")
 
-            await self.db.sync()
-            self.ready.synced = True
-            print(" Synchronised database.")
+            # TODO Use Database class from Solaris
+            # await self.db.sync()
+            # self.ready.synced = True
+            # print(" Synchronised database.")
 
             self.ready.booted = True
             print(" Bot booted. Don't use CTRL+C to shut the bot down!")

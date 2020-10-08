@@ -1,7 +1,7 @@
 #From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/utils/modules/retrieve.py
 
 import discord
-from ....common import common
+import common
 
 
 async def _system__runfts(bot, guild):

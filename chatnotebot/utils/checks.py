@@ -1,7 +1,7 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
 from discord.ext import commands
-from lib.utils import modules
+from chatnotebot.utils import modules
 
 
 class CustomCheckFailure(commands.CheckFailure):

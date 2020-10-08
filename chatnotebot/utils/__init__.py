@@ -24,9 +24,8 @@ SUPPORT_GUILD_INVITE_LINK = "https://discord.gg/c3b4cZs"
 
 # Dependant on constants above.
 from .embed import EmbedConstructor
-# TODO These not ported yet
-#from .emoji import EmojiGetter
-#from .loc import CodeCounter
-#from .presence import PresenceSetter
-#from .ready import Ready
+from .emoji import EmojiGetter
+from .loc import CodeCounter
+from .presence import PresenceSetter
+from .ready import Ready
 from .search import Search
