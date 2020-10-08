@@ -114,12 +114,12 @@ class Bot(commands.Bot):
 
     async def prefix(self, guild):
         if guild is not None:
-            prefixes = await self.db.field("SELECT commandPrefixes FROM guild_config WHERE GuildID = ?", guild.id)
-            return prefixes.split(common.CSV_SEPARATOR)
+            prefix = await self.db.field("SELECT commandPrefix FROM guild_config WHERE GuildID = ?", guild.id)
+            return prefix
 
     async def command_prefix(self, bot, msg):
-        prefixes = await self.prefix(msg.guild)
-        return commands.when_mentioned_or(prefixes or Config.DEFAULT_PREFIX)(bot, msg)
+        prefix = await self.prefix(msg.guild)
+        return commands.when_mentioned_or(prefix or Config.DEFAULT_PREFIX)(bot, msg)
 
     async def process_commands(self, msg):
         ctx = await self.get_context(msg, cls=commands.Context)

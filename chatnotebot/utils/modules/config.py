@@ -24,7 +24,7 @@ MIN_STRIKES = 1
 MAX_STRIKES = 9
 
 async def _system__runfts(bot, channel, value):
-    await bot.db.execute("UPDATE guild_config SET run_fts = ? WHERE guildId = ?", value, channel.guild.id)
+    await bot.db.execute("UPDATE guild_config SET runFts = ? WHERE guildId = ?", value, channel.guild.id)
 
 async def system__prefix(bot, channel, values):
     """The server prefix

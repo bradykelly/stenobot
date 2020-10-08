@@ -173,9 +173,9 @@ def set_prefixes(guildId, guildName, userId, prefixList):
     """
     Sets the command prefixes for a given guild
     """
-    upsert_sql = """INSERT INTO guild_config(guildId, name, setTime, setByUserId, commandPrefixes)
+    upsert_sql = """INSERT INTO guild_config(guildId, name, setTime, setByUserId, commandPrefix)
                         VALUES(?, ?, ?, ?, ?)
-                        ON CONFLICT(guildId) DO UPDATE SET commandPrefixes = excluded.commandPrefixes;"""
+                        ON CONFLICT(guildId) DO UPDATE SET commandPrefix = excluded.commandPrefix;"""
     setAt = datetime.now()
     prefString = common.CSV_SEPARATOR.join(prefixList)
     values = (guildId, guildName, setAt, userId, prefString)
@@ -193,7 +193,7 @@ def get_prefixes(guildId):
     """
     Gets the command prefixes for a given guild
     """
-    select_sql = """SELECT command_prefixes 
+    select_sql = """SELECT commandPrefix 
                     FROM guild_config
                     WHERE guildId = ?;"""
     values = (str(guildId), )
@@ -205,7 +205,7 @@ def get_prefixes(guildId):
         if rows is None:
             return None
         else:
-            prefString = rows["command_prefixes"]
+            prefString = rows["commandPrefix"]
             prefList = prefString.split(common.CSV_SEPARATOR)
             return prefList
     except Exception as ex:

@@ -137,7 +137,7 @@ class Error(commands.Cog):
 
         ref = self.bot.generate_id()
         tb = format_exc()
-        self.bot.db.execute(
+        await self.bot.db.execute(
             "INSERT INTO errors (Ref, errorTime, Cause, Traceback) VALUES (?, ?, ?, ?)", ref, datetime.now() , cause, tb
         )
         return ref

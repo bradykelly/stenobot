@@ -5,10 +5,10 @@ import common
 
 
 async def _system__runfts(bot, guild):
-    return await bot.db.field("SELECT run_fts FROM guild_config WHERE guildId = ?", guild.id)
+    return await bot.db.field("SELECT runFts FROM guild_config WHERE guildId = ?", guild.id)
 
 async def system__prefix(bot, guild):
-    return bot.dal.get_prefix(guild.id)    
+    return bot.db.get_prefix(guild.id)    
 
 async def system__defaultlogchannel(bot, guild):
     return bot.get_channel(await bot.db.field("SELECT default_log_channel_id FROM guild_config WHERE guildId = ?", guild.id))    
