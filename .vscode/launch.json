@@ -5,12 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: launcher.py",
+            "name": "Python: Module",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/launcher.py",
-            "console": "integratedTerminal",
-            "justMyCode": false
+            "module": "chatnotebot"
         }
     ]
 }
