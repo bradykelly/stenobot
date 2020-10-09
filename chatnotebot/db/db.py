@@ -1,9 +1,12 @@
 # From Solaris: https://github.com/parafoxia/Solaris
+# TODO Exception handling
 
+import sys
+import common
 from os import path
-
 from aiosqlite import connect
 from apscheduler.triggers.cron import CronTrigger
+from datetime import datetime
 
 
 class Database:
@@ -97,3 +100,23 @@ class Database:
         with open(path, "r", encoding="utf-8") as script:
             await self.cxn.executescript(script.read())
         self._calls += 1  # NOTE: Should this be different?
+
+    async def insert_note(self, userId, text, notebook=None):   
+        '''
+        Insert a note into a named notebook or the default notebook
+        ''' 
+        if notebook is None:
+            notebook = common.DEFAULT_NOTEBOOK
+        insert_sql = """INSERT INTO 'notes' 
+                        ('Time', 'UserId', 'Notebook', 'Text') 
+                        VALUES(?, ?, ?, ?);"""
+        values = (datetime.now(), userId, notebook.strip().lower(), text)
+        cur = None
+        try:
+            cur = await self.cxn.execute(insert_sql, values)
+        except:
+            err = sys.exc_info()[0]
+        else:
+            self._calls += 1      
+
+        return cur.rowcount

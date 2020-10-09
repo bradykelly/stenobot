@@ -2,6 +2,7 @@
 
 import datetime as dt
 import typing as t
+import common
 from os import name
 from platform import python_version
 from time import time
@@ -48,9 +49,9 @@ class LeavingMenu(menu.SelectionMenu):
             "header": "Leave Wizard",
             "title": "Leaving already?",
             "description": (
-                "If you remove Solaris from your server, all server information Solaris has stored, as well as any roles and channels Solaris has created, will be deleted."
-                f"If you are having issues with Solaris, consider joining the support server to try and find a resolution - select {ctx.bot.info} to get an invite link.\n\n"
-                "Are you sure you want to remove Solaris from your server?"
+                F"If you remove {common.BOT_NAME} from your server, all server information {common.BOT_NAME} has stored, as well as any roles and channels {common.BOT_NAME} has created, will be deleted."
+                f"If you are having issues with {common.BOT_NAME}, consider joining the support server to try and find a resolution - select {ctx.bot.info} to get an invite link.\n\n"
+                F"Are you sure you want to remove {common.BOT_NAME} from your server?"
             ),
             "thumbnail": ctx.bot.user.avatar_url,
         }
@@ -89,20 +90,20 @@ class LeavingMenu(menu.SelectionMenu):
         await deactivate.everything(self.ctx)
 
         if self.ctx.guild.me.guild_permissions.manage_roles and (dar := self.ctx.guild.get_role(dar_id)) is not None:
-            await dar.delete(reason="Solaris is leaving the server.")
+            await dar.delete(reason=F"{common.BOT_NAME} is leaving the server.")
 
         if (
             self.ctx.guild.me.guild_permissions.manage_channels
             and (dlc := self.ctx.guild.get_channel(dlc_id)) is not None
         ):
-            await dlc.delete(reason="Solaris is leaving the server.")
+            await dlc.delete(reason=F"{common.BOT_NAME} is leaving the server.")
 
         pagemap = {
             "header": "Leave Wizard",
             "title": "Sorry to see you go!",
             "description": (
-                f"If you ever wish to reinvite Solaris, you can do so by clicking [here]({self.bot.admin_invite}) (recommended permissions), or [here]({self.bot.non_admin_invite}) (minimum required permissions).\n\n"
-                "The Solaris team wish you and your server all the best."
+                f"If you ever wish to reinvite {common.BOT_NAME}, you can do so by clicking [here]({self.bot.admin_invite}) (recommended permissions), or [here]({self.bot.non_admin_invite}) (minimum required permissions).\n\n"
+                F"The {common.BOT_NAME} team wish you and your server all the best."
             ),
         }
         await self.switch(pagemap)
@@ -110,7 +111,7 @@ class LeavingMenu(menu.SelectionMenu):
 
 
 class Meta(commands.Cog):
-    """Commands for retrieving information regarding Solaris, from invitation links to detailed bot statistics."""
+    """Commands for retrieving information regarding {common.BOT_NAME}, from invitation links to detailed bot statistics."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -138,7 +139,7 @@ class Meta(commands.Cog):
     @commands.command(
         name="about",
         aliases=["credits"],
-        help="View information regarding those behind Solaris' development. This includes the developer and the testers, and also shows copyright information.",
+        help=F"View information regarding those behind {common.BOT_NAME}' development. This includes the developer and the testers, and also shows copyright information.",
     )
     async def about_command(self, ctx):
         prefix = await self.bot.prefix(ctx.guild)
@@ -146,7 +147,7 @@ class Meta(commands.Cog):
             embed=self.bot.embed.build(
                 ctx=ctx,
                 header="Information",
-                title="About Solaris",
+                title=F"About {common.BOT_NAME}",
                 description=f"Use `{prefix}botinfo` for detailed statistics.",
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
@@ -157,7 +158,7 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="support", aliases=["sos"], help="Provides an invite link to Solaris' support server.")
+    @commands.command(name="support", aliases=["sos"], help=F"Provides an invite link to {common.BOT_NAME}' support server.")
     async def support_command(self, ctx):
         online = [m for m in self.support_guild.members if not m.bot and m.status == discord.Status.online]
         helpers = [
@@ -180,7 +181,7 @@ class Meta(commands.Cog):
         )
 
     @commands.command(
-        name="invite", aliases=["join"], help="Provides the links necessary to invite Solaris to other servers."
+        name="invite", aliases=["join"], help=F"Provides the links necessary to invite {common.BOT_NAME} to other servers."
     )
     async def invite_command(self, ctx):
         await ctx.send(
@@ -191,12 +192,12 @@ class Meta(commands.Cog):
                 fields=(
                     (
                         "Primary link",
-                        f"To invite Solaris with administrator privileges, click [here]({self.bot.admin_invite}).",
+                        f"To invite {common.BOT_NAME} with administrator privileges, click [here]({self.bot.admin_invite}).",
                         False,
                     ),
                     (
                         "Secondary",
-                        f"To invite Solaris without administrator privileges, click [here]({self.bot.non_admin_invite}) (you may need to grant Solaris some extra permissions in order to use some modules).",
+                        f"To invite {common.BOT_NAME} without administrator privileges, click [here]({self.bot.non_admin_invite}) (you may need to grant {common.BOT_NAME} some extra permissions in order to use some modules).",
                         False,
                     ),
                     ("Servers", f"{self.bot.guild_count:,}", True),
@@ -206,7 +207,7 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="source", aliases=["src"], help="Provides a link to Solaris' source code.")
+    @commands.command(name="source", aliases=["src"], help=F"Provides a link to {common.BOT_NAME}' source code.")
     async def source_command(self, ctx):
         await ctx.send(
             embed=self.bot.embed.build(
@@ -226,7 +227,7 @@ class Meta(commands.Cog):
     @commands.command(
         name="issue",
         aliases=["bugreport", "reportbug", "featurerequest", "requestfeature"],
-        help="Provides a link to open an issue on the Solaris repo.",
+        help=F"Provides a link to open an issue on the {common.BOT_NAME} repo.",
     )
     async def issue_command(self, ctx):
         await ctx.send(
@@ -237,6 +238,7 @@ class Meta(commands.Cog):
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
                     (
+                        # TODO Fix all urls
                         "View all known bugs",
                         "Click [here](https://github.com/parafoxia/Solaris/issues?q=is%3Aissue+is%3Aopen+label%3Abug).",
                         False,
@@ -271,7 +273,7 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="ping", help="Pings Solaris.")
+    @commands.command(name="ping", help=f"Pings {common.BOT_NAME}.")
     async def ping_command(self, ctx):
         lat = self.bot.latency * 1000
         s = time()
@@ -285,7 +287,7 @@ class Meta(commands.Cog):
         name="botinfo",
         aliases=["bi", "botstats", "stats", "bs"],
         cooldown_after_parsing=True,
-        help="Displays statistical information on Solaris. This includes process and composition information, and also includes information about Solaris' reach.",
+        help=f"Displays statistical information on {common.BOT_NAME}. This includes process and composition information, and also includes information about {common.BOT_NAME}' reach.",
     )
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def botinfo_command(self, ctx):
@@ -302,7 +304,7 @@ class Meta(commands.Cog):
                     ctx=ctx,
                     header="Information",
                     title="Bot information",
-                    description=f"Solaris was developed by {(await self.bot.application_info()).owner.mention}. Use `{prefix}about` for more information.",
+                    description=f"{common.BOT_NAME} was developed by {(await self.bot.application_info()).owner.mention}. Use `{prefix}about` for more information.",
                     thumbnail=self.bot.user.avatar_url,
                     fields=(
                         ("Bot version", f"{self.bot.version}", True),
@@ -339,7 +341,7 @@ class Meta(commands.Cog):
     @commands.command(
         name="userinfo",
         aliases=["ui"],
-        help="Displays information on a given user. If no user is provided, Solaris will display your information. Note that although Solaris can display information about any user on Discord, the amount of information available is significantly lower for users not in the server the command was invoked in.",
+        help=f"Displays information on a given user. If no user is provided, {common.BOT_NAME} will display your information. Note that although {common.BOT_NAME} can display information about any user on Discord, the amount of information available is significantly lower for users not in the server the command was invoked in.",
     )
     async def userinfo_command(
         self, ctx, *, target: t.Optional[t.Union[discord.Member, converters.User, converters.SearchedMember, str]]
@@ -407,7 +409,7 @@ class Meta(commands.Cog):
             )
 
         else:
-            await ctx.send(f"{self.bot.cross} Solaris was unable to identify a user with the information provided.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a user with the information provided.")
 
     @commands.command(
         name="serverinfo", aliases=["si", "guildinfo", "gi"], help="Displays information on your server."
@@ -465,7 +467,7 @@ class Meta(commands.Cog):
     @commands.command(
         name="channelinfo",
         aliases=["categoryinfo", "ci"],
-        help="Displays information on a given channel or category. If no channel or category is provided, Solaris will display information on the channel the command was invoked in.",
+        help=f"Displays information on a given channel or category. If no channel or category is provided, {common.BOT_NAME} will display information on the channel the command was invoked in.",
     )
     async def channelinfo_command(
         self,
@@ -556,12 +558,12 @@ class Meta(commands.Cog):
             )
 
         else:
-            await ctx.send(f"{self.bot.cross} Solaris was unable to identify a channel with the information provided.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a channel with the information provided.")
 
     @commands.command(
         name="roleinfo",
         aliases=["ri"],
-        help="Displays information on a given role. If no role is provided, Solaris will display information on your top role.",
+        help=f"Displays information on a given role. If no role is provided, {common.BOT_NAME} will display information on your top role.",
     )
     async def roleinfo_command(self, ctx, *, target: t.Optional[t.Union[discord.Role, str]]):
         target = target or ctx.author.top_role
@@ -593,7 +595,7 @@ class Meta(commands.Cog):
             )
 
         else:
-            await ctx.send(f"{self.bot.cross} Solaris was unable to identify a role with the information provided.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a role with the information provided.")
 
     @commands.command(
         name="messageinfo",
@@ -634,7 +636,7 @@ class Meta(commands.Cog):
             )
 
         else:
-            await ctx.send(f"{self.bot.cross} Solaris was unable to identify a message with the information provided.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a message with the information provided.")
 
     @commands.command(
         name="emojiinfo",
@@ -668,7 +670,7 @@ class Meta(commands.Cog):
 
         else:
             await ctx.send(
-                f"{self.bot.cross} Solaris was unable to identify an emoji with the information provided. Are you sure it is a custom emoji?"
+                f"{self.bot.cross} {common.BOT_NAME} was unable to identify an emoji with the information provided. Are you sure it is a custom emoji?"
             )
 
     @commands.command(
@@ -768,7 +770,7 @@ class Meta(commands.Cog):
                 )
             )
         else:
-            await ctx.send(f"{self.bot.cross} Solaris was unable to identify a user with the information provided.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a user with the information provided.")
 
     @commands.command(name="icon", help="Displays the icon of your server.")
     async def icon_command(self, ctx):
@@ -783,7 +785,7 @@ class Meta(commands.Cog):
 
     @commands.command(
         name="leave",
-        help="Utility to make Solaris clean up before leaving the server. This involves deactivating all active modules and deleting the default log channel and the default admin role should they still exist.",
+        help=f"Utility to make {common.BOT_NAME} clean up before leaving the server. This involves deactivating all active modules and deleting the default log channel and the default admin role should they still exist.",
     )
     @checks.author_can_configure()
     async def leave_command(self, ctx):

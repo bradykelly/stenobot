@@ -1,9 +1,8 @@
 # From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/utils/__init__.py
 
 import os
-
+import common
 from pygount import SourceAnalysis
-
 from chatnotebot.utils import ROOT_DIR
 
 
@@ -14,7 +13,7 @@ class CodeCounter:
         self.empty = 0
 
     def count(self):
-        for subdir, _, files in os.walk(ROOT_DIR / "solaris"):
+        for subdir, _, files in os.walk(ROOT_DIR / f"{common.BOT_NAME}"):
             for file in (f for f in files if f.endswith(".py")):
                 analysis = SourceAnalysis.from_file(f"{subdir}/{file}", "pygount", encoding="utf=8")
                 self.code += analysis.code_count

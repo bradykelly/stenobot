@@ -66,7 +66,7 @@ class Bot(commands.Bot):
 
         hub = self.get_cog("Hub")
         if (sc := getattr(hub, "stdout_channel", None)) is not None:
-            await sc.send(f"{self.info} Solaris is now shutting down. (Version {self.version})")
+            await sc.send(f"{self.info} {common.BOT_NAME} is now shutting down. (Version {self.version})")
 
         print(" Closing connection to Discord...")
         await self.logout()
@@ -91,7 +91,7 @@ class Bot(commands.Bot):
             self.scheduler.start()
             print(f" Scheduler started ({len(self.scheduler.get_jobs()):,} job(s)).")
 
-            # TODO Use Database class from Solaris
+            # TODO Use Database class from {common.BOT_NAME}
             # await self.db.sync()
             # self.ready.synced = True
             # print(" Synchronised database.")
@@ -126,10 +126,10 @@ class Bot(commands.Bot):
 
         if ctx.command is not None:
             if isinstance(msg.channel, discord.DMChannel):
-                await ctx.send(f"{self.cross} Solaris does not support command invokations in DMs.")
+                await ctx.send(f"{self.cross} {common.BOT_NAME} does not support command invokations in DMs.")
             elif not self.ready.booted:
                 await ctx.send(
-                    f"{self.cross} Solaris is still booting and is not ready to receive commands. Please try again later."
+                    f"{self.cross} {common.BOT_NAME} is still booting and is not ready to receive commands. Please try again later."
                 )
             else:
                 await self.invoke(ctx)

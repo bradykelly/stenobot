@@ -1,8 +1,9 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
 import datetime as dt
-from datetime import datetime
 import json
+import common
+from datetime import datetime
 from os import path
 from traceback import format_exc
 
@@ -72,15 +73,15 @@ class Error(commands.Cog):
             try:
                 mp = string.list_of([str(perm.replace("_", " ")).title() for perm in exc.missing_perms], sep="or")
                 await ctx.send(
-                    f"{self.bot.cross} Solaris does not have the {mp} permission(s), which are required to use this command."
+                    f"{self.bot.cross} {common.BOT_NAME} does not have the {mp} permission(s), which are required to use this command."
                 )
             except discord.Forbidden:
-                # If Solaris does not have the Send Messages permission
+                # If {common.BOT_NAME} does not have the Send Messages permission
                 # (might redirect this to log channel once it's set up).
                 pass
 
         elif isinstance(exc, commands.NotOwner):
-            await ctx.send(f"{self.bot.cross} That command can only be used by Solaris' owner.")
+            await ctx.send(f"{self.bot.cross} That command can only be used by {common.BOT_NAME}' owner.")
 
         elif isinstance(exc, commands.CommandOnCooldown):
             # Hooray for discord.py str() logic.
@@ -99,11 +100,11 @@ class Error(commands.Cog):
 
         elif isinstance(exc, commands.InvalidEndOfQuotedStringError):
             await ctx.send(
-                f"{self.bot.cross} Solaris expected a space after the closing quote, but found a(n) `{exc.char}` instead."
+                f"{self.bot.cross} {common.BOT_NAME} expected a space after the closing quote, but found a(n) `{exc.char}` instead."
             )
 
         elif isinstance(exc, commands.ExpectedClosingQuoteError):
-            await ctx.send(f"{self.bot.cross} Solaris expected a closing quote character, but did not find one.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} expected a closing quote character, but did not find one.")
 
         # Base errors.
         elif isinstance(exc, commands.UserInputError):

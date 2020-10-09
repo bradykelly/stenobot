@@ -1,10 +1,11 @@
-# From Solaris: https://github.com/parafoxia/Solaris
+# From Solaris: https://github.com/parafoxia/{common.BOT_NAME}
 
 from chatnotebot.utils import string
 from chatnotebot.utils import chron
 from chatnotebot.utils import checks
 import datetime as dt
 import typing as t
+import common
 import discord
 from collections import defaultdict
 from apscheduler.triggers.cron import CronTrigger
@@ -20,23 +21,23 @@ class Okay:
 
     async def permissions(self):
         if not self.guild.me.guild_permissions.manage_roles:
-            await trips.gateway(self, "Solaris no longer has the Manage Roles permission")
+            await trips.gateway(self, "{common.BOT_NAME} no longer has the Manage Roles permission")
         elif not self.guild.me.guild_permissions.kick_members:
-            await trips.gateway(self, "Solaris no longer has the Kick Members permission")
+            await trips.gateway(self, F"{common.BOT_NAME} no longer has the Kick Members permission")
         else:
             return True
 
     async def gate_message(self, rc_id, gm_id):
         try:
             if (rc := self.bot.get_channel(rc_id)) is None:
-                await trips.gateway(self, "the rules channel no longer exists, or is unable to be accessed by Solaris")
+                await trips.gateway(self, F"the rules channel no longer exists, or is unable to be accessed by {common.BOT_NAME}")
             else:
                 # This is done here to ensure the correct order of operations.
                 gm = await rc.fetch_message(gm_id)
 
                 if not rc.permissions_for(self.guild.me).manage_messages:
                     await trips.gateway(
-                        self, "Solaris does not have the Manage Messages permission in the rules channel"
+                        self, "{common.BOT_NAME} does not have the Manage Messages permission in the rules channel"
                     )
                 else:
                     return gm
@@ -46,10 +47,10 @@ class Okay:
 
     async def blocking_role(self, br_id):
         if (br := self.guild.get_role(br_id)) is None:
-            await trips.gateway(self, "the blocking role no longer exists, or is unable to be accessed by Solaris")
+            await trips.gateway(self, "the blocking role no longer exists, or is unable to be accessed by {common.BOT_NAME}")
         elif br.position >= self.guild.me.top_role.position:
             await trips.gateway(
-                self, "the blocking role is equal to or higher than Solaris' top role in the role hierarchy"
+                self, F"the blocking role is equal to or higher than {common.BOT_NAME}' top role in the role hierarchy"
             )
         else:
             return br
@@ -59,13 +60,13 @@ class Okay:
             for r in (mrs := [self.guild.get_role(int(id_)) for id_ in mr_ids.split(",")]) :
                 if r is None:
                     await trips.gateway(
-                        self, "one or more member roles no longer exist, or are unable to be accessed by Solaris"
+                        self, "one or more member roles no longer exist, or are unable to be accessed by {common.BOT_NAME}"
                     )
                     return
                 elif r.position >= self.guild.me.top_role.position:
                     await trips.gateway(
                         self,
-                        "one or more member roles are equal to or higher than Solaris' top role in the role hierarchy",
+                        F"one or more member roles are equal to or higher than {common.BOT_NAME}' top role in the role hierarchy",
                     )
                     return
 
@@ -76,7 +77,7 @@ class Okay:
             for r in (ers := [self.guild.get_role(int(id_)) for id_ in er_ids.split(",")]) :
                 if r is None:
                     await trips.gateway(
-                        self, "one or more exception roles no longer exist, or are unable to be accessed by Solaris"
+                        self, F"one or more exception roles no longer exist, or are unable to be accessed by {common.BOT_NAME}"
                     )
                     return
 
@@ -86,10 +87,10 @@ class Okay:
         if wc_id is not None:
             if (wc := self.bot.get_channel(wc_id)) is None:
                 await trips.gateway(
-                    self, "the welcome channel no longer exists or is unable to be accessed by Solaris"
+                    self, "the welcome channel no longer exists or is unable to be accessed by {common.BOT_NAME}"
                 )
             elif not wc.permissions_for(self.guild.me).send_messages:
-                await trips.gateway(self, "Solaris does not have the Send Messages permission in the welcome channel")
+                await trips.gateway(self, "{common.BOT_NAME} does not have the Send Messages permission in the welcome channel")
             else:
                 return wc
 
@@ -97,10 +98,10 @@ class Okay:
         if gc_id is not None:
             if (gc := self.bot.get_channel(gc_id)) is None:
                 await trips.gateway(
-                    self, "the goodbye channel no longer exists or is unable to be accessed by Solaris"
+                    self, "the goodbye channel no longer exists or is unable to be accessed by {common.BOT_NAME}"
                 )
             elif not gc.permissions_for(self.guild.me).send_messages:
-                await trips.gateway(self, "Solaris does not have the Send Messages permission in the goodbye channel")
+                await trips.gateway(self, "{common.BOT_NAME} does not have the Send Messages permission in the goodbye channel")
             else:
                 return gc
 
@@ -439,7 +440,7 @@ class Gateway(commands.Cog):
         name="synchronise",
         aliases=["synchronize", "sync"],
         invoke_without_command=True,
-        help="Synchronise the gateway module. In theory, you should only ever need this as a convenience utility, but it is useful to use if Solaris falls out of sync for whatever reason. Use the command for information on available subcommands.",
+        help="Synchronise the gateway module. In theory, you should only ever need this as a convenience utility, but it is useful to use if {common.BOT_NAME} falls out of sync for whatever reason. Use the command for information on available subcommands.",
     )
     @checks.module_has_initialised(MODULE_NAME)
     @checks.module_is_active(MODULE_NAME)
@@ -464,7 +465,7 @@ class Gateway(commands.Cog):
                     ),
                     (
                         "Why does the module need synchronising?",
-                        "Generally speaking, it will not 99% of the time, especially as Solaris performs an automatic synchronisation on start-up. However, due to the complexity of the systems used, and measures taken to make sure there are no database conflicts, it can fall out of sync sometimes. This command is the solution to that problem.",
+                        "Generally speaking, it will not 99% of the time, especially as {common.BOT_NAME} performs an automatic synchronisation on start-up. However, due to the complexity of the systems used, and measures taken to make sure there are no database conflicts, it can fall out of sync sometimes. This command is the solution to that problem.",
                         False,
                     ),
                 ),
@@ -474,7 +475,7 @@ class Gateway(commands.Cog):
     @synchronise_group.command(
         name="members",
         cooldown_after_parsing=True,
-        help="Handles offline arrivals and departures. This is generally not required as Solaris does this on start-up.",
+        help="Handles offline arrivals and departures. This is generally not required as {common.BOT_NAME} does this on start-up.",
     )
     @commands.cooldown(1, 3600, commands.BucketType.guild)
     @checks.module_has_initialised(MODULE_NAME)
@@ -503,7 +504,7 @@ class Gateway(commands.Cog):
     @synchronise_group.command(
         name="roles",
         cooldown_after_parsing=True,
-        help="Provides the member roles to those who have accepted the rules. This is good to run after you add a new member role, but Solaris will not remove roles that are no longer member roles. If `accepted_only` is set to `False`, every single member will receive these roles regardless of any other factors.",
+        help="Provides the member roles to those who have accepted the rules. This is good to run after you add a new member role, but {common.BOT_NAME} will not remove roles that are no longer member roles. If `accepted_only` is set to `False`, every single member will receive these roles regardless of any other factors.",
     )
     @commands.cooldown(1, 3600, commands.BucketType.guild)
     @checks.module_has_initialised(MODULE_NAME)
@@ -581,7 +582,7 @@ class Gateway(commands.Cog):
     @commands.command(
         name="checkaccepted",
         aliases=["ca"],
-        help='Checks whether a given user has accepted the server rules. If no user is provided, Solaris will display the total number of members who have accepted. A member who has "accepted" is taken as one who has reacted to the gate message with the confirm emoji at some point, regardless of whether they unreacted later. The only exceptions to this are if the member leaves the server, or if the acceptance records are manually reset.',
+        help='Checks whether a given user has accepted the server rules. If no user is provided, {common.BOT_NAME} will display the total number of members who have accepted. A member who has "accepted" is taken as one who has reacted to the gate message with the confirm emoji at some point, regardless of whether they unreacted later. The only exceptions to this are if the member leaves the server, or if the acceptance records are manually reset.',
     )
     @checks.module_has_initialised(MODULE_NAME)
     @checks.module_is_active(MODULE_NAME)
@@ -602,7 +603,7 @@ class Gateway(commands.Cog):
     @commands.command(
         name="resetaccepted",
         cooldown_after_parsing=True,
-        help="Resets Solaris' records regarding who has accepted the rules in your server. This action is irreversible.",
+        help="Resets {common.BOT_NAME}' records regarding who has accepted the rules in your server. This action is irreversible.",
     )
     @commands.cooldown(1, 300, commands.BucketType.guild)
     @checks.module_has_initialised(MODULE_NAME)

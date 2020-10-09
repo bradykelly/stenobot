@@ -4,6 +4,7 @@ from chatnotebot.bot.cogs.gateway import Synchronise
 import os
 import datetime as dt
 import typing as t
+import common
 from collections import defaultdict
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
@@ -60,7 +61,7 @@ class ConfigHelpMenu(menu.NumberedSelectionMenu):
 
 
 class Help(commands.Cog):
-    """Assistance with using a configuring Solaris."""
+    """Assistance with using a configuring {common.BOT_NAME}."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -99,11 +100,11 @@ class Help(commands.Cog):
             return f"No - You are missing the {mp} permission(s)"
         except commands.BotMissingPermissions as exc:
             mp = string.list_of([str(perm.replace("_", " ")).title() for perm in exc.missing_perms])
-            return f"No - Solaris is missing the {mp} permission(s)"
+            return f"No - {common.BOT_NAME} is missing the {mp} permission(s)"
         except checks.AuthorCanNotConfigure:
-            return "No - You are not able to configure Solaris"
+            return F"No - You are not able to configure {common.BOT_NAME}"
         except commands.CommandError:
-            return "No - Solaris is not configured properly"
+            return F"No - {common.BOT_NAME} is not configured properly"
 
     async def get_command_mapping(self, ctx):
         mapping = defaultdict(list)
@@ -118,13 +119,13 @@ class Help(commands.Cog):
 
     @commands.command(
         name="help",
-        help="Help with anything Solaris. Passing a command name or alias through will show help with that specific command, while passing no arguments will bring up a general command overview.",
+        help=F"Help with anything {common.BOT_NAME}. Passing a command name or alias through will show help with that specific command, while passing no arguments will bring up a general command overview.",
     )
     async def help_command(self, ctx, *, cmd: t.Optional[t.Union[converters.Command, str]]):
         prefix = await self.bot.prefix(ctx.guild)
 
         if isinstance(cmd, str):
-            await ctx.send(f"{self.bot.cross} Solaris has no commands or aliases with that name.")
+            await ctx.send(f"{self.bot.cross} {common.BOT_NAME} has no commands or aliases with that name.")
 
         elif isinstance(cmd, commands.Command):
             if cmd.name == "config":

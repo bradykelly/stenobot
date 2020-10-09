@@ -1,5 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+import common
 from discord.ext import commands
 from chatnotebot.utils import modules
 
@@ -11,7 +12,7 @@ class CustomCheckFailure(commands.CheckFailure):
 
 class BotHasNotBooted(CustomCheckFailure):
     def __init__(self):
-        super().__init__("Solaris is still booting. Please try again later.")
+        super().__init__(f"{common.BOT_NAME} is still booting. Please try again later.")
 
 
 def bot_has_booted():
@@ -39,7 +40,7 @@ def module_has_initialised(module):
 
 class BotIsNotReady(CustomCheckFailure):
     def __init__(self):
-        super().__init__("Solaris is still performing some start-up procedures. Please try again later.")
+        super().__init__(f"{common.BOT_NAME} is still performing some start-up procedures. Please try again later.")
 
 
 def bot_is_ready():
@@ -111,7 +112,7 @@ def admin_role_is_set():
 
 class AuthorCanNotConfigure(CustomCheckFailure):
     def __init__(self):
-        super().__init__("You are not able to configure Solaris.")
+        super().__init__(f"You are not able to configure {common.BOT_NAME}.")
 
 
 def author_can_configure():

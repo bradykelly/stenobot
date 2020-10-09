@@ -9,7 +9,7 @@ from discord.ext import commands
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
-class Notes(ChatNoteBaseCog):
+class Notes(ChatNoteBaseCog, name="note"):
     """Commands to use your ChatNote notebook"""
 
     def __init__(self, bot):
@@ -17,10 +17,10 @@ class Notes(ChatNoteBaseCog):
     
     # 'note' command    
     @commands.group(
-        aliases=[],
+        aliases=["notes"],
         help="Commands to help you manage your ChatNote notes",
         brief="Use your notebook",
-        usage= f"[add | find] <note-text>\n note list [notebook]\n note del <note-number>"
+        usage= f"[add | find | list | del]"
     )
     async def note(self, ctx):
         '''

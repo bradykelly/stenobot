@@ -14,15 +14,21 @@ CREATE TABLE IF NOT EXISTS errors (
     Traceback text
 );
 
-CREATE TABLE IF NOT EXISTS guild_config (
-    GuildID integer PRIMARY KEY,
-    RunFTS integer DEFAULT 0,
-    Prefix text DEFAULT ">>",
-    DefaultLogChannelID integer,
-    LogChannelID integer,
-    DefaultAdminRoleID interger,
-    AdminRoleID integer
+CREATE TABLE guild_config (
+    guildId             STRING (18) PRIMARY KEY,
+    name                STRING      UNIQUE
+                                    NOT NULL,
+    setTime             DATETIME    NOT NULL,
+    setByUserId         STRING      NOT NULL,
+    commandPrefix       STRING      NOT NULL,
+    notificationChannel STRING,
+    defaultLogChannelId INTEGER,
+    logChannelId        INTEGER,
+    runFts              STRING,
+    defaultAdminRoleId  INTEGER,hg
+    adminRoleId         INTEGER
 );
+
 
 -- gateway
 

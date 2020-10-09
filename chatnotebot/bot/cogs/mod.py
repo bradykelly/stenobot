@@ -3,6 +3,7 @@
 import datetime as dt
 import re
 import typing as t
+import common
 
 import discord
 from discord.ext import commands
@@ -42,7 +43,7 @@ class Mod(commands.Cog):
                         count += 1
                     except discord.Forbidden:
                         await ctx.send(
-                            f"Failed to kick {target.display_name} as their permission set is superior to Solaris'."
+                            f"Failed to kick {target.display_name} as their permission set is superior to {common.BOT_NAME}'."
                         )
 
                 if count > 0:
@@ -90,7 +91,7 @@ class Mod(commands.Cog):
                         count += 1
                     except discord.Forbidden:
                         await ctx.send(
-                            f"Failed to ban {target.display_name} as their permission set is superior to Solaris'."
+                            f"Failed to ban {target.display_name} as their permission set is superior to {common.BOT_NAME}'."
                         )
 
                 if count > 0:
@@ -146,7 +147,7 @@ class Mod(commands.Cog):
     @commands.command(
         name="clearchannel",
         aliases=["clrch"],
-        help="Clears an entire channel of messages. Solaris does this by cloning the given channel, and then deleting it, keeping the clean clone intact.",
+        help=f"Clears an entire channel of messages. {common.BOT_NAME} does this by cloning the given channel, and then deleting it, keeping the clean clone intact.",
     )
     @commands.has_permissions(manage_messages=True, manage_channels=True)
     @commands.bot_has_permissions(send_messages=True, manage_channels=True)
@@ -183,7 +184,7 @@ class Mod(commands.Cog):
             await ctx.send(f"{self.bot.cross} Nicknames can not be more than 32 characters in length.")
         elif not isinstance(target, discord.Member):
             await ctx.send(
-                f"{self.bot.cross} Solaris was unable to identify a server member with the information provided."
+                f"{self.bot.cross} {common.BOT_NAME} was unable to identify a server member with the information provided."
             )
         else:
             try:
@@ -191,7 +192,7 @@ class Mod(commands.Cog):
                 await ctx.send(f"{self.bot.tick} Nickname changed.")
             except discord.Forbidden:
                 await ctx.send(
-                    f"{self.bot.cross} Failed to change {target.display_name}'s nickname as their permission set is superior to Solaris'."
+                    f"{self.bot.cross} Failed to change {target.display_name}'s nickname as their permission set is superior to {common.BOT_NAME}'."
                 )
 
     @commands.command(name="clearnickname", aliases=["clrnick"], help="Clears one or more members' nicknames.")
@@ -209,7 +210,7 @@ class Mod(commands.Cog):
                     count += 1
                 except discord.Forbidden:
                     await ctx.send(
-                        f"Failed to clear {target.display_name}'s nickname as their permission set is superior to Solaris'."
+                        f"Failed to clear {target.display_name}'s nickname as their permission set is superior to {common.BOT_NAME}'."
                     )
 
             if count > 0:

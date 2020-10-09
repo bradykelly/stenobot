@@ -18,12 +18,12 @@ class System(commands.Cog):
 
 # Defined in control.py
     # @commands.command(
-    #     name="prefix", help="Displays Solaris' prefix in your server. Note that mentioning Solaris will always work."
+    #     name="prefix", help=f"Displays {common.BOT_NAME}' prefix in your server. Note that mentioning {common.BOT_NAME} will always work."
     # )
     # async def prefix_command(self, ctx):
     #     prefix = await self.bot.prefix(ctx.guild)
     #     await ctx.send(
-    #         f"{self.bot.info} Solaris' prefix in this server is {prefix}. To change it, use `{prefix}config system prefix <new prefix>`."
+    #         f"{self.bot.info} {common.BOT_NAME}' prefix in this server is {prefix}. To change it, use `{prefix}config system prefix <new prefix>`."
     #     )
 
 

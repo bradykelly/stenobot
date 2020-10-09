@@ -1,7 +1,7 @@
 # From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/utils/__init__.py
 
+import common
 from collections import deque
-
 from apscheduler.triggers.cron import CronTrigger
 from discord import Activity, ActivityType
 
@@ -12,13 +12,14 @@ class PresenceSetter:
     def __init__(self, bot):
         self.bot = bot
 
-        self._name = "@Solaris help • {message} • Version {version}"
+        # TODO duplicate bug?
+        self._name = f"@{common.BOT_NAME} help • {message} • Version {version}"
         self._type = "watching"
         self._messages = deque(
             (
-                "Invite Solaris to your server by using @Solaris invite",
-                "To view information about Solaris, use @Solaris botinfo",
-                "Need help with Solaris? Join the support server! Use @Solaris support to get an invite",
+                f"Invite {common.BOT_NAME} to your server by using @{common.BOT_NAME} invite",
+                f"To view information about {common.BOT_NAME}, use @{common.BOT_NAME} botinfo",
+                f"Need help with {common.BOT_NAME}? Join the support server! Use @{common.BOT_NAME} support to get an invite",
                 "Developed by Parafoxia#1911, and available under the GPLv3 license",
             )
         )

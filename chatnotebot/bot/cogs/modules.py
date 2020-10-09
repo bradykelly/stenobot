@@ -1,8 +1,8 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
 import typing as t
-
 import discord
+import common
 from discord.ext import commands
 from chatnotebot.utils import ERROR_ICON, LOADING_ICON, SUCCESS_ICON, checks, menu, modules
 
@@ -12,17 +12,17 @@ class SetupMenu(menu.SelectionMenu):
         pagemap = {
             "header": "Setup Wizard",
             "title": "Hello!",
-            "description": "Welcome to the Solaris first time setup! You need to run this before you can use most of Solaris' commands, but you only ever need to run once.\n\nIn order to operate effectively in your server, Solaris needs to create a few things:",
+            "description": f"Welcome to the {common.BOT_NAME} first time setup! You need to run this before you can use most of {common.BOT_NAME}' commands, but you only ever need to run once.\n\nIn order to operate effectively in your server, {common.BOT_NAME} needs to create a few things:",
             "thumbnail": ctx.bot.user.avatar_url,
             "fields": (
                 (
                     "A log channel",
-                    "This will be called solaris-logs and will be placed directly under the channel you run the setup in. This channel is what Solaris will use to communicate important information to you, so it is recommended you only allow server moderators access to it. You will be able to change what Solaris uses as the log channel later.",
+                    f"This will be called {common.BOT_NAME}-logs and will be placed directly under the channel you run the setup in. This channel is what {common.BOT_NAME} will use to communicate important information to you, so it is recommended you only allow server moderators access to it. You will be able to change what {common.BOT_NAME} uses as the log channel later.",
                     False,
                 ),
                 (
                     "An admin role",
-                    "This will be called Solaris Administrator and will be placed at the bottom of the role hierarchy. This role does not provide members any additional access to the server, but does allow them to use Solaris' configuration commands. Server administrators do not need this role to configure Solaris. You will be able to change what Solaris uses as the admin role later.",
+                    f"This will be called {common.BOT_NAME} Administrator and will be placed at the bottom of the role hierarchy. This role does not provide members any additional access to the server, but does allow them to use {common.BOT_NAME}' configuration commands. Server administrators do not need this role to configure {common.BOT_NAME}. You will be able to change what {common.BOT_NAME} uses as the admin role later.",
                     False,
                 ),
                 (
@@ -49,14 +49,15 @@ class SetupMenu(menu.SelectionMenu):
             await self.stop()
 
     async def run(self):
+        lc = None
         if not await modules.retrieve.system__logchannel(self.bot, self.ctx.guild):
             if self.ctx.guild.me.guild_permissions.manage_channels:
                 lc = await self.ctx.guild.create_text_channel(
-                    name="solaris-logs",
+                    name=f"{common.BOT_NAME}-logs",
                     category=self.ctx.channel.category,
                     position=self.ctx.channel.position,
                     topic=f"Log output for {self.ctx.guild.me.mention}",
-                    reason="Needed for Solaris log output.",
+                    reason=f"Needed for {common.BOT_NAME} log output.",
                 )
                 await self.bot.db.execute(
                     "UPDATE guild_config SET DefaultLogChannelID = ?, LogChannelID = ? WHERE GuildID = ?",
@@ -69,7 +70,7 @@ class SetupMenu(menu.SelectionMenu):
                 pagemap = {
                     "header": "Setup Wizard",
                     "title": "Setup failed",
-                    "description": "The log channel could not be created as Solaris does not have the Manage Channels permission. The setup can not continue.",
+                    "description": f"The log channel could not be created as {common.BOT_NAME} does not have the Manage Channels permission. The setup can not continue.",
                     "thumbnail": ERROR_ICON,
                 }
                 await self.switch(pagemap)
@@ -78,9 +79,9 @@ class SetupMenu(menu.SelectionMenu):
         if not await modules.retrieve.system__adminrole(self.bot, self.ctx.guild):
             if self.ctx.guild.me.guild_permissions.manage_roles:
                 ar = await self.ctx.guild.create_role(
-                    name="Solaris Administrator",
+                    name="{common.BOT_NAME} Administrator",
                     permissions=discord.Permissions(permissions=0),
-                    reason="Needed for Solaris configuration.",
+                    reason=f"Needed for {common.BOT_NAME} configuration.",
                 )
                 await self.bot.db.execute(
                     "UPDATE guild_config SET DefaultAdminRoleID = ?, AdminRoleID = ? WHERE GuildID = ?",
@@ -93,7 +94,7 @@ class SetupMenu(menu.SelectionMenu):
                 pagemap = {
                     "header": "Setup Wizard",
                     "title": "Setup failed",
-                    "description": "The admin role could not be created as Solaris does not have the Manage Roles permission. The setup can not continue.",
+                    "description": f"The admin role could not be created as {common.BOT_NAME} does not have the Manage Roles permission. The setup can not continue.",
                     "thumbnail": ERROR_ICON,
                 }
                 await self.switch(pagemap)
@@ -108,7 +109,7 @@ class SetupMenu(menu.SelectionMenu):
         pagemap = {
             "header": "Setup",
             "title": "First time setup complete",
-            "description": "Congratulations - the first time setup has been completed! You can now use all of Solaris' commands, and activate all of Solaris' modules.\n\nEnjoy using Solaris!",
+            "description": f"Congratulations - the first time setup has been completed! You can now use all of {common.BOT_NAME}' commands, and activate all of {common.BOT_NAME}' modules.\n\nEnjoy using {common.BOT_NAME}!",
             "thumbnail": SUCCESS_ICON,
         }
         await modules.config._system__runfts(self.bot, self.ctx.channel, 1)
@@ -116,7 +117,7 @@ class SetupMenu(menu.SelectionMenu):
 
 
 class Modules(commands.Cog):
-    """Configure, activate, and deactivate Solaris modules."""
+    """Configure, activate, and deactivate {common.BOT_NAME} modules."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -135,7 +136,7 @@ class Modules(commands.Cog):
         await SetupMenu(ctx).start()
 
     @commands.command(
-        name="config", aliases=["set"], help="Configures Solaris; use `help config` to bring up a special help menu."
+        name="config", aliases=["set"], help=f"Configures {common.BOT_NAME}; use `help config` to bring up a special help menu."
     )
     @checks.bot_has_booted()
     @checks.first_time_setup_has_run()

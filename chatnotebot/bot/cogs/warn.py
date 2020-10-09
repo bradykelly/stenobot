@@ -132,7 +132,7 @@ class Warn(commands.Cog):
 
         if isinstance(target, str):
             return await ctx.send(
-                f"{self.bot.cross} Solaris was unable to identify a member with the information provided."
+                f"{self.bot.cross} {common.BOT_NAME} was unable to identify a member with the information provided."
             )
 
         records = await self.bot.db.records(
