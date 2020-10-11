@@ -32,7 +32,7 @@ class SetupMenu(menu.SelectionMenu):
                 ),
             ),
         }
-        super().__init__(ctx, ["confirm", "cancel"], pagemap, timeout=120.0)
+        super().__init__(ctx, ["confirm", "cancel"], pagemap, timeout=common.MENU_TIMEOUT2)
 
     async def start(self):
         r = await super().start()
@@ -79,7 +79,7 @@ class SetupMenu(menu.SelectionMenu):
         if not await modules.retrieve.system__adminrole(self.bot, self.ctx.guild):
             if self.ctx.guild.me.guild_permissions.manage_roles:
                 ar = await self.ctx.guild.create_role(
-                    name="{common.BOT_NAME} Administrator",
+                    name=f"{common.BOT_NAME} Administrator",
                     permissions=discord.Permissions(permissions=0),
                     reason=f"Needed for {common.BOT_NAME} configuration.",
                 )
@@ -117,7 +117,7 @@ class SetupMenu(menu.SelectionMenu):
 
 
 class Modules(commands.Cog):
-    """Configure, activate, and deactivate {common.BOT_NAME} modules."""
+    f"""Configure, activate, and deactivate {common.BOT_NAME} modules."""
 
     def __init__(self, bot):
         self.bot = bot

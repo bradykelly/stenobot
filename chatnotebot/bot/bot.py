@@ -91,10 +91,9 @@ class Bot(commands.Bot):
             self.scheduler.start()
             print(f" Scheduler started ({len(self.scheduler.get_jobs()):,} job(s)).")
 
-            # TODO Use Database class from {common.BOT_NAME}
-            # await self.db.sync()
-            # self.ready.synced = True
-            # print(" Synchronised database.")
+            await self.db.sync()
+            self.ready.synced = True
+            print(" Synchronised database.")
 
             self.ready.booted = True
             print(" Bot booted. Don't use CTRL+C to shut the bot down!")

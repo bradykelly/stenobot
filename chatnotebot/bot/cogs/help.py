@@ -13,7 +13,7 @@ from chatnotebot.utils import checks, chron, converters, menu, modules, string
 
 class HelpMenu(menu.MultiPageMenu):
     def __init__(self, ctx, pagemaps):
-        super().__init__(ctx, pagemaps, timeout=120.0)
+        super().__init__(ctx, pagemaps, timeout=common.MENU_TIMEOUT2)
 
 
 class ConfigHelpMenu(menu.NumberedSelectionMenu):
@@ -61,17 +61,11 @@ class ConfigHelpMenu(menu.NumberedSelectionMenu):
 
 
 class Help(commands.Cog):
-    """Assistance with using a configuring {common.BOT_NAME}."""
+    """Assistance with using a configuring ChatNoteBot."""
 
     def __init__(self, bot):
         self.bot = bot
         self.bot.remove_command("help")
-        
-    @Cog.listener()
-    async def on_ready(self):
-        if not self.bot.ready.booted:
-            await Synchronise(self.bot).on_boot()
-            self.bot.ready.up(self)
 
     @staticmethod
     async def basic_syntax(ctx, cmd, prefix):
@@ -102,9 +96,9 @@ class Help(commands.Cog):
             mp = string.list_of([str(perm.replace("_", " ")).title() for perm in exc.missing_perms])
             return f"No - {common.BOT_NAME} is missing the {mp} permission(s)"
         except checks.AuthorCanNotConfigure:
-            return F"No - You are not able to configure {common.BOT_NAME}"
+            return f"No - You are not able to configure {common.BOT_NAME}"
         except commands.CommandError:
-            return F"No - {common.BOT_NAME} is not configured properly"
+            return f"No - {common.BOT_NAME} is not configured properly"
 
     async def get_command_mapping(self, ctx):
         mapping = defaultdict(list)
@@ -119,7 +113,7 @@ class Help(commands.Cog):
 
     @commands.command(
         name="help",
-        help=F"Help with anything {common.BOT_NAME}. Passing a command name or alias through will show help with that specific command, while passing no arguments will bring up a general command overview.",
+        help=f"Help with anything {common.BOT_NAME}. Passing a command name or alias through will show help with that specific command, while passing no arguments will bring up a general command overview.",
     )
     async def help_command(self, ctx, *, cmd: t.Optional[t.Union[converters.Command, str]]):
         prefix = await self.bot.prefix(ctx.guild)
@@ -160,6 +154,7 @@ class Help(commands.Cog):
             pagemaps = []
 
             for cog, cmds in (await self.get_command_mapping(ctx)).items():
+                syntaxes = "\n" + "\n".join([await self.basic_syntax(ctx, cmd, prefix) for cmd in cmds])
                 pagemaps.append(
                     {
                         "header": "Help",
@@ -170,7 +165,8 @@ class Help(commands.Cog):
                             (
                                 f"{len(cmds)} command(s)",
                                 "```{}```".format(
-                                    "\n".join([await self.basic_syntax(ctx, cmd, prefix) for cmd in cmds])
+                                    #"\n".join([await self.basic_syntax(ctx, cmd, prefix) for cmd in cmds])
+                                    syntaxes
                                 ),
                                 False,
                             ),
@@ -179,6 +175,12 @@ class Help(commands.Cog):
                 )
 
             await HelpMenu(ctx, pagemaps).start()
+        
+    @Cog.listener()
+    async def on_ready(self):
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)            
 
 
 def setup(bot):

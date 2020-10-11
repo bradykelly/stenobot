@@ -12,15 +12,14 @@ class PresenceSetter:
     def __init__(self, bot):
         self.bot = bot
 
-        # TODO duplicate bug?
-        self._name = f"@{common.BOT_NAME} help • {message} • Version {version}"
+        self._name = f"@{common.BOT_NAME}" + " help • {message} • Version {version}"
         self._type = "watching"
         self._messages = deque(
             (
                 f"Invite {common.BOT_NAME} to your server by using @{common.BOT_NAME} invite",
                 f"To view information about {common.BOT_NAME}, use @{common.BOT_NAME} botinfo",
                 f"Need help with {common.BOT_NAME}? Join the support server! Use @{common.BOT_NAME} support to get an invite",
-                "Developed by Parafoxia#1911, and available under the GPLv3 license",
+                "Developed by Doktor9#5168, and available under the GPLv3 license",
             )
         )
 

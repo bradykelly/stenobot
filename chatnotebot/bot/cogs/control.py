@@ -14,6 +14,7 @@ class Control(Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # TODO Implement multiple prefixes
     @command(name="prefix", 
             aliases=["prefixes"], 
             brief="Set this bot's command prefix",

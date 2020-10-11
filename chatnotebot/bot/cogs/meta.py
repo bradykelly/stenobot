@@ -40,7 +40,7 @@ class DetailedServerInfoMenu(menu.MultiPageMenu):
             pm.update({"description": f"Showing {key} information.", "fields": value})
             pagemaps.append(pm)
 
-        super().__init__(ctx, pagemaps, timeout=120.0)
+        super().__init__(ctx, pagemaps, timeout=common.MENU_TIMEOUT2)
 
 
 class LeavingMenu(menu.SelectionMenu):
@@ -49,13 +49,13 @@ class LeavingMenu(menu.SelectionMenu):
             "header": "Leave Wizard",
             "title": "Leaving already?",
             "description": (
-                F"If you remove {common.BOT_NAME} from your server, all server information {common.BOT_NAME} has stored, as well as any roles and channels {common.BOT_NAME} has created, will be deleted."
+                f"If you remove {common.BOT_NAME} from your server, all server information {common.BOT_NAME} has stored, as well as any roles and channels {common.BOT_NAME} has created, will be deleted."
                 f"If you are having issues with {common.BOT_NAME}, consider joining the support server to try and find a resolution - select {ctx.bot.info} to get an invite link.\n\n"
-                F"Are you sure you want to remove {common.BOT_NAME} from your server?"
+                f"Are you sure you want to remove {common.BOT_NAME} from your server?"
             ),
             "thumbnail": ctx.bot.user.avatar_url,
         }
-        super().__init__(ctx, ["confirm", "cancel", "info"], pagemap, timeout=120.0)
+        super().__init__(ctx, ["confirm", "cancel", "info"], pagemap, timeout=common.MENU_TIMEOUT2)
 
     async def start(self):
         r = await super().start()
@@ -90,20 +90,20 @@ class LeavingMenu(menu.SelectionMenu):
         await deactivate.everything(self.ctx)
 
         if self.ctx.guild.me.guild_permissions.manage_roles and (dar := self.ctx.guild.get_role(dar_id)) is not None:
-            await dar.delete(reason=F"{common.BOT_NAME} is leaving the server.")
+            await dar.delete(reason=f"{common.BOT_NAME} is leaving the server.")
 
         if (
             self.ctx.guild.me.guild_permissions.manage_channels
             and (dlc := self.ctx.guild.get_channel(dlc_id)) is not None
         ):
-            await dlc.delete(reason=F"{common.BOT_NAME} is leaving the server.")
+            await dlc.delete(reason=f"{common.BOT_NAME} is leaving the server.")
 
         pagemap = {
             "header": "Leave Wizard",
             "title": "Sorry to see you go!",
             "description": (
                 f"If you ever wish to reinvite {common.BOT_NAME}, you can do so by clicking [here]({self.bot.admin_invite}) (recommended permissions), or [here]({self.bot.non_admin_invite}) (minimum required permissions).\n\n"
-                F"The {common.BOT_NAME} team wish you and your server all the best."
+                f"The {common.BOT_NAME} team wish you and your server all the best."
             ),
         }
         await self.switch(pagemap)
@@ -111,7 +111,7 @@ class LeavingMenu(menu.SelectionMenu):
 
 
 class Meta(commands.Cog):
-    """Commands for retrieving information regarding {common.BOT_NAME}, from invitation links to detailed bot statistics."""
+    """Commands for retrieving information regarding ChatNoteBot, from invitation links to detailed bot statistics."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -139,7 +139,7 @@ class Meta(commands.Cog):
     @commands.command(
         name="about",
         aliases=["credits"],
-        help=F"View information regarding those behind {common.BOT_NAME}' development. This includes the developer and the testers, and also shows copyright information.",
+        help=f"View information regarding those behind {common.BOT_NAME}' development. This includes the developer and the testers, and also shows copyright information.",
     )
     async def about_command(self, ctx):
         prefix = await self.bot.prefix(ctx.guild)
@@ -147,7 +147,7 @@ class Meta(commands.Cog):
             embed=self.bot.embed.build(
                 ctx=ctx,
                 header="Information",
-                title=F"About {common.BOT_NAME}",
+                title=f"About {common.BOT_NAME}",
                 description=f"Use `{prefix}botinfo` for detailed statistics.",
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
@@ -158,7 +158,7 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="support", aliases=["sos"], help=F"Provides an invite link to {common.BOT_NAME}' support server.")
+    @commands.command(name="support", aliases=["sos"], help=f"Provides an invite link to {common.BOT_NAME}' support server.")
     async def support_command(self, ctx):
         online = [m for m in self.support_guild.members if not m.bot and m.status == discord.Status.online]
         helpers = [
@@ -181,7 +181,7 @@ class Meta(commands.Cog):
         )
 
     @commands.command(
-        name="invite", aliases=["join"], help=F"Provides the links necessary to invite {common.BOT_NAME} to other servers."
+        name="invite", aliases=["join"], help=f"Provides the links necessary to invite {common.BOT_NAME} to other servers."
     )
     async def invite_command(self, ctx):
         await ctx.send(
@@ -207,7 +207,7 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="source", aliases=["src"], help=F"Provides a link to {common.BOT_NAME}' source code.")
+    @commands.command(name="source", aliases=["src"], help=f"Provides a link to {common.BOT_NAME}' source code.")
     async def source_command(self, ctx):
         await ctx.send(
             embed=self.bot.embed.build(
@@ -227,7 +227,7 @@ class Meta(commands.Cog):
     @commands.command(
         name="issue",
         aliases=["bugreport", "reportbug", "featurerequest", "requestfeature"],
-        help=F"Provides a link to open an issue on the {common.BOT_NAME} repo.",
+        help=f"Provides a link to open an issue on the {common.BOT_NAME} repo.",
     )
     async def issue_command(self, ctx):
         await ctx.send(

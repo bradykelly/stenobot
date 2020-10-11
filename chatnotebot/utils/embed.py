@@ -1,5 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris/blob/master/solaris/utils/embed.py
 
+import common
 from datetime import datetime
 from discord import Embed
 from chatnotebot.utils import DEFAULT_EMBED_COLOUR
@@ -23,7 +24,7 @@ class EmbedConstructor:
             timestamp=datetime.utcnow(),
         )
 
-        embed.set_author(name=kwargs.get("header", "{common.BOT_NAME}"))
+        embed.set_author(name=kwargs.get("header", f"{common.BOT_NAME}"))
         embed.set_footer(
             text=kwargs.get("footer", f"Invoked by {ctx.author.display_name}" if ctx else r"\o/"),
             icon_url=ctx.author.avatar_url if ctx else self.bot.user.avatar_url,

@@ -1,5 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+import common
 from chatnotebot.utils.menu import selectors
 
 
@@ -61,7 +62,7 @@ class SelectionMenu(Menu):
         *,
         delete_after=False,
         delete_invoke_after=None,
-        timeout=300.0,
+        timeout=common.MENU_TIMEOUT5,
         auto_exit=True,
         check=None,
     ):
@@ -93,7 +94,7 @@ class NumberedSelectionMenu(Menu):
         *,
         delete_after=False,
         delete_invoke_after=None,
-        timeout=300.0,
+        timeout=common.MENU_TIMEOUT5,
         auto_exit=True,
         check=None,
     ):
@@ -128,7 +129,7 @@ class NumberedSelectionMenu(Menu):
 
 class MultiPageMenu(Menu):
     def __init__(
-        self, ctx, pagemaps, *, delete_after=False, delete_invoke_after=None, timeout=300.0, auto_exit=True, check=None
+        self, ctx, pagemaps, *, delete_after=False, delete_invoke_after=None, timeout=common.MENU_TIMEOUT5, auto_exit=True, check=None
     ):
         super().__init__(ctx, pagemaps[0], delete_after=delete_after, delete_invoke_after=delete_invoke_after)
         self.selector = selectors.PageControls(self, pagemaps, timeout=timeout, auto_exit=auto_exit, check=check)

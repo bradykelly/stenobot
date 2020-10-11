@@ -76,12 +76,11 @@ class Error(commands.Cog):
                     f"{self.bot.cross} {common.BOT_NAME} does not have the {mp} permission(s), which are required to use this command."
                 )
             except discord.Forbidden:
-                # If {common.BOT_NAME} does not have the Send Messages permission
-                # (might redirect this to log channel once it's set up).
+                # If ChatNoteBot does not have the Send Messages permission (might redirect this to log channel once it's set up).
                 pass
 
         elif isinstance(exc, commands.NotOwner):
-            await ctx.send(f"{self.bot.cross} That command can only be used by {common.BOT_NAME}' owner.")
+            await ctx.send(f"{self.bot.cross} That command can only be used by the {common.BOT_NAME} owner.")
 
         elif isinstance(exc, commands.CommandOnCooldown):
             # Hooray for discord.py str() logic.

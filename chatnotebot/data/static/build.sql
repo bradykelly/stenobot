@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS errors (
     Traceback text
 );
 
-CREATE TABLE guild_config (
+CREATE TABLE IF NOT EXISTS guild_config (
     guildId             STRING (18) PRIMARY KEY,
     name                STRING      UNIQUE
                                     NOT NULL,

@@ -1,5 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+import common
 from asyncio import TimeoutError
 from datetime import timedelta
 from chatnotebot.utils.emoji import ALTERNATIVES
@@ -8,7 +9,7 @@ from chatnotebot.utils import chron
 
 
 class Selector:
-    def __init__(self, menu, selection, *, timeout=300.0, auto_exit=True, check=None):
+    def __init__(self, menu, selection, *, timeout=common.MENU_TIMEOUT5, auto_exit=True, check=None):
         self.menu = menu
         self.timeout = timeout
         self.auto_exit = auto_exit
@@ -74,7 +75,7 @@ class Selector:
 
 
 class NumericalSelector(Selector):
-    def __init__(self, menu, iterable, *, timeout=300.0, auto_exit=True, check=None):
+    def __init__(self, menu, iterable, *, timeout=common.MENU_TIMEOUT5, auto_exit=True, check=None):
         super().__init__(menu, ["exit"], timeout=timeout, auto_exit=auto_exit, check=check)
 
         self.iterable = iterable
@@ -179,7 +180,7 @@ class NumericalSelector(Selector):
 
 
 class PageControls(Selector):
-    def __init__(self, menu, pagemaps, *, timeout=300.0, auto_exit=True, check=None):
+    def __init__(self, menu, pagemaps, *, timeout=common.MENU_TIMEOUT5, auto_exit=True, check=None):
         super().__init__(menu, ["exit"], timeout=timeout, auto_exit=auto_exit, check=check)
 
         self.pagemaps = pagemaps

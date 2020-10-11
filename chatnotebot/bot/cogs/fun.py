@@ -12,7 +12,7 @@ from discord.ext.commands.cooldowns import Cooldown
 from discord.ext.commands.core import cooldown
 from discord.ext.commands.errors import BadArgument
 
-class Fun(Cog):
+class Fun(Cog, name="fun"):
     """Entertaining, interesting and fun commands."""
 
     def __init__(self, bot):
@@ -27,7 +27,7 @@ class Fun(Cog):
 
     @command(name="dice", 
             aliases=["roll"], 
-            brief="Roll the bot's dice",
+            brief="Roll the dice",
             help="`roll AdB` will roll a `B` sided die `A` times")
     @cooldown(1, 60, BucketType.user)
     async def roll_dice(self, ctx, die_string: str):
