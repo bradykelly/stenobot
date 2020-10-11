@@ -9,7 +9,8 @@ from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 from chatnotebot.db import db
-from chatnotebot import Config, utils
+from chatnotebot import utils
+from chatnotebot.config import Config
 from chatnotebot.db import dal
 from chatnotebot.utils import loc
 from chatnotebot.utils.emoji import EmojiGetter

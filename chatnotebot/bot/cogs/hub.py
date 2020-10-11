@@ -1,6 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-#from chatnotebot.utils.modules.config import Config
+from chatnotebot.config import Config
 from chatnotebot import config
 from chatnotebot.bot.cogs.gateway import Synchronise
 from discord.ext import commands

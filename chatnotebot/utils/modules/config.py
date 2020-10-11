@@ -473,22 +473,4 @@ async def warn__maxstrikes(bot, channel, value):
         )
         lc = await retrieve.log_channel(bot, channel.guild)
         await lc.send(f"{bot.info} The max strikes per offence has been set to {value}.")        
-
-class Config:
-    def __init__(self):
-        load_dotenv()
-    # TODO Remove if not needed
-    # try:
-    #     # Load production token.
-    #     with open(getenv("TOKEN", "")) as f:
-    #         token = f.read()
-    # except FileNotFoundError:
-    #     # Load development token.
-    #     token = getenv("TOKEN", "")
-
-    TOKEN: Final = getenv("TOKEN", "")
-    DEFAULT_PREFIX: Final = getenv("DEFAULT_PREFIX", ">>")
-    HUB_GUILD_ID: Final = int(getenv("HUB_GUILD_ID", ""))
-    HUB_COMMANDS_CHANNEL_ID: Final = int(getenv("HUB_COMMANDS_CHANNEL_ID", ""))
-    HUB_RELAY_CHANNEL_ID: Final = int(getenv("HUB_RELAY_CHANNEL_ID", ""))
-    HUB_STDOUT_CHANNEL_ID: Final = int(getenv("HUB_STDOUT_CHANNEL_ID", ""))        
+       

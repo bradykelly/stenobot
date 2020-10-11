@@ -1,3 +1,4 @@
 .env
 discord_creds.txt
 __pycache__
+secrets/token
