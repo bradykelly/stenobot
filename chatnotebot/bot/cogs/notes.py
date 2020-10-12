@@ -91,17 +91,18 @@ class Notes(ChatNoteBaseCog, name="note"):
 
     # 'del' command
     @note.command(
+        name="del",
+        aliases=["delete"],
         help="Delete a note from your notebooks",
         brief="Delete a note",
-        usage="<note_id>: Id of the note to delete. Required",
-        name="del"
+        usage="<note_id>: Id of the note to delete. Required"
     )
     async def delnote(self, ctx, note_id):
         '''
         Deletes a note, by note_id, from the notebook it is in
         '''
         del_id = int(note_id)
-        self.bot.db.delete_note(ctx.author.id, del_id)
+        await self.bot.db.delete_note(ctx.author.id, del_id)
         await self.show_message_codeblock(ctx, f"Note #{del_id} deleted")
 
     @delnote.error

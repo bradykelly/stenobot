@@ -14,7 +14,7 @@ from chatnotebot.utils.loc import CodeCounter
 from chatnotebot.utils.presence import PresenceSetter
 from chatnotebot.utils.ready import Ready
 
-DISABLED_COGS = ["warn", "mod", "control"]
+DISABLED_COGS = ["warn", "control", "gateway"]
 
 class Bot(commands.Bot):
 

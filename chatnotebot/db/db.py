@@ -153,9 +153,8 @@ class Database:
                         WHERE UserId = ?
                             AND Id = ?"""
         values = (userId, noteId)
-        cursor = None
         try:
-            await self.ctx.execute(del_sql, values)
+            await self.cxn.execute(del_sql, values)
         except Exception as ex:
             err = sys.exc_info()[0]
 
@@ -178,7 +177,7 @@ class Database:
         except Exception as ex:
             err = sys.exc_info()[0]
        
-    def del_book(self, userId, notebook):
+    async def del_book(self, userId, notebook):
         """
         Deletes a notebook.
         """
@@ -191,11 +190,10 @@ class Database:
                         WHERE Notebook = ? 
                             and UserId = ?"""
         values = (notebook.strip().lower(), userId)
-        cursor = None
         try:
-            self.cxn.execute(count_sql, values)
-            row = cursor.fetchone()
-            count = row["Count"]
+            cur = await self.cxn.execute(count_sql, values)
+            row = await cur.fetchone()
+            count = row[0]
             if count > 0:
                 self.cxn.execute(delete_sql, values)
             return count

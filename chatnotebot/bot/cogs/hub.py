@@ -13,16 +13,13 @@ class Hub(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         if not self.bot.ready.booted:
-            #self.guild = self.bot.get_guild(config.HUB_GUILD_ID)
-            # TODO Remove hard-coded Id
-            self.guild = self.bot.get_guild(734386829587120268)
+            self.guild = self.bot.get_guild(Config.HUB_GUILD_ID)
 
             if self.guild is not None:
-                # self.commands_channel = self.guild.get_channel(Config.HUB_COMMANDS_CHANNEL_ID)
-                # self.relay_channel = self.guild.get_channel(Config.HUB_COMMANDS_CHANNEL_ID)
-                # self.stdout_channel = self.guild.get_channel(Config.HUB_STDOUT_CHANNEL_ID)
-                # TODO Remove hard-coding
-                self.stdout_channel = self.guild.get_channel(758561293132890122)
+                self.commands_channel = self.guild.get_channel(Config.HUB_COMMANDS_CHANNEL_ID)
+                self.relay_channel = self.guild.get_channel(Config.HUB_COMMANDS_CHANNEL_ID)
+                self.stdout_channel = self.guild.get_channel(Config.HUB_STDOUT_CHANNEL_ID)
+
                 if self.stdout_channel is not None:
                     await self.stdout_channel.send(
                         f"{self.bot.info} ChatNoteBot is now online! (Version {self.bot.version})"

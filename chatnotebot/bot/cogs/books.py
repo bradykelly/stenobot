@@ -72,7 +72,7 @@ class Books(ChatNoteBaseCog, name="book"):
         '''
         Deletes a notebook
         '''
-        count = self.bot.db.del_book(ctx.message.author.id, name)
+        count = await self.bot.db.del_book(ctx.message.author.id, name)
 
         if count > 0:
             await self.show_message_codeblock(ctx, f"Notebook '{name}' deleted' ", "Delete Noteboook")
