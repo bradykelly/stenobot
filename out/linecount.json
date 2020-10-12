@@ -45,7 +45,7 @@
                     "comment": 0
                 },
                 {
-                    "filename": "__pycache__\\dal.cpython-37.pyc",
+                    "filename": "__pycache__\\self.bot.db.cpython-37.pyc",
                     "isbinaryfile": true,
                     "blank": 0,
                     "code": 0,
@@ -145,7 +145,7 @@
                     "blank": 15,
                     "code": 125,
                     "comment": 10,
-                    "filename": "dal.py"
+                    "filename": "self.bot.db.py"
                 },
                 {
                     "blank": 1,
@@ -362,7 +362,7 @@
                     "comment": 0
                 },
                 {
-                    "filename": "lib\\db\\__pycache__\\dal.cpython-38.pyc",
+                    "filename": "lib\\db\\__pycache__\\self.bot.db.cpython-38.pyc",
                     "isbinaryfile": true,
                     "blank": 0,
                     "code": 0,
@@ -372,7 +372,7 @@
                     "blank": 25,
                     "code": 162,
                     "comment": 11,
-                    "filename": "lib\\db\\dal.py"
+                    "filename": "lib\\db\\self.bot.db.py"
                 },
                 {
                     "blank": 8,
@@ -741,7 +741,7 @@
                     "comment": 0
                 },
                 {
-                    "filename": "lib\\db\\__pycache__\\dal.cpython-38.pyc",
+                    "filename": "lib\\db\\__pycache__\\self.bot.db.cpython-38.pyc",
                     "isbinaryfile": true,
                     "blank": 0,
                     "code": 0,
@@ -751,7 +751,7 @@
                     "blank": 23,
                     "code": 201,
                     "comment": 16,
-                    "filename": "lib\\db\\dal.py"
+                    "filename": "lib\\db\\self.bot.db.py"
                 },
                 {
                     "filename": "lib\\models\\__pycache__\\note.cpython-38.pyc",

@@ -1,5 +1,4 @@
 import common
-from chatnotebot.db import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
@@ -22,7 +21,7 @@ class NoteCommands(ChatNoteCommands, name="admin"):
         '''
         Sets the command prefixes for this bot
         '''     
-        dal.set_prefixes(ctx.guild.id, prefixes)
+        self.bot.db.set_prefixes(ctx.guild.id, prefixes)
 
     @set_prefix.error
     async def del_book_handler(self, ctx, error):

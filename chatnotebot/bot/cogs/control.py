@@ -1,11 +1,9 @@
-import discord
 import common
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.core import command, has_permissions
 from discord.ext.commands.errors import CheckFailure
 from typing import List
-from chatnotebot.db import dal
 from chatnotebot.bot.cogs.gateway import Synchronise
 
 class Control(Cog):
@@ -13,6 +11,12 @@ class Control(Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)        
 
     # TODO Implement multiple prefixes
     @command(name="prefix", 
@@ -34,7 +38,7 @@ class Control(Cog):
                 else:
                     filtered.append(pref)
 
-            dal.set_prefixes(ctx.guild.id,ctx.guild.name, ctx.author.id, filtered)
+            self.bot.db.set_prefixes(ctx.guild.id,ctx.guild.name, ctx.author.id, filtered)
             pref_string = ", ".join(filtered)
             await ctx.send(f"Prefixes set to {pref_string}")
 
@@ -50,12 +54,7 @@ class Control(Cog):
     @commands.is_owner()
     async def logout(self, ctx):
         self.bot.logout(ctx)
-        
-    @commands.Cog.listener()
-    async def on_ready(self):
-        if not self.bot.ready.booted:
-            await Synchronise(self.bot).on_boot()
-            self.bot.ready.up(self)
+
 
 def setup(bot):
     bot.add_cog(Control(bot))        

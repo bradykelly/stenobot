@@ -1,7 +1,5 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-import os
-import subprocess as sp
 import time
 import discord
 import common
@@ -11,17 +9,18 @@ from discord.ext import commands
 from chatnotebot.db import db
 from chatnotebot import utils
 from chatnotebot.config import Config
-from chatnotebot.db import dal
-from chatnotebot.utils import loc
 from chatnotebot.utils.emoji import EmojiGetter
 from chatnotebot.utils.loc import CodeCounter
 from chatnotebot.utils.presence import PresenceSetter
 from chatnotebot.utils.ready import Ready
 
+DISABLED_COGS = ["warn", "mod", "control"]
+
 class Bot(commands.Bot):
+
     def __init__(self, version):
         self.version = version
-        self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py")]
+        self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py") if p.stem not in DISABLED_COGS]
         self._dynamic = "./chatnotebot/data/dynamic"
         self._static = "./chatnotebot/data/static"
         self.scheduler = AsyncIOScheduler()

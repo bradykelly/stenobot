@@ -1,7 +1,6 @@
 from chatnotebot.bot.cogs.gateway import Synchronise
 from chatnotebot.bot.chatnote_base_cog import ChatNoteBaseCog
 import common
-from chatnotebot.db import dal
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
@@ -10,15 +9,22 @@ from discord.ext import commands
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
 class Notes(ChatNoteBaseCog, name="note"):
-    """Commands to use your ChatNote notebook"""
+    """Commands to use your ChatNote notes"""
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)          
     
-    # 'note' command    
+    # 'note' command group
     @commands.group(
         aliases=["notes"],
-        help="Commands to help you manage your ChatNote notes",
+        title="Commands to help you manage your ChatNote notes",
+        help=f"Add, find, list or delete notes",
         brief="Use your notebook",
         usage= f"[add | find | list | del]"
     )
@@ -49,7 +55,7 @@ class Notes(ChatNoteBaseCog, name="note"):
         '''
         if (notebook is not None):
             notebook = notebook.strip()        
-        dal.insert_note(ctx.message.author.id, text, notebook) 
+        self.bot.db.insert_note(ctx.message.author.id, text, notebook) 
         await self.show_message_codeblock(ctx, r"note added: " + text)
 
     @add.error
@@ -73,7 +79,7 @@ class Notes(ChatNoteBaseCog, name="note"):
         if (notebook is None):
             notebook = common.DEFAULT_NOTEBOOK
         notebook = notebook.strip() 
-        notes = dal.get_notes(ctx.message.author.id, notebook)
+        notes = await self.bot.db.get_notes(ctx.message.author.id, notebook)
         note_count = 0
         list_text = ""
         for note in notes:   
@@ -95,7 +101,7 @@ class Notes(ChatNoteBaseCog, name="note"):
         Deletes a note, by note_id, from the notebook it is in
         '''
         del_id = int(note_id)
-        dal.delete_note(ctx.author.id, del_id)
+        self.bot.db.delete_note(ctx.author.id, del_id)
         await self.show_message_codeblock(ctx, f"Note #{del_id} deleted")
 
     @delnote.error
@@ -105,13 +111,7 @@ class Notes(ChatNoteBaseCog, name="note"):
         '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "note_id":
             usage = f"{ctx.prefix}{ctx.command.name} <note_id>"
-            await self.show_message_codeblock(ctx, usage, "Usage")    
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        if not self.bot.ready.booted:
-            await Synchronise(self.bot).on_boot()
-            self.bot.ready.up(self)    
+            await self.show_message_codeblock(ctx, usage, "Usage")     
 
 
 def setup(bot):

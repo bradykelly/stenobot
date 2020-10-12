@@ -14,7 +14,7 @@ total blank lines : 98
 __pycache__\books_cog.cpython-37.pyc, it is a binary file.
 __pycache__\chatnote_cog.cpython-37.pyc, it is a binary file.
 __pycache__\common.cpython-37.pyc, it is a binary file.
-__pycache__\dal.cpython-37.pyc, it is a binary file.
+__pycache__\self.bot.db.cpython-37.pyc, it is a binary file.
 __pycache__\full_embed_help.cpython-37.pyc, it is a binary file.
 __pycache__\help_cog.cpython-37.pyc, it is a binary file.
 __pycache__\misc_cog.cpython-37.pyc, it is a binary file.
@@ -29,7 +29,7 @@ chatnote_cog.py, code is 26, comment is 12, blank is 9.
 chatnotebot.service, code is 13, comment is 0, blank is 1.
 cnb.code-workspace, code is 10, comment is 0, blank is 0.
 common.py, code is 4, comment is 0, blank is 0.
-dal.py, code is 125, comment is 10, blank is 15.
+self.bot.db.py, code is 125, comment is 10, blank is 15.
 discord_creds.txt, code is 5, comment is 0, blank is 1.
 full_embed_help.py, code is 47, comment is 7, blank is 16.
 help_cog.py, code is 42, comment is 3, blank is 9.
@@ -75,8 +75,8 @@ lib\bot\__init__.py, code is 62, comment is 0, blank is 16.
 lib\bot\__pycache__\__init__.cpython-38.pyc, it is a binary file.
 lib\db\__init__.py, code is 2, comment is 0, blank is 1.
 lib\db\__pycache__\__init__.cpython-38.pyc, it is a binary file.
-lib\db\__pycache__\dal.cpython-38.pyc, it is a binary file.
-lib\db\dal.py, code is 162, comment is 11, blank is 25.
+lib\db\__pycache__\self.bot.db.cpython-38.pyc, it is a binary file.
+lib\db\self.bot.db.py, code is 162, comment is 11, blank is 25.
 note.py, code is 30, comment is 0, blank is 8.
 old_bot.py, code is 43, comment is 2, blank is 8.
 README.md, code is 2, comment is 1, blank is 1.
@@ -145,8 +145,8 @@ lib\cogs\notes.py, code is 76, comment is 26, blank is 12.
 lib\cogs\welcome.py, code is 40, comment is 3, blank is 5.
 lib\db\__init__.py, code is 2, comment is 0, blank is 1.
 lib\db\__pycache__\__init__.cpython-38.pyc, it is a binary file.
-lib\db\__pycache__\dal.cpython-38.pyc, it is a binary file.
-lib\db\dal.py, code is 201, comment is 16, blank is 23.
+lib\db\__pycache__\self.bot.db.cpython-38.pyc, it is a binary file.
+lib\db\self.bot.db.py, code is 201, comment is 16, blank is 23.
 lib\models\__pycache__\note.cpython-38.pyc, it is a binary file.
 lib\models\note.py, code is 30, comment is 0, blank is 8.
 lib\utils\__init__.py, code is 21, comment is 7, blank is 4.

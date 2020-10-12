@@ -1,3 +1,1 @@
-from ..db import dal
-
-dal.build()
+from .db import Database

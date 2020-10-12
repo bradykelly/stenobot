@@ -1,9 +1,7 @@
 import common
 from discord.errors import Forbidden
 from discord.ext.commands import Cog
-from chatnotebot.db import dal
 from chatnotebot.bot.cogs.gateway import Synchronise
-from chatnotebot.bot import bot
 
 class Welcome(Cog):
     """Listeners for when a member joins or leaves the guild"""
@@ -12,10 +10,10 @@ class Welcome(Cog):
         self.bot = bot
 
     def get_notification_channel(self, guildId):
-        channelName = dal.field("""select notification_channel
+        channelName = self.bot.db.field("""select notification_channel
                             from guild_config
                             where guildId = ?""", guildId)
-        channelId = dal.field("""select channelId from channelIds
+        channelId = self.bot.db.field("""select channelId from channelIds
                                 where guildId = ?
                                     and name = ?""", guildId, channelName)
         return self.bot.get_channel(channelId)
@@ -28,7 +26,7 @@ class Welcome(Cog):
 
     @Cog.listener()
     async def on_member_join(self, member): 
-        dal.execute("INSERT INTO exp(userId) VALUES (?) ON CONFLICT DO NOTHING", member.id)       
+        self.bot.db.execute("INSERT INTO exp(userId) VALUES (?) ON CONFLICT DO NOTHING", member.id)       
         if chan := self.get_notification_channel(member.guild.id):
             if member.guild.id != common.PY_GUILD_ID:
                 await chan.send(f"Welcome to ** {member.guild.name} ** {member.display_name}! Head over to {'Introductions'} and make yourself known.")
@@ -44,7 +42,7 @@ class Welcome(Cog):
 
     @Cog.listener()
     async def on_member_remove(self, member):
-        dal.execute("DELETE FROM exp WHERE userId = ?", member.id)
+        self.bot.db.execute("DELETE FROM exp WHERE userId = ?", member.id)
         if chan := self.get_notification_channel(member.guild.id):
             if member.guild.id != common.PY_GUILD_ID:
                 await chan.send(f"{member.display_name} has left {member.guild.name}")

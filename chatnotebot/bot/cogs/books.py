@@ -1,50 +1,48 @@
 from chatnotebot.bot.cogs.gateway import Synchronise
-import common
-from chatnotebot.db import dal
-from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chatnotebot.bot.chatnote_base_cog import ChatNoteBaseCog
 
 BOOKS_COMMANDS = ["list", "rename", "del"]
 
-class Books(ChatNoteBaseCog, name="books"):
+class Books(ChatNoteBaseCog, name="book"):
+    """Commands to manage your ChatNote notebooks"""
 
     def __init__(self, bot):
         self.bot = bot
-    
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        if not self.bot.ready.booted:
+            await Synchronise(self.bot).on_boot()
+            self.bot.ready.up(self)      
+
     # 'books' command group
     @commands.group(
+        name="book",
+        aliases = ["notebooks"],
         title="Commands to help you manage your ChatNote notebooks",
-        help="For 'del', 'name' is required. For rename, 'name' and 'new-name' are required",
+        help="List or delete notebooks.",
         brief="Manage your notebooks",
-        usage= f"[list | rename | del]"
+        usage= f"[list | del]"
     )
     async def books(self, ctx):
-        '''
-        The root command for the Books group
-        '''
         if ctx.invoked_subcommand is None or (ctx.invoked_subcommand is not None and ctx.invoked_subcommand.name not in BOOKS_COMMANDS):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
 
     @books.error
     async def books_handler(self, ctx, error):
-        '''
-        Error handler for all commands in the 'books' group
-        '''
         if isinstance(error, CommandNotFound):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")       
 
     # 'list' command
     @books.command(
+        alias=['show'],
         help="List all your notebooks",
         brief="List notebooks"
     )           
     async def list(self, ctx):          
-        '''
-        Lists all a user's notebooks
-        '''
-        books = dal.get_books(ctx.message.author.id)
+        books = await self.bot.db.get_books(ctx.message.author.id)
         book_count = 0
         list_text = ""
         for book in books:   
@@ -74,7 +72,7 @@ class Books(ChatNoteBaseCog, name="books"):
         '''
         Deletes a notebook
         '''
-        count = dal.del_book(ctx.message.author.id, name)
+        count = self.bot.db.del_book(ctx.message.author.id, name)
 
         if count > 0:
             await self.show_message_codeblock(ctx, f"Notebook '{name}' deleted' ", "Delete Noteboook")
@@ -87,13 +85,7 @@ class Books(ChatNoteBaseCog, name="books"):
         Error handler for the 'del' command
         '''
         if isinstance(error, MissingRequiredArgument):
-            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        if not self.bot.ready.booted:
-            await Synchronise(self.bot).on_boot()
-            self.bot.ready.up(self)               
+            await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")          
 
 
 def setup(bot):

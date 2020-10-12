@@ -339,6 +339,7 @@ class Meta(commands.Cog):
             )
 
     @commands.command(
+        hidden=True,
         name="userinfo",
         aliases=["ui"],
         help=f"Displays information on a given user. If no user is provided, {common.BOT_NAME} will display your information. Note that although {common.BOT_NAME} can display information about any user on Discord, the amount of information available is significantly lower for users not in the server the command was invoked in.",
@@ -412,7 +413,10 @@ class Meta(commands.Cog):
             await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a user with the information provided.")
 
     @commands.command(
-        name="serverinfo", aliases=["si", "guildinfo", "gi"], help="Displays information on your server."
+        disabled=True,
+        name="serverinfo", 
+        aliases=["si", "guildinfo", "gi"], 
+        help="Displays information on your server."
     )
     async def serverinfo_command(self, ctx):
         bot_count = len([m for m in ctx.guild.members if m.bot])
@@ -465,6 +469,7 @@ class Meta(commands.Cog):
         )
 
     @commands.command(
+        disabled=True,
         name="channelinfo",
         aliases=["categoryinfo", "ci"],
         help=f"Displays information on a given channel or category. If no channel or category is provided, {common.BOT_NAME} will display information on the channel the command was invoked in.",
@@ -561,6 +566,7 @@ class Meta(commands.Cog):
             await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a channel with the information provided.")
 
     @commands.command(
+        disabled=True,
         name="roleinfo",
         aliases=["ri"],
         help=f"Displays information on a given role. If no role is provided, {common.BOT_NAME} will display information on your top role.",
@@ -598,6 +604,7 @@ class Meta(commands.Cog):
             await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a role with the information provided.")
 
     @commands.command(
+        disabled=True,
         name="messageinfo",
         aliases=["mi"],
         help='Displays information on a given message. Hint: If you are in developer mode, you can hold SHIFT while clicking on the "Copy ID" option to get a channelid-messageid format. This allows you to get information for messages in different channels.',
@@ -639,6 +646,7 @@ class Meta(commands.Cog):
             await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a message with the information provided.")
 
     @commands.command(
+        disabled=True,
         name="emojiinfo",
         aliases=["ei"],
         help="Displays information on a given emoji. This only works for custom emoji.",
@@ -674,6 +682,7 @@ class Meta(commands.Cog):
             )
 
     @commands.command(
+        disabled=True,
         name="detailedserverinfo",
         aliases=["dsi", "detailedguildinfo", "dgi"],
         cooldown_after_parsing=True,
@@ -750,6 +759,7 @@ class Meta(commands.Cog):
         await DetailedServerInfoMenu(ctx, table).start()
 
     @commands.command(
+        disabled=True,
         name="avatar",
         aliases=["profile", "pfp"],
         help="Displays the avatar (profile picture) of a given user. This is not limited to server members.",
@@ -772,7 +782,9 @@ class Meta(commands.Cog):
         else:
             await ctx.send(f"{self.bot.cross} {common.BOT_NAME} was unable to identify a user with the information provided.")
 
-    @commands.command(name="icon", help="Displays the icon of your server.")
+    @commands.command(
+        name="icon", 
+        help="Displays the icon of your server.")
     async def icon_command(self, ctx):
         await ctx.send(
             embed=self.bot.embed.build(

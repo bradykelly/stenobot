@@ -1,6 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-import time
+import common
 import typing as t
 from string import ascii_lowercase
 
@@ -17,7 +17,7 @@ MAX_WARNTYPES = 25
 
 
 class Warn(commands.Cog):
-    """A system to serve official warnings to members."""
+    """A system to serve official warnings to members"""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot

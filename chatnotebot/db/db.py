@@ -1,6 +1,7 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 # TODO Exception handling
 
+from chatnotebot.models.note import Note
 import sys
 import common
 from os import path
@@ -120,3 +121,83 @@ class Database:
             self._calls += 1      
 
         return cur.rowcount
+
+    async def get_notes(self, userId, notebook=None):
+        '''
+        Gets all notes in a named notebook or the default notebook
+        ''' 
+        if notebook is None:
+            notebook = common.DEFAULT_NOTEBOOK
+        select_sql = """SELECT Id, Time, Text 
+                        FROM notes
+                        WHERE UserId = ?
+                        and Notebook = ?;"""
+        values = (userId, notebook.strip().lower())
+        try:
+            cur = await self.cxn.execute(select_sql, values)
+            rows = await cur.fetchall()
+            notes = []
+            for row in rows:
+                note = Note(row[0], row[1], row[2])
+                notes.append(note)
+            return notes
+        except Exception as ex:
+            err = sys.exc_info()[0]
+
+    async def delete_note(self, userId, noteId):
+        '''
+        Deletes a note by Id from whatever notebook is in
+        ''' 
+        del_sql = """DELETE 
+                        FROM notes 
+                        WHERE UserId = ?
+                            AND Id = ?"""
+        values = (userId, noteId)
+        cursor = None
+        try:
+            await self.ctx.execute(del_sql, values)
+        except Exception as ex:
+            err = sys.exc_info()[0]
+
+    async def get_books(self, userId):
+        """
+        List all notebooks for a given member
+        """
+        select_sql = """SELECT count(*) Num, Notebook 
+                        FROM notes
+                        WHERE UserId = ?
+                        GROUP BY Notebook"""
+        values = (userId, )
+        try:
+            cur = await self.cxn.execute(select_sql, values)
+            rows = await cur.fetchall()
+            books = []
+            for row in rows:
+                books.append((row[0], row[1]))
+            return books
+        except Exception as ex:
+            err = sys.exc_info()[0]
+       
+    def del_book(self, userId, notebook):
+        """
+        Deletes a notebook.
+        """
+        count_sql = """SELECT count(*) Count
+                        FROM notes
+                        WHERE Notebook = ? 
+                            and UserId = ?"""
+        delete_sql = """DELETE 
+                        FROM notes
+                        WHERE Notebook = ? 
+                            and UserId = ?"""
+        values = (notebook.strip().lower(), userId)
+        cursor = None
+        try:
+            self.cxn.execute(count_sql, values)
+            row = cursor.fetchone()
+            count = row["Count"]
+            if count > 0:
+                self.cxn.execute(delete_sql, values)
+            return count
+        except Exception as e:
+            err = sys.exc_info()[0]       
