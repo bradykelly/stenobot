@@ -140,9 +140,10 @@ class Database:
             for row in rows:
                 note = Note(row[0], row[1], row[2])
                 notes.append(note)
+            self._calls += 1
             return notes
         except Exception as ex:
-            err = sys.exc_info()[0]
+            err = sys.exc_info()[0]          
 
     async def delete_note(self, userId, noteId):
         '''
@@ -157,6 +158,8 @@ class Database:
             await self.cxn.execute(del_sql, values)
         except Exception as ex:
             err = sys.exc_info()[0]
+        else:
+            self._calls += 1            
 
     async def get_books(self, userId):
         """
@@ -173,6 +176,7 @@ class Database:
             books = []
             for row in rows:
                 books.append((row[0], row[1]))
+            self._calls += 1
             return books
         except Exception as ex:
             err = sys.exc_info()[0]
@@ -195,7 +199,9 @@ class Database:
             row = await cur.fetchone()
             count = row[0]
             if count > 0:
-                self.cxn.execute(delete_sql, values)
+                await self.cxn.execute(delete_sql, values)
+            self._calls += 1  
             return count
-        except Exception as e:
-            err = sys.exc_info()[0]       
+        except Exception as ex:
+            err = sys.exc_info()[0]  
+               

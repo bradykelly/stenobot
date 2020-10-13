@@ -120,26 +120,26 @@ class Meta(commands.Cog):
     async def on_ready(self):
         if not self.bot.ready.booted:
             self.developer = (await self.bot.application_info()).owner
-            self.artist = await self.bot.grab_user(167803836839231488)
-            self.testers = [
-                (await self.bot.grab_user(id_))
-                for id_ in (
-                    116520426401693704,
-                    300346872109989898,
-                    135372594953060352,
-                    287969892689379331,
-                    254245982395564032,
-                )
-            ]
-            self.support_guild = self.bot.get_guild(734386829587120268)
-            self.helper_role = self.support_guild.get_role(758837748403667004)
+            # self.artist = await self.bot.grab_user(167803836839231488)
+            # self.testers = [
+            #     (await self.bot.grab_user(id_))
+            #     for id_ in (
+            #         116520426401693704,
+            #         300346872109989898,
+            #         135372594953060352,
+            #         287969892689379331,
+            #         254245982395564032,
+            #     )
+            # ]
+            self.support_guild = self.bot.get_guild(765626249556262934) # ChatNoteBot Support
+            self.helper_role = self.support_guild.get_role(765635385316737084) # @helper
 
             self.bot.ready.up(self)
 
     @commands.command(
         name="about",
         aliases=["credits"],
-        help=f"View information regarding those behind {common.BOT_NAME}' development. This includes the developer and the testers, and also shows copyright information.",
+        help=f"View information regarding those behind {common.BOT_NAME} development. This includes the developer and the testers, and also shows copyright information.",
     )
     async def about_command(self, ctx):
         prefix = await self.bot.prefix(ctx.guild)
@@ -151,14 +151,14 @@ class Meta(commands.Cog):
                 description=f"Use `{prefix}botinfo` for detailed statistics.",
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
-                    ("Developer", self.developer.mention, False),
-                    ("Avatar Designer", self.artist.mention, False),
-                    ("Testers", string.list_of([t.mention for t in self.testers]), False),
+                    ("Developer", self.developer.mention, False)
+                    # ("Avatar Designer", self.artist.mention, False),
+                    # ("Testers", string.list_of([t.mention for t in self.testers]), False),
                 ),
             )
         )
 
-    @commands.command(name="support", aliases=["sos"], help=f"Provides an invite link to {common.BOT_NAME}' support server.")
+    @commands.command(name="support", aliases=["sos"], help=f"Provides an invite link to {common.BOT_NAME} support server.")
     async def support_command(self, ctx):
         online = [m for m in self.support_guild.members if not m.bot and m.status == discord.Status.online]
         helpers = [
@@ -207,7 +207,7 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="source", aliases=["src"], help=f"Provides a link to {common.BOT_NAME}' source code.")
+    @commands.command(name="source", aliases=["src"], help=f"Provides a link to {common.BOT_NAME} source code.")
     async def source_command(self, ctx):
         await ctx.send(
             embed=self.bot.embed.build(
@@ -287,7 +287,7 @@ class Meta(commands.Cog):
         name="botinfo",
         aliases=["bi", "botstats", "stats", "bs"],
         cooldown_after_parsing=True,
-        help=f"Displays statistical information on {common.BOT_NAME}. This includes process and composition information, and also includes information about {common.BOT_NAME}' reach.",
+        help=f"Displays statistical information on {common.BOT_NAME}. This includes process and composition information, and also includes information about {common.BOT_NAME} reach.",
     )
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def botinfo_command(self, ctx):

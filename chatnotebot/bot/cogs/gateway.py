@@ -66,7 +66,7 @@ class Okay:
                 elif r.position >= self.guild.me.top_role.position:
                     await trips.gateway(
                         self,
-                        f"one or more member roles are equal to or higher than {common.BOT_NAME}' top role in the role hierarchy",
+                        f"one or more member roles are equal to or higher than {common.BOT_NAME} top role in the role hierarchy",
                     )
                     return
 
@@ -603,7 +603,7 @@ class Gateway(commands.Cog):
     @commands.command(
         name="resetaccepted",
         cooldown_after_parsing=True,
-        help=f"Resets {common.BOT_NAME}' records regarding who has accepted the rules in your server. This action is irreversible.",
+        help=f"Resets {common.BOT_NAME} records regarding who has accepted the rules in your server. This action is irreversible.",
     )
     @commands.cooldown(1, 300, commands.BucketType.guild)
     @checks.module_has_initialised(MODULE_NAME)

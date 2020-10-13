@@ -12,7 +12,7 @@ class SetupMenu(menu.SelectionMenu):
         pagemap = {
             "header": "Setup Wizard",
             "title": "Hello!",
-            "description": f"Welcome to the {common.BOT_NAME} first time setup! You need to run this before you can use most of {common.BOT_NAME}' commands, but you only ever need to run once.\n\nIn order to operate effectively in your server, {common.BOT_NAME} needs to create a few things:",
+            "description": f"Welcome to the {common.BOT_NAME} first time setup! You need to run this before you can use most of {common.BOT_NAME} commands, but you only ever need to run once.\n\nIn order to operate effectively in your server, {common.BOT_NAME} needs to create a few things:",
             "thumbnail": ctx.bot.user.avatar_url,
             "fields": (
                 (
@@ -22,7 +22,7 @@ class SetupMenu(menu.SelectionMenu):
                 ),
                 (
                     "An admin role",
-                    f"This will be called {common.BOT_NAME} Administrator and will be placed at the bottom of the role hierarchy. This role does not provide members any additional access to the server, but does allow them to use {common.BOT_NAME}' configuration commands. Server administrators do not need this role to configure {common.BOT_NAME}. You will be able to change what {common.BOT_NAME} uses as the admin role later.",
+                    f"This will be called {common.BOT_NAME} Administrator and will be placed at the bottom of the role hierarchy. This role does not provide members any additional access to the server, but does allow them to use {common.BOT_NAME} configuration commands. Server administrators do not need this role to configure {common.BOT_NAME}. You will be able to change what {common.BOT_NAME} uses as the admin role later.",
                     False,
                 ),
                 (
@@ -109,7 +109,7 @@ class SetupMenu(menu.SelectionMenu):
         pagemap = {
             "header": "Setup",
             "title": "First time setup complete",
-            "description": f"Congratulations - the first time setup has been completed! You can now use all of {common.BOT_NAME}' commands, and activate all of {common.BOT_NAME}' modules.\n\nEnjoy using {common.BOT_NAME}!",
+            "description": f"Congratulations - the first time setup has been completed! You can now use all of {common.BOT_NAME} commands, and activate all of {common.BOT_NAME} modules.\n\nEnjoy using {common.BOT_NAME}!",
             "thumbnail": SUCCESS_ICON,
         }
         await modules.config._system__runfts(self.bot, self.ctx.channel, 1)

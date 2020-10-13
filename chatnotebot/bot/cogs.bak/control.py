@@ -28,7 +28,7 @@ class Control(Cog):
         if not prefixes:
             prefix = await self.bot.prefix(ctx.guild)
             await ctx.send(
-                f"{self.bot.info} {common.BOT_NAME}' prefix in this server is {prefix}. To change it, use `{prefix}config system prefix <new prefix>`."
+                f"{self.bot.info} {common.BOT_NAME} prefix in this server is {prefix}. To change it, use `{prefix}config system prefix <new prefix>`."
             )
         else:
             filtered = []
