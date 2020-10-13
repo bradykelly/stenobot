@@ -26,22 +26,20 @@ MAX_STRIKES = 9
 async def _system__runfts(bot, channel, value):
     await bot.db.execute("UPDATE guild_config SET runFts = ? WHERE guildId = ?", value, channel.guild.id)
 
-async def system__prefix(bot, channel, values):
+async def system__prefix(bot, channel, value):
     """The server prefix
-    The prefix ChatNoteBot responds to, aside from mentions. The default is >>."""
-    for pfx in values:
-        if not isinstance(pfx, str):
-            await channel.send(f"{bot.cross} A server prefix must be a string.")
-        elif len(pfx) > MAX_PREFIX_LEN:
-            await channel.send(
-                f"{bot.cross} A server prefix must be no longer than {MAX_PREFIX_LEN} characters in length."
+    The prefix ChatNoteBot responds to, aside from mentions. The default is >-."""
+    if not isinstance(value, str):
+        await channel.send(f"{bot.cross} A server prefix must be a string.")
+    elif len(value) > MAX_PREFIX_LEN:
+        await channel.send(
+            f"{bot.cross} A server prefix must be no longer than {MAX_PREFIX_LEN} characters in length."
         )
     else:
-        prefString = common.CSV_SEPARATOR.join(values)
-        await bot.db.execute("UPDATE guild_config SET command_prefixes = ? WHERE guildId = ?", prefString, channel.guild.id)
-        await channel.send(f"{bot.tick} The server prefixes have been set to {prefString}.")
+        await bot.db.execute("UPDATE guild_config SET commandPrefix = ? WHERE guildId = ?", value, channel.guild.id)
+        await channel.send(f"{bot.tick} The server prefix has been set to {value}.")
         lc = await retrieve.log_channel(bot, channel.guild)
-        await lc.send(f"{bot.info} The server prefixes have been set to {prefString}.")    
+        await lc.send(f"{bot.info} The server prefix has been set to {value}.")    
 
 async def system__logchannel(bot, channel, value):
     """The log channel

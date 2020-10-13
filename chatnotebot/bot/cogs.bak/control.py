@@ -4,7 +4,7 @@ from discord.ext.commands.cog import Cog
 from discord.ext.commands.core import command, has_permissions
 from discord.ext.commands.errors import CheckFailure
 from typing import List
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 
 class Control(Cog):
     """Commands to control users and the bot"""

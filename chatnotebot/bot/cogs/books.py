@@ -1,4 +1,4 @@
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from chatnotebot.bot.chatnote_base_cog import ChatNoteBaseCog

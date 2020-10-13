@@ -1,4 +1,4 @@
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 from chatnotebot.bot.chatnote_base_cog import ChatNoteBaseCog
 import common
 from discord.ext.commands.cog import Cog

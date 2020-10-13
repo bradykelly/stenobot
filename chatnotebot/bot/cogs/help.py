@@ -1,6 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 import os
 import datetime as dt
 import typing as t

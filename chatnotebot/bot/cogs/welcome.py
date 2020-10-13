@@ -1,7 +1,7 @@
 import common
 from discord.errors import Forbidden
 from discord.ext.commands import Cog
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 
 class Welcome(Cog):
     """Listeners for when a member joins or leaves the guild"""

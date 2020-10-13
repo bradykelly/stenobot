@@ -2,7 +2,7 @@
 
 from chatnotebot.config import Config
 from chatnotebot import config
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 from discord.ext import commands
 
 

@@ -18,7 +18,7 @@ DISABLED_COGS = ["warn", "control", "gateway"]
 
 class Bot(commands.Bot):
 
-    def __init__(self, version):
+    def __init__(self, version, intents):
         self.version = version
         self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py") if p.stem not in DISABLED_COGS]
         self._dynamic = "./chatnotebot/data/dynamic"
@@ -33,7 +33,7 @@ class Bot(commands.Bot):
 
         self.loc.count()
 
-        super().__init__(command_prefix=self.command_prefix, case_insensitive=True, status=discord.Status.dnd)
+        super().__init__(command_prefix=self.command_prefix, case_insensitive=True, status=discord.Status.dnd, intents=intents)
 
     def setup(self):
         print("Running setup...")

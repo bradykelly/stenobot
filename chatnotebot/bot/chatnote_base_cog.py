@@ -8,7 +8,7 @@ from discord.ext.commands.cog import Cog
 
 class ChatNoteBaseCog(Cog):
     '''
-    Base class for all cogs in the ChatNoteBot
+    Base class for application cogs in the ChatNoteBot
     '''
     def __init__(self, bot):
         self.bot = bot

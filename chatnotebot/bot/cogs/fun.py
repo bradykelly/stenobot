@@ -1,4 +1,4 @@
-from chatnotebot.bot.cogs.gateway import Synchronise
+from chatnotebot.utils.synchronise import Synchronise
 from aiohttp import request
 from typing import Optional
 from discord import Member, Embed

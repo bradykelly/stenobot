@@ -17,7 +17,9 @@ class System(commands.Cog):
             self.bot.ready.up(self)
 
     @commands.command(
-        name="prefix", help=f"Displays {common.BOT_NAME} prefix in your server. Note that mentioning {common.BOT_NAME} will always work."
+        name="prefix", 
+        aliases=["pref"],
+        help=f"Displays {common.BOT_NAME} prefix in your server. Note that mentioning {common.BOT_NAME} will always work."
     )
     async def prefix_command(self, ctx):
         prefix = await self.bot.prefix(ctx.guild)
