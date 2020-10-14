@@ -111,7 +111,7 @@ class LeavingMenu(menu.SelectionMenu):
 
 
 class Meta(commands.Cog):
-    """Commands for retrieving information regarding ChatNoteBot, from invitation links to detailed bot statistics."""
+    """Commands for retrieving information regarding this bot, from invitation links to detailed bot statistics."""
 
     def __init__(self, bot):
         self.bot = bot

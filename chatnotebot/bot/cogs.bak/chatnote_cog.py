@@ -1,14 +1,13 @@
 
 import discord
 from discord.ext.commands.errors import CommandNotFound
-import common
 from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 
 class ChatNoteCommands(Cog):
     '''
-    Base class for all cogs in the ChatNoteBot
+    Base class for all cogs in the bot
     '''
     def __init__(self, bot):
         self.bot = bot

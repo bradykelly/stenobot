@@ -24,9 +24,9 @@ class Notes(ChatNoteBaseCog, name="note"):
     @commands.group(
         aliases=["notes"],
         title="Commands to help you manage your ChatNote notes",
-        help=f"Add, find, list or delete notes",
+        help=f"Add, list or delete notes",
         brief="Use your notebook",
-        usage= f"[add | find | list | del]"
+        usage= f"add <note-text> \nnote list \nnote del <note-number>]"
     )
     async def note(self, ctx):
         '''

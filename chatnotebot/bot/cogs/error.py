@@ -76,7 +76,7 @@ class Error(commands.Cog):
                     f"{self.bot.cross} {common.BOT_NAME} does not have the {mp} permission(s), which are required to use this command."
                 )
             except discord.Forbidden:
-                # If ChatNoteBot does not have the Send Messages permission (might redirect this to log channel once it's set up).
+                # If this bot does not have the Send Messages permission (might redirect this to log channel once it's set up).
                 pass
 
         elif isinstance(exc, commands.NotOwner):

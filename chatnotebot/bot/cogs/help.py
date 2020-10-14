@@ -61,7 +61,7 @@ class ConfigHelpMenu(menu.NumberedSelectionMenu):
 
 
 class Help(commands.Cog):
-    """Assistance with using a configuring ChatNoteBot."""
+    """Assistance with using a configuring this bot."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -71,18 +71,18 @@ class Help(commands.Cog):
     async def basic_syntax(ctx, cmd, prefix):
         try:
             await cmd.can_run(ctx)
-            return f"{prefix}{cmd.name}" if cmd.parent is None else f"  ↳ {cmd.name}"
+            return f"{cmd.name}" if cmd.parent is None else f"  ↳ {cmd.name}"
         except commands.CommandError:
-            return f"{prefix}{cmd.name} (✗)" if cmd.parent is None else f"  ↳ {cmd.name} (✗)"
+            return f"{cmd.name} (✗)" if cmd.parent is None else f"  ↳ {cmd.name} (✗)"
 
     @staticmethod
     def full_syntax(ctx, cmd, prefix):
         invokations = "|".join([cmd.name, *cmd.aliases])
         if (p := cmd.parent) is None:
-            return f"```{prefix}{invokations} {cmd.signature}```"
+            return f"```{invokations} {cmd.signature}```"
         else:
             p_invokations = "|".join([p.name, *p.aliases])
-            return f"```{prefix}{p_invokations} {invokations} {cmd.signature}```"
+            return f"```{p_invokations} {invokations} {cmd.signature}```"
 
     @staticmethod
     async def required_permissions(ctx, cmd):
@@ -133,17 +133,17 @@ class Help(commands.Cog):
                         thumbnail=self.bot.user.avatar_url,
                         fields=(
                             ("Syntax (<required> • [optional])", self.full_syntax(ctx, cmd, prefix), False),
+                            ("Command Prefix:", prefix, False),
+                                                        (
+                                "Parent",
+                                self.full_syntax(ctx, p, prefix) if (p := cmd.parent) is not None else "None",
+                                False,
+                            ),
                             (
                                 "On cooldown?",
                                 f"Yes, for {chron.long_delta(dt.timedelta(seconds=s))}."
                                 if (s := cmd.get_cooldown_retry_after(ctx))
                                 else "No",
-                                False,
-                            ),
-                            ("Can be run?", await self.required_permissions(ctx, cmd), False),
-                            (
-                                "Parent",
-                                self.full_syntax(ctx, p, prefix) if (p := cmd.parent) is not None else "None",
                                 False,
                             ),
                         ),

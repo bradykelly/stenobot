@@ -1,5 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+import common
 from chatnotebot.config import Config
 from chatnotebot import config
 from chatnotebot.utils.synchronise import Synchronise
@@ -22,7 +23,7 @@ class Hub(commands.Cog):
 
                 if self.stdout_channel is not None:
                     await self.stdout_channel.send(
-                        f"{self.bot.info} ChatNoteBot is now online! (Version {self.bot.version})"
+                        f"{self.bot.info} {common.BOT_NAME} is now online! (Version {self.bot.version})"
                     )
 
             await Synchronise(self.bot).on_boot()
