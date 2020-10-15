@@ -7,7 +7,7 @@ from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 from stenobot.db import db
-from chatnotebot import utils
+from stenobot import utils
 from stenobot.config import Config
 from stenobot.utils.emoji import EmojiGetter
 from stenobot.utils.loc import CodeCounter
@@ -18,9 +18,9 @@ class Bot(commands.Bot):
 
     def __init__(self, version, intents):
         self.version = version
-        self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py")]
-        self._dynamic = "./chatnotebot/data/dynamic"
-        self._static = "./chatnotebot/data/static"
+        self._cogs = [p.stem for p in Path(".").glob("stenobot/bot/cogs/*.py")]
+        self._dynamic = "./stenobot/data/dynamic"
+        self._static = "./stenobot/data/static"
         self.scheduler = AsyncIOScheduler()
         self.db = db.Database(self)
         self.embed = utils.EmbedConstructor(self)
