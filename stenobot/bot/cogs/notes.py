@@ -1,14 +1,12 @@
-from stenobot.utils.synchronise import Synchronise
-from stenobot.bot.chatnote_base_cog import ChatNoteBaseCog
+from stenobot.bot.stenobot_cogs import StenobotBaseCog
 import common
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
-#from cogs.chatnote_cog import ChatNoteCommands
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
-class Notes(ChatNoteBaseCog, name="note"):
+class Notes(StenobotBaseCog, name="note"):
     """Commands to use your Stenobot notes"""
 
     def __init__(self, bot):

@@ -6,7 +6,7 @@ from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 
-class ChatNoteBaseCog(Cog):
+class StenobotBaseCog(Cog):
     '''
     Base class for application cogs in this bot
     '''
@@ -27,7 +27,7 @@ class ChatNoteBaseCog(Cog):
         if title is None:
             title = f"Command Output"
         em = discord.Embed(title=title, description="```\n" + message + "\n```", colour=0xBD362F)
-        em.set_footer(text="ChatNote (c) 2020 Erisia")
+        em.set_footer(text="Stenobot (c) 2020 Erisia")
         em.timestamp = datetime.utcnow()
         await ctx.send(embed=em)
 

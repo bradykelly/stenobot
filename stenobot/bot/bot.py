@@ -40,7 +40,7 @@ class Bot(commands.Bot):
             if cog.lower() in ["gateway"]:
                 continue
             try:
-                self.load_extension(f"chatnotebot.bot.cogs.{cog}")
+                self.load_extension(f"stenobot.bot.cogs.{cog}")
             except Exception as ex:
                 print(f"Error loading {cog}: {str(ex.args)}")
             else:

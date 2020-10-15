@@ -1,12 +1,12 @@
 import common
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
-from stenobot.bot.chatnote_base_cog import ChatNoteBaseCog
+from stenobot.bot.stenobot_cogs import StenobotBaseCog
 from stenobot.db import db
 
 BOOKS_COMMANDS = ["list", "open", "del"]
 
-class Books(ChatNoteBaseCog, name="book"):
+class Books(StenobotBaseCog, name="book"):
     """Commands to manage your Stenobot notebooks"""
 
     def __init__(self, bot):
