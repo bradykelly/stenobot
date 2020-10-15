@@ -1,5 +1,5 @@
-BOT_NAME = "ChatNoteBot"
-BOT_VERSION = "0.0.2"
+BOT_NAME = "Stenobot"
+BOT_VERSION = "0.3.0"
 CSV_SEPARATOR = ";"
 DEFAULT_NOTEBOOK = "Main"
 DEFAULT_PREFIXES = [">-"]
