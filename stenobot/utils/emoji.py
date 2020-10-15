@@ -33,7 +33,8 @@ class EmojiGetter:
         hub = self.bot.get_cog("Hub")
 
         if getattr(hub, "guild", None) is not None:
-            return utils.get(hub.guild.emojis, name=name) or ALTERNATIVES[name]
+            emoj = utils.get(hub.guild.emojis, name=name) or ALTERNATIVES[name]
+            return emoj
         else:
             return ALTERNATIVES[name]
 
