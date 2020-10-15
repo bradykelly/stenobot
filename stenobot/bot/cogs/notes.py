@@ -1,8 +1,9 @@
-from stenobot.bot.stenobot_cogs import StenobotBaseCog
 import common
 from discord.ext.commands.cog import Cog
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
+from stenobot.bot.stenobot_cogs import StenobotBaseCog
+from stenobot.utils.stenobot import Stenobot
 
 NOTE_COMMANDS = ["add", "list", "del", "find"]
 
@@ -10,7 +11,8 @@ class Notes(StenobotBaseCog, name="note"):
     """Commands to use your Stenobot notes"""
 
     def __init__(self, bot):
-        self.bot = bot
+        self.bot = bot,
+        self.stenobot = Stenobot()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -42,51 +44,35 @@ class Notes(StenobotBaseCog, name="note"):
 
     # 'add' command
     @note.command(
+        name="add",
         help="Add <text-to-add> to your current notebook, or a named notebook",
         brief="Add a note",
-        description="<text-to-add> [notebook-name]: Name of a notebook to add a note to. Default is 'Main'"
+        description="<text-to-add>"
     )
-    async def add(self, ctx, text, notebook=None):
-        '''
-        Writes a note to a notebook
-        '''
-        if (notebook is not None):
-            notebook = notebook.strip()        
-        self.bot.db.insert_note(ctx.message.author.id, text, notebook) 
-        await self.show_message_codeblock(ctx, r"note added: " + text)
+    async def add_command(self, ctx, *, text):
+        await self.stenobot.insert_note(ctx.guild.id, ctx.message.author.id, text)
+        await self.show_message_codeblock(ctx, r"Note added: " + text)
 
-    @add.error
+    @add_command.error
     async def add_handler(self, ctx, error):
-        '''
-        Error handler for the 'add' command
-        '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
             
     # 'list' command
     @note.command(
+        name="list",
         help="List all notes in your current notebook, or a named notebook",
         brief="List all notes",
         usage="[notebook-name]: Notebook-name (optional) must be a single word"
     )
-    async def list(self, ctx, notebook=None):
-        '''
-        Lists all notes in the default notebook or a named notebook
-        '''
-        if (notebook is None):
-            notebook = common.DEFAULT_NOTEBOOK
-        notebook = notebook.strip() 
-        notes = await self.bot.db.get_notes(ctx.message.author.id, notebook)
-        note_count = 0
+    async def list_command(self, ctx, notebook=None):
+        notes = await self.stenobot.get_notes(ctx.guild.id, ctx.message.author.id)
         list_text = ""
         for note in notes:   
-            msg = f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}"
-            list_text += msg + "\n"
-            note_count += 1
-        list_text += "\n" + f"{note_count} note(s) in '{notebook}'"
+            list_text += f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}\n"
+        list_text += "\n" + f"{len(notes)} note(s) in '{notebook}'"
         await self.show_message_codeblock(ctx, list_text, f"Notes in {notebook}")
 
-    # 'del' command
     @note.command(
         name="del",
         aliases=["delete"],
@@ -94,19 +80,12 @@ class Notes(StenobotBaseCog, name="note"):
         brief="Delete a note",
         usage="<note_id>: Id of the note to delete. Required"
     )
-    async def delnote(self, ctx, note_id):
-        '''
-        Deletes a note, by note_id, from the notebook it is in
-        '''
-        del_id = int(note_id)
-        await self.bot.db.delete_note(ctx.author.id, del_id)
-        await self.show_message_codeblock(ctx, f"Note #{del_id} deleted")
+    async def del_command(self, ctx, note_id):
+        await self.stenobot.delete_note(ctx.message.author.id, int(note_id))
+        await self.show_message_codeblock(ctx, f"Note #{note_id} deleted")
 
-    @delnote.error
+    @del_command.error
     async def delnote_handler(self, ctx, error):
-        '''
-        Error hanlder for the 'delnote' command
-        '''
         if isinstance(error, MissingRequiredArgument) and error.param.name == "note_id":
             usage = f"{ctx.prefix}{ctx.command.name} <note_id>"
             await self.show_message_codeblock(ctx, usage, "Usage")     

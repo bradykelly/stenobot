@@ -96,56 +96,6 @@ class Database:
             await self.cxn.executescript(script.read())
         self._calls += 1  # NOTE: Should this be different?
 
-    async def insert_note(self, userId, text, notebook=None):   
-        if notebook is None:
-            notebook = common.DEFAULT_NOTEBOOK
-        insert_sql = """INSERT INTO 'notes' 
-                        ('Time', 'UserId', 'Notebook', 'Text') 
-                        VALUES(?, ?, ?, ?);"""
-        values = (datetime.now(), userId, notebook.strip().lower(), text)
-        cur = None
-        try:
-            cur = await self.cxn.execute(insert_sql, values)
-        except:
-            err = sys.exc_info()[0]
-        else:
-            self._calls += 1      
-
-        return cur.rowcount
-
-    async def get_notes(self, userId, notebook=None):
-        if notebook is None:
-            notebook = common.DEFAULT_NOTEBOOK
-        select_sql = """SELECT Id, Time, Text 
-                        FROM notes
-                        WHERE UserId = ?
-                        and Notebook = ?;"""
-        values = (userId, notebook.strip().lower())
-        try:
-            cur = await self.cxn.execute(select_sql, values)
-            rows = await cur.fetchall()
-            notes = []
-            for row in rows:
-                note = Note(row[0], row[1], row[2])
-                notes.append(note)
-            self._calls += 1
-            return notes
-        except Exception as ex:
-            err = sys.exc_info()[0]          
-
-    async def delete_note(self, userId, noteId):
-        del_sql = """DELETE 
-                        FROM notes 
-                        WHERE UserId = ?
-                            AND Id = ?"""
-        values = (userId, noteId)
-        try:
-            await self.cxn.execute(del_sql, values)
-        except Exception as ex:
-            err = sys.exc_info()[0]
-        else:
-            self._calls += 1            
-
     async def get_books(self, userId):
         select_sql = """SELECT count(*) Num, Notebook 
                         FROM notes

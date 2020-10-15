@@ -4,3 +4,5 @@ __pycache__
 secrets/token
 stenobot/data/dynamic/notebooks.db-shm
 stenobot/data/dynamic/notebooks.db-wal
+stenobot/data/dynamic/database.db3-shm
+stenobot/data/dynamic/database.db3-wal
