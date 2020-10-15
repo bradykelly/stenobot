@@ -4,7 +4,7 @@ import discord
 import common
 
 
-async def _syzstem__runfts(bot, guild):
+async def _system__runfts(bot, guild):
     return await bot.db.field("SELECT runFts FROM guild_config WHERE guildId = ?", guild.id)
 
 async def system__prefix(bot, guild):
