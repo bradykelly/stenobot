@@ -120,7 +120,7 @@ class Error(commands.Cog):
         elif (original := getattr(exc, "original", None)) is not None:
             if isinstance(original, discord.HTTPException):
                 await ctx.send(
-                    f"{self.bot.cross} A HTTP exception occurred ({original.status})\n```{original.text}```"
+                    f"{self.bot.cross} An HTTP exception occurred ({original.status})\n```{original.text}```"
                 )
             else:
                 raise original
