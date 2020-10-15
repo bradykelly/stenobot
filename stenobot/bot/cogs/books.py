@@ -1,4 +1,5 @@
 import common
+import discord
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from stenobot.bot.stenobot_cogs import StenobotBaseCog

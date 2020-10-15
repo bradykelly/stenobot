@@ -1,7 +1,7 @@
 import common
 import sys
 from datetime import datetime
-from discord import commands
+from discord.ext import commands
 from stenobot.models.note import Note
 
 class Stenobot():

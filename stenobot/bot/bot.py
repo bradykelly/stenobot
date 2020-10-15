@@ -3,6 +3,7 @@
 import time
 import discord
 import common
+import importlib
 from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands

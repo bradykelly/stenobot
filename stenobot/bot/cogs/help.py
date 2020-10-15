@@ -1,6 +1,5 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-from stenobot.utils.synchronise import Synchronise
 import os
 import datetime as dt
 import typing as t
@@ -9,6 +8,7 @@ from collections import defaultdict
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 from stenobot.utils import checks, chron, converters, menu, modules, string
+from stenobot.utils.synchronise import Synchronise
 
 
 class HelpMenu(menu.MultiPageMenu):
