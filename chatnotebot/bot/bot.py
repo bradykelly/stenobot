@@ -71,6 +71,16 @@ class Bot(commands.Bot):
         print(" Closing connection to Discord...")
         await self.logout()
 
+    # TODO This doesn't belong here. Maybe anywhere?
+    def get_notification_channel(self, guildId):
+        channelName = self.bot.db.field("""select notificationChannel
+                            from guild_config
+                            where guildId = ?""", guildId)
+        channelId = self.bot.db.field("""select channelId from channelIds
+                                where guildId = ?
+                                    and name = ?""", guildId, channelName)
+        return self.bot.get_channel(channelId)        
+
     async def on_connect(self):
         if not self.ready.booted:
             print(f" Connected to Discord (latency: {self.latency*1000:,.0f} ms).")

@@ -88,3 +88,11 @@ CREATE TABLE IF NOT EXISTS warns (
 	WarnType text,
 	Comment text
 );
+
+CREATE TABLE IF NOT EXISTS notebooks (
+    guildId integer,
+    memberId integer,
+    current_notebook STRING,
+	PRIMARY KEY (guildId, memberId)
+);
+

@@ -158,7 +158,10 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="support", aliases=["sos"], help=f"Provides an invite link to {common.BOT_NAME} support server.")
+    @commands.command(
+        name="support", 
+        aliases=["sos"], 
+        help=f"Provides an invite link to {common.BOT_NAME} support server.")
     async def support_command(self, ctx):
         online = [m for m in self.support_guild.members if not m.bot and m.status == discord.Status.online]
         helpers = [
