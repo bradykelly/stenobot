@@ -95,52 +95,5 @@ class Database:
         with open(path, "r", encoding="utf-8") as script:
             await self.cxn.executescript(script.read())
         self._calls += 1  # NOTE: Should this be different?
-
-    async def get_books(self, userId):
-        select_sql = """SELECT count(*) Num, Notebook 
-                        FROM notes
-                        WHERE UserId = ?
-                        GROUP BY Notebook"""
-        values = (userId, )
-        try:
-            cur = await self.cxn.execute(select_sql, values)
-            rows = await cur.fetchall()
-            books = []
-            for row in rows:
-                books.append((row[0], row[1]))
-            self._calls += 1
-            return books
-        except Exception as ex:
-            err = sys.exc_info()[0]
-
-    async def set_current_book(self, guildId, userId, name):
-        curBook = await self.record("SELECT currentNotebook FROM members WHERE guildId = ? AND userId = ?", (guildId, userId))
-        if (curBook is None):
-            await self.execute("INSERT INTO members (guildId, userId, currentNotebook) VALUES (?, ?, ?)", (guildId, userId, name))
-        else:
-            await self.execute("UPDATE members SET currentNotebook = ? WHERE guildId = ? AND userId = ?", (name, guildId, userId))
-
-    async def get_current_book(self, guildId, userId):
-        return await self.record("SELECT currentNotebook from members where guildId = ? and userId = ?", (guildId, userId))
-       
-    async def del_book(self, userId, notebook):
-        count_sql = """SELECT count(*) Count
-                        FROM notes
-                        WHERE Notebook = ? 
-                            and UserId = ?"""
-        delete_sql = """DELETE 
-                        FROM notes
-                        WHERE Notebook = ? 
-                            and UserId = ?"""
-        values = (notebook.strip().lower(), userId)
-        try:
-            cur = await self.cxn.execute(count_sql, values)
-            row = await cur.fetchone()
-            count = row[0]
-            if count > 0:
-                await self.cxn.execute(delete_sql, values)
-            self._calls += 1  
-            return count
-        except Exception as ex:
-            err = sys.exc_info()[0]  
+         
                

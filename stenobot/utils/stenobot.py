@@ -63,4 +63,31 @@ class Stenobot():
             await self.bot.db.execute(del_sql, values)
         except Exception as ex:
             print("Stenobot class: " + sys.exc_info()[0])
-            raise        
+            raise   
+
+    async def get_books(self, userId):
+        select_sql = "SELECT count(*) Num, Notebook FROM notes WHERE UserId = ? GROUP BY Notebook"
+        values = (userId, )
+        try:
+            rows = await self.bot.db.records(select_sql, values)
+            books = []
+            for row in rows:
+                books.append((row[0], row[1]))
+            return books
+        except Exception as ex:
+            print("Stenobot class: " + sys.exc_info()[0])
+            raise           
+
+    async def del_book(self, userId, notebook):
+        count_sql = "SELECT count(*) Count FROM notes WHERE Notebook = ? and UserId = ?"
+        delete_sql = "DELETE FROM notes WHERE Notebook = ? and UserId = ?"
+        values = (notebook.strip().lower(), userId)
+        try:
+            row = await self.bot.db.execute(count_sql, values)
+            count = row[0] if row is not None else 0
+            if count > 0:
+                await self.bot.db.execute(delete_sql, values)
+            return count
+        except Exception as ex:
+            print("Stenobot class: " + sys.exc_info()[0])
+            raise    

@@ -2,8 +2,9 @@ import common
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from stenobot.bot.stenobot_cogs import StenobotBaseCog
-from stenobot.db import db
+from stenobot.utils.stenobot import Stenobot
 
+#TODO Show embeds for exceptions
 BOOKS_COMMANDS = ["list", "open", "del"]
 
 class Books(StenobotBaseCog, name="book"):
@@ -11,6 +12,7 @@ class Books(StenobotBaseCog, name="book"):
 
     def __init__(self, bot):
         self.bot = bot
+        self.stenobot = Stenobot()
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -40,14 +42,11 @@ class Books(StenobotBaseCog, name="book"):
         help="Gets or sets which notebook is currently in use. The default is Main.",
         brief="[name]"
     )
-    async def open_command(self, ctx, name=None):
-        if name is None:
-            book = await self.bot.get_current_book(ctx.guild.id, ctx.message.author.id)
-            await self.show_message_codeblock(ctx, f"Current notebook is '{book or common.DEFAULT_NOTEBOOK}'")
-        elif not isinstance(name, str):
+    async def open_command(self, ctx, name):
+        if not isinstance(name, str):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage") 
         else:
-            await self.bot.db.set_current_book(ctx.guild.id, ctx.message.author.id, name.lower())
+            await self.stenobot.set_open_book(ctx.guild.id, ctx.message.author.id, name.lower().strip())
         await self.show_message_codeblock(ctx, f"Current notebook set to '{name}'")
 
     @books.command(
@@ -56,15 +55,13 @@ class Books(StenobotBaseCog, name="book"):
         help="List all your notebooks",
         brief="List notebooks"
     )           
+    #FIXME Book names must be unique across all guilds. We need guildId in notes as well.
     async def list(self, ctx):          
-        books = await self.bot.db.get_books(ctx.message.author.id)
-        book_count = 0
+        books = await self.stenobot.get_books(ctx.message.author.id)
         list_text = ""
         for book in books:   
-            msg = f"{str(book[0]).zfill(6)}:   {book[1]}"
-            list_text += msg + "\n"
-            book_count += 1
-        list_text += "\n" + f"{book_count} notebook(s)"
+            list_text += f"{str(book[0]).zfill(6)}:   {book[1]}\n"
+        list_text += "\n" + f"{len(books)} notebook(s)"
         await self.show_message_codeblock(ctx, list_text, f"Notebooks")
 
     @list.error
@@ -72,7 +69,6 @@ class Books(StenobotBaseCog, name="book"):
         if isinstance(error, MissingRequiredArgument):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
 
-    # 'del' command
     @books.command(
         name="del",
         aliases=["delete"],        
@@ -81,8 +77,7 @@ class Books(StenobotBaseCog, name="book"):
         usage="<name>: Name of the notebook to delete"
     )
     async def del_book(self, ctx, name):
-        count = await self.bot.db.del_book(ctx.message.author.id, name)
-
+        count = await self.stenobot.del_book(ctx.message.author.id, name)
         if count > 0:
             await self.show_message_codeblock(ctx, f"Notebook '{name}' deleted' ", "Delete Noteboook")
         else:
