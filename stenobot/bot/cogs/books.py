@@ -7,7 +7,7 @@ from stenobot.db import db
 BOOKS_COMMANDS = ["list", "open", "del"]
 
 class Books(ChatNoteBaseCog, name="book"):
-    """Commands to manage your ChatNote notebooks"""
+    """Commands to manage your Stenobot notebooks"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -20,7 +20,7 @@ class Books(ChatNoteBaseCog, name="book"):
     @commands.group(
         name="books",
         aliases = ["book", "notebook", "notebooks"],
-        title="Commands to help you manage your ChatNote notebooks",
+        title="Commands to help you manage your Stenobot notebooks",
         help="List or delete notebooks.",
         brief="Manage your notebooks",
         usage= f"[list | del]"

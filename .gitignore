@@ -2,5 +2,5 @@
 discord_creds.txt
 __pycache__
 secrets/token
-chatnotebot/data/dynamic/notebooks.db-shm
-chatnotebot/data/dynamic/notebooks.db-wal
+stenobot/data/dynamic/notebooks.db-shm
+stenobot/data/dynamic/notebooks.db-wal
