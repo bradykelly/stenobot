@@ -29,27 +29,6 @@ CREATE TABLE IF NOT EXISTS guild_config (
     adminRoleId         INTEGER
 );
 
-
--- gateway
-
-CREATE TABLE IF NOT EXISTS gateway (
-	GuildID integer PRIMARY KEY,
-	Active integer DEFAULT 0,
-	RulesChannelID integer,
-	GateMessageID integer,
-	BlockingRoleID integer,
-	MemberRoleIDs text,
-	ExceptionRoleIDs text,
-	WelcomeChannelID integer,
-	GoodbyeChannelID integer,
-	Timeout integer,
-	GateText text,
-	WelcomeText text,
-	WelcomeBotText text,
-	GoodbyeText text,
-	GoodbyeBotText text
-);
-
 CREATE TABLE IF NOT EXISTS entrants (
 	GuildID integer,
 	UserID integer,

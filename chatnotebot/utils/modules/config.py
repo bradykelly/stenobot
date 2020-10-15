@@ -88,8 +88,5 @@ async def system__adminrole(bot, channel, value):
         ):
             await dar.delete(reason="Default admin role was overridden.")
             lc = await retrieve.log_channel(bot, channel.guild)
-            await lc.send(f"{bot.info} The default admin role has been deleted, as it is no longer required.")            
-
-async def _gateway__active(bot, channel, value):
-    await bot.db.execute("UPDATE gateway SET active = ? WHERE guildId = ?", value, channel.guild.id)            
+            await lc.send(f"{bot.info} The default admin role has been deleted, as it is no longer required.")                       
 

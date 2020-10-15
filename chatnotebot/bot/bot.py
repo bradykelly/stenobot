@@ -14,13 +14,11 @@ from chatnotebot.utils.loc import CodeCounter
 from chatnotebot.utils.presence import PresenceSetter
 from chatnotebot.utils.ready import Ready
 
-DISABLED_COGS = ["warn", "control", "gateway"]
-
 class Bot(commands.Bot):
 
     def __init__(self, version, intents):
         self.version = version
-        self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py") if p.stem not in DISABLED_COGS]
+        self._cogs = [p.stem for p in Path(".").glob("chatnotebot/bot/cogs/*.py")]
         self._dynamic = "./chatnotebot/data/dynamic"
         self._static = "./chatnotebot/data/static"
         self.scheduler = AsyncIOScheduler()

@@ -17,7 +17,7 @@ class Notes(ChatNoteBaseCog, name="note"):
     @commands.Cog.listener()
     async def on_ready(self):
         if not self.bot.ready.booted:
-            await Synchronise(self.bot).on_boot()
+            #await Synchronise(self.bot).on_boot()
             self.bot.ready.up(self)          
     
     # 'note' command group

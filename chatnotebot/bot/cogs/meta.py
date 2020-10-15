@@ -18,13 +18,8 @@ from chatnotebot.utils import (
     SUPPORT_GUILD_INVITE_LINK,
     checks,
     chron,
-    converters,
-    menu,
-    string,
+    menu
 )
-
-from chatnotebot.utils.modules import deactivate
-
 
 class DetailedServerInfoMenu(menu.MultiPageMenu):
     def __init__(self, ctx, table):

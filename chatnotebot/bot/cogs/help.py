@@ -61,7 +61,7 @@ class ConfigHelpMenu(menu.NumberedSelectionMenu):
 
 
 class Help(commands.Cog):
-    """Assistance with using a configuring this bot."""
+    """Assistance with using and configuring this bot."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -154,7 +154,6 @@ class Help(commands.Cog):
             pagemaps = []
 
             for cog, cmds in (await self.get_command_mapping(ctx)).items():
-                syntaxes = "\n" + "\n".join([await self.basic_syntax(ctx, cmd, prefix) for cmd in cmds])
                 pagemaps.append(
                     {
                         "header": "Help",
@@ -165,8 +164,7 @@ class Help(commands.Cog):
                             (
                                 f"{len(cmds)} command(s)",
                                 "```{}```".format(
-                                    #"\n".join([await self.basic_syntax(ctx, cmd, prefix) for cmd in cmds])
-                                    syntaxes
+                                    "\n" + "\n".join([await self.basic_syntax(ctx, cmd, prefix) for cmd in cmds])
                                 ),
                                 False,
                             ),
@@ -179,7 +177,7 @@ class Help(commands.Cog):
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready.booted:
-            await Synchronise(self.bot).on_boot()
+            #await Synchronise(self.bot).on_boot()
             self.bot.ready.up(self)            
 
 

@@ -26,14 +26,12 @@ class Hub(commands.Cog):
                         f"{self.bot.info} {common.BOT_NAME} is now online! (Version {self.bot.version})"
                     )
 
-            await Synchronise(self.bot).on_boot()
+            #await Synchronise(self.bot).on_boot()
             self.bot.ready.up(self)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         await self.bot.db.execute("INSERT OR IGNORE INTO guild_config (GuildID) VALUES (?)", guild.id)
-        await self.bot.db.execute("INSERT OR IGNORE INTO gateway (GuildID) VALUES (?)", guild.id)
-        await self.bot.db.execute("INSERT OR IGNORE INTO warn (GuildID) VALUES (?)", guild.id)
 
         if self.stdout_channel is not None:
             await self.stdout_channel.send(
@@ -43,8 +41,6 @@ class Hub(commands.Cog):
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
         await self.bot.db.execute("DELETE FROM guild_config WHERE GuildID = ?", guild.id)
-        await self.bot.db.execute("DELETE FROM gateway WHERE GuildID = ?", guild.id)
-        await self.bot.db.execute("DELETE FROM warn WHERE GuildID = ?", guild.id)
 
         if self.stdout_channel is not None:
             await self.stdout_channel.send(

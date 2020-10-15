@@ -136,7 +136,8 @@ class MultiPageMenu(Menu):
 
     async def start(self):
         await super().start()
-        return await self.selector.response()
+        resp = await self.selector.response()
+        return resp
 
     async def switch(self, reaction):
         await super().switch(self.selector.pagemaps[self.selector.page])

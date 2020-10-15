@@ -175,50 +175,6 @@ class Modules(commands.Cog):
         else:
             await ctx.send(f"{self.bot.cross} Invalid module or attribute.")
 
-    @commands.command(name="activate", aliases=["enable"], help="Activates a module.")
-    @checks.bot_is_ready()
-    @checks.log_channel_is_set()
-    @checks.first_time_setup_has_run()
-    @checks.author_can_configure()
-    async def activate_command(self, ctx, module: str):
-        if module.startswith("_"):
-            await ctx.send(f"{self.bot.cross} The module you are trying to access is non-configurable.")
-        elif (func := getattr(modules.activate, module, None)) is not None:
-            await func(ctx)
-        else:
-            await ctx.send(f"{self.bot.cross} That module either does not exist, or can not be activated.")
-
-    @commands.command(name="deactivate", aliases=["disable"], help="Deactivates a module.")
-    @checks.bot_is_ready()
-    @checks.log_channel_is_set()
-    @checks.first_time_setup_has_run()
-    @checks.author_can_configure()
-    async def deactivate_command(self, ctx, module: str):
-        if module.startswith("_"):
-            await ctx.send(f"{self.bot.cross} The module you are trying to access is non-configurable.")
-        elif (func := getattr(modules.deactivate, module, None)) is not None:
-            await func(ctx)
-        else:
-            await ctx.send(f"{self.bot.cross} That module either does not exist, or can not be deactivated.")
-
-    @commands.command(
-        name="restart", help="Restarts a module. This is a shortcut command which calls `deactivate` then `activate`."
-    )
-    @checks.bot_is_ready()
-    @checks.log_channel_is_set()
-    @checks.first_time_setup_has_run()
-    @checks.author_can_configure()
-    async def restart_command(self, ctx, module: str):
-        if module.startswith("_"):
-            await ctx.send(f"{self.bot.cross} The module you are trying to access is non-configurable.")
-        elif (dfunc := getattr(modules.deactivate, module, None)) is not None and (
-            afunc := getattr(modules.activate, module, None)
-        ) is not None:
-            await dfunc(ctx)
-            await afunc(ctx)
-        else:
-            await ctx.send(f"{self.bot.cross} That module either does not exist, or can not be restarted.")
-
 
 def setup(bot):
     bot.add_cog(Modules(bot))

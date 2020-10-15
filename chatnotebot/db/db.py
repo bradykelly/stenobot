@@ -44,18 +44,12 @@ class Database:
     async def sync(self):
         # Insert.
         await self.executemany("INSERT OR IGNORE INTO guild_config (GuildID) VALUES (?)", [(g.id,) for g in self.bot.guilds])
-        await self.executemany(
-            "INSERT OR IGNORE INTO gateway (GuildID) VALUES (?)", [(g.id,) for g in self.bot.guilds]
-        )
-        await self.executemany("INSERT OR IGNORE INTO warn (GuildID) VALUES (?)", [(g.id,) for g in self.bot.guilds])
 
         # Remove.
         stored = await self.column("SELECT GuildID FROM guild_config")
         member_of = [g.id for g in self.bot.guilds]
         removals = [(g_id,) for g_id in set(stored) - set(member_of)]
         await self.executemany("DELETE FROM guild_config WHERE GuildID = ?", removals)
-        await self.executemany("DELETE FROM gateway WHERE GuildID = ?", removals)
-        await self.executemany("DELETE FROM warn WHERE GuildID = ?", removals)
 
         # Commit.
         await self.commit()
@@ -103,9 +97,6 @@ class Database:
         self._calls += 1  # NOTE: Should this be different?
 
     async def insert_note(self, userId, text, notebook=None):   
-        '''
-        Insert a note into a named notebook or the default notebook
-        ''' 
         if notebook is None:
             notebook = common.DEFAULT_NOTEBOOK
         insert_sql = """INSERT INTO 'notes' 
@@ -123,9 +114,6 @@ class Database:
         return cur.rowcount
 
     async def get_notes(self, userId, notebook=None):
-        '''
-        Gets all notes in a named notebook or the default notebook
-        ''' 
         if notebook is None:
             notebook = common.DEFAULT_NOTEBOOK
         select_sql = """SELECT Id, Time, Text 
@@ -146,9 +134,6 @@ class Database:
             err = sys.exc_info()[0]          
 
     async def delete_note(self, userId, noteId):
-        '''
-        Deletes a note by Id from whatever notebook is in
-        ''' 
         del_sql = """DELETE 
                         FROM notes 
                         WHERE UserId = ?
@@ -162,9 +147,6 @@ class Database:
             self._calls += 1            
 
     async def get_books(self, userId):
-        """
-        List all notebooks for a given member
-        """
         select_sql = """SELECT count(*) Num, Notebook 
                         FROM notes
                         WHERE UserId = ?
@@ -182,9 +164,6 @@ class Database:
             err = sys.exc_info()[0]
        
     async def del_book(self, userId, notebook):
-        """
-        Deletes a notebook.
-        """
         count_sql = """SELECT count(*) Count
                         FROM notes
                         WHERE Notebook = ? 
