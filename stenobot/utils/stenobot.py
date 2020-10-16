@@ -38,17 +38,16 @@ class Stenobot():
             raise    
 
     async def get_notes(self, guildId, userId, notebook=None):
-        if notebook is None:
-            if (notebook := self.get_open_book(guildId, userId)) is None:
-                notebook = common.DEFAULT_NOTEBOOK
-        select_sql = "SELECT Id, Time, Text FROM notes WHERE UserId = ? and Notebook = ?;"
-        values = (userId, notebook.strip().lower())
         try:
-            rows = await self.bot.db.records(select_sql, values)
+            if notebook is None:
+                if (notebook := await self.get_open_book(guildId, userId)) is None:
+                    notebook = common.DEFAULT_NOTEBOOK
+            select_sql = "SELECT NoteId, Time, Text FROM notes WHERE UserId = ? and Notebook = ?;"
+            rows = await self.bot.db.records(select_sql, userId, notebook.strip().lower())
             notes = []
             for row in rows:
                 notes.append(Note(row[0], row[1], row[2]))
-            return notes
+            return notes, notebook
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
             raise 

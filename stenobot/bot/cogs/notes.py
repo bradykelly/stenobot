@@ -58,7 +58,6 @@ class Notes(StenobotBaseCog, name="note"):
         if isinstance(error, MissingRequiredArgument) and error.param.name == "text":
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
             
-    # 'list' command
     @note.command(
         name="list",
         help="List all notes in your current notebook, or a named notebook",
@@ -66,7 +65,7 @@ class Notes(StenobotBaseCog, name="note"):
         usage="[notebook-name]: Notebook-name (optional) must be a single word"
     )
     async def list_command(self, ctx, notebook=None):
-        notes = await self.stenobot.get_notes(ctx.guild.id, ctx.message.author.id)
+        notes, notebook = await self.stenobot.get_notes(ctx.guild.id, ctx.message.author.id, notebook)
         list_text = ""
         for note in notes:   
             list_text += f"{str(note.id).zfill(6)}:   {note.time[:19]}   {note.text}\n"
