@@ -19,9 +19,13 @@ class Stenobot():
         book = await self.get_open_book(guildId, userId)
         try:
             if (book is not None):
-                await self.bot.db.execute("UPDATE members SET open_notebook = ? WHERE guildId = ? and userId = ?", (name, guildId, userId))
+                await self.bot.db.execute("UPDATE members SET open_notebook = ? WHERE guildId = ? and userId = ?", name, guildId, userId)
             else:
-                await self.bot.db.execute("INSERT INTO members (guildId, userId, open_notebook) VALUES (?, ?, ?)", (guildId, userId, name))
+                await self.bot.db.execute("INSERT INTO members (guildId, userId, open_notebook) VALUES (?, ?, ?)", guildId, userId, name)
+            # Insert a dummy record for this notebook name so that get_books includes the active notebook even if it is empty
+            notes = await self.get_notes(guildId, userId, name)
+            if len(notes) == 0:
+                await self.insert_note(guildId, self.bot.user.id, F"{name} - empty note")
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
             raise
@@ -61,10 +65,10 @@ class Stenobot():
             raise   
 
     async def get_books(self, userId):
+
         select_sql = "SELECT count(*) Num, Notebook FROM notes WHERE UserId = ? GROUP BY Notebook"
-        values = (userId, )
         try:
-            rows = await self.bot.db.records(select_sql, values)
+            rows = await self.bot.db.records(select_sql, userId)
             books = []
             for row in rows:
                 books.append((row[0], row[1]))
