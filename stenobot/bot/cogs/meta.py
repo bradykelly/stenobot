@@ -127,9 +127,11 @@ class Meta(commands.Cog):
             #     )
             # ]
             self.support_guild = self.bot.get_guild(765626249556262934) # Stenobot
-            self.helper_role = self.support_guild.get_role(765635385316737084) # @helper
+            if self.support_guild is not None:
+                #TODO Look up id of help role. It will be different for each guild.
+                self.helper_role = self.support_guild.get_role(765635385316737084) # @helper
 
-            self.bot.ready.up(self)
+            self.bot.ready.up(self) 
 
     @commands.command(
         name="about",

@@ -10,34 +10,31 @@ class Stenobot():
 
     async def get_open_book(self, guildId, userId):
         try:
-            return self.bot.db.field("SELECT open_notebook FROM members WHERE guildId = ? and userId = ?", (guildId, userId))
-        except:
-            print("Stenobot class: " + sys.exc_info()[0])
+            return await self.bot.db.field("SELECT open_notebook FROM members WHERE guildId = ? and userId = ?", guildId, userId)
+        except Exception as ex:
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise            
     
     async def set_open_book(self, guildId, userId, name):
         book = await self.get_open_book(guildId, userId)
         try:
             if (book is not None):
-                self.bot.db.execute("UPDATE members SET open_book = ? WHERE guildId = ? and userId = ?", (name, guildId, userId))
+                await self.bot.db.execute("UPDATE members SET open_notebook = ? WHERE guildId = ? and userId = ?", (name, guildId, userId))
             else:
-                self.bot.db.execute("INSERT INTO members (guildId, userId, open_book) VALUES (?, ?, ?)", (guildId, userId, name))
-        except:
-            print("Stenobot class: " + sys.exc_info()[0])
+                await self.bot.db.execute("INSERT INTO members (guildId, userId, open_notebook) VALUES (?, ?, ?)", (guildId, userId, name))
+        except Exception as ex:
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise
 
     async def insert_note(self, guildId, userId, text):  
-        notebook = await self.get_open_book() 
-        if (notebook := self.get_open_book(guildId, userId)) is None:
-            notebook = common.DEFAULT_NOTEBOOK
-        insert_sql = "INSERT INTO 'notes' ('Time', 'UserId', 'Notebook', 'Text') VALUES(?, ?, ?, ?);"
-        values = (datetime.now(), userId, notebook.strip().lower(), text)
-        cur = None
         try:
-            cur = await self.bot.db.execute(insert_sql, values)
-            return cur.rowcount
-        except:
-            print("Stenobot class: " + sys.exc_info()[0])
+            if (notebook := await self.get_open_book(guildId, userId)) is None:
+                notebook = common.DEFAULT_NOTEBOOK
+            insert_sql = "INSERT INTO 'notes' ('Time', 'UserId', 'Notebook', 'Text') VALUES(?, ?, ?, ?);"
+            count = await self.bot.db.execute(insert_sql, datetime.now(), userId, notebook.strip().lower(), text)
+            return count
+        except Exception as ex:
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise    
 
     async def get_notes(self, guildId, userId, notebook=None):
@@ -53,7 +50,7 @@ class Stenobot():
                 notes.append(Note(row[0], row[1], row[2]))
             return notes
         except Exception as ex:
-            print("Stenobot class: " + sys.exc_info()[0])
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise 
         
     async def delete_note(self, userId, noteId):
@@ -62,7 +59,7 @@ class Stenobot():
         try:
             await self.bot.db.execute(del_sql, values)
         except Exception as ex:
-            print("Stenobot class: " + sys.exc_info()[0])
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise   
 
     async def get_books(self, userId):
@@ -75,7 +72,7 @@ class Stenobot():
                 books.append((row[0], row[1]))
             return books
         except Exception as ex:
-            print("Stenobot class: " + sys.exc_info()[0])
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise           
 
     async def del_book(self, userId, notebook):
@@ -89,5 +86,5 @@ class Stenobot():
                 await self.bot.db.execute(delete_sql, values)
             return count
         except Exception as ex:
-            print("Stenobot class: " + sys.exc_info()[0])
+            print("Stenobot class: " + str(sys.exc_info()[0]))
             raise    

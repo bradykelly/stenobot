@@ -11,6 +11,7 @@ class Hub(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    #TODO Stuff when the bot isn't in any guild when it connects.
     @commands.Cog.listener()
     async def on_ready(self):
         if not self.bot.ready.booted:

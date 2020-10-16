@@ -2,7 +2,8 @@
 
 import discord
 from stenobot import Bot, __version__
-intents = discord.Intents(guilds=True, members=True, invites=True, presences=True, messages=True, reactions=True)
+#intents = discord.Intents(guilds=True, members=True, invites=True, presences=True, messages=True, reactions=True)
+intents = discord.Intents.all()
 
 
 def main():

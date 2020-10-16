@@ -68,10 +68,20 @@ CREATE TABLE IF NOT EXISTS warns (
 	Comment text
 );
 
-CREATE TABLE IF NOT EXISTS notebooks (
-    guildId integer,
-    memberId integer,
-    current_notebook STRING,
-	PRIMARY KEY (guildId, memberId)
+CREATE TABLE IF NOT EXISTS notes (
+    noteId   INTEGER  PRIMARY KEY AUTOINCREMENT,
+    time     DATETIME,
+    userId   INTEGER,
+    notebook STRING,
+    text     STRING
 );
+
+
+CREATE TABLE IF NOT EXISTS members (
+    guildId       INTEGER,
+    userId        INTEGER,
+    open_notebook STRING,
+    PRIMARY KEY (guildId, userId)
+);
+
 

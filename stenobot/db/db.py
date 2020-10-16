@@ -13,7 +13,7 @@ from datetime import datetime
 class Database:
     def __init__(self, bot):
         self.bot = bot
-        self.db_path = f"{self.bot._dynamic}/notebooks.db"
+        self.db_path = f"{self.bot._dynamic}/notebooks.db3"
         self.build_path = f"{self.bot._static}/build.sql"
         self._calls = 0
 
@@ -95,5 +95,5 @@ class Database:
         with open(path, "r", encoding="utf-8") as script:
             await self.cxn.executescript(script.read())
         self._calls += 1  # NOTE: Should this be different?
-         
+
                

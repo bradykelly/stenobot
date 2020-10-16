@@ -13,7 +13,7 @@ class Books(StenobotBaseCog, name="book"):
 
     def __init__(self, bot):
         self.bot = bot
-        self.stenobot = Stenobot()
+        self.stenobot = Stenobot(bot)
 
     @commands.Cog.listener()
     async def on_ready(self):

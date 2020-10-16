@@ -1,5 +1,5 @@
 import common
-from discord.ext.commands.cog import Cog
+import discord
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
 from stenobot.bot.stenobot_cogs import StenobotBaseCog
@@ -11,8 +11,8 @@ class Notes(StenobotBaseCog, name="note"):
     """Commands to use your Stenobot notes"""
 
     def __init__(self, bot):
-        self.bot = bot,
-        self.stenobot = Stenobot()
+        self.bot = bot
+        self.stenobot = Stenobot(bot)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -45,7 +45,7 @@ class Notes(StenobotBaseCog, name="note"):
     # 'add' command
     @note.command(
         name="add",
-        help="Add <text-to-add> to your current notebook, or a named notebook",
+        help="Add <text-to-add> to your current notebook",
         brief="Add a note",
         description="<text-to-add>"
     )

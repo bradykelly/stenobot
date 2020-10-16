@@ -15,6 +15,8 @@ from stenobot.utils.loc import CodeCounter
 from stenobot.utils.presence import PresenceSetter
 from stenobot.utils.ready import Ready
 
+#TODO On startup, ensure HUB_GUILD is written to guild_config
+
 class Bot(commands.Bot):
 
     def __init__(self, version, intents):
