@@ -19,6 +19,10 @@ async def system__logchannel(bot, guild):
 async def log_channel(bot, guild):
     # An alias function.
     return await system__logchannel(bot, guild)    
+
+async def system__adminrole(bot, guild):
+    return guild.get_role(await bot.db.field("SELECT adminRoleId FROM guild_config WHERE guildId = ?", guild.id))    
+
    
 
 
