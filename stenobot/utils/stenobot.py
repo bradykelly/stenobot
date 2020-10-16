@@ -53,10 +53,9 @@ class Stenobot():
             raise 
         
     async def delete_note(self, userId, noteId):
-        del_sql = "DELETE FROM notes WHERE UserId = ? AND Id = ?"
-        values = (userId, noteId)
+        del_sql = "DELETE FROM notes WHERE UserId = ? AND NoteId = ?"
         try:
-            await self.bot.db.execute(del_sql, values)
+            await self.bot.db.execute(del_sql, userId, noteId)
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
             raise   
