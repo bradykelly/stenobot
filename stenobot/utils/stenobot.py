@@ -10,7 +10,8 @@ class Stenobot():
 
     async def get_open_book(self, guildId, userId):
         try:
-            return await self.bot.db.field("SELECT open_notebook FROM members WHERE guildId = ? and userId = ?", guildId, userId)
+            book = await self.bot.db.field("SELECT open_notebook FROM members WHERE guildId = ? and userId = ?", guildId, userId)
+            return book
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
             raise            
@@ -22,20 +23,24 @@ class Stenobot():
                 await self.bot.db.execute("UPDATE members SET open_notebook = ? WHERE guildId = ? and userId = ?", name, guildId, userId)
             else:
                 await self.bot.db.execute("INSERT INTO members (guildId, userId, open_notebook) VALUES (?, ?, ?)", guildId, userId, name)
+            await self.bot.db.commit()
             # Insert a dummy record for this notebook name so that get_books includes the active notebook even if it is empty
-            notes = await self.get_notes(guildId, userId, name)
+            notes, notebook = await self.get_notes(guildId, userId, name)
             if len(notes) == 0:
-                await self.insert_note(guildId, self.bot.user.id, F"{name} - empty note")
+                await self.insert_note(guildId, self.bot.user.id, F"{name} - empty note", name)
+                await self.bot.db.commit()
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
             raise
 
-    async def insert_note(self, guildId, userId, text):  
+    async def insert_note(self, guildId, userId, text, notebook=None):  
         try:
-            if (notebook := await self.get_open_book(guildId, userId)) is None:
-                notebook = common.DEFAULT_NOTEBOOK
+            if notebook is None:
+                if (notebook := await self.get_open_book(guildId, userId)) is None:
+                    notebook = common.DEFAULT_NOTEBOOK
             insert_sql = "INSERT INTO 'notes' ('Time', 'UserId', 'Notebook', 'Text') VALUES(?, ?, ?, ?);"
             count = await self.bot.db.execute(insert_sql, datetime.now(), userId, notebook.strip().lower(), text)
+            await self.bot.db.commit()
             return count
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
@@ -60,15 +65,16 @@ class Stenobot():
         del_sql = "DELETE FROM notes WHERE UserId = ? AND NoteId = ?"
         try:
             await self.bot.db.execute(del_sql, userId, noteId)
+            await self.bot.db.commit()
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
             raise   
 
     async def get_books(self, userId):
-
-        select_sql = "SELECT count(*) Num, Notebook FROM notes WHERE UserId = ? GROUP BY Notebook"
+        # Also need notes with the bot's user id to include dummy notes just for book names.
+        select_sql = "SELECT count(*) Num, Notebook FROM notes WHERE UserId = ? OR UserId = ? GROUP BY Notebook"
         try:
-            rows = await self.bot.db.records(select_sql, userId)
+            rows = await self.bot.db.records(select_sql, userId, self.bot.user.id)
             books = []
             for row in rows:
                 books.append((row[0], row[1]))
@@ -86,6 +92,7 @@ class Stenobot():
             count = row[0] if row is not None else 0
             if count > 0:
                 await self.bot.db.execute(delete_sql, values)
+                await self.bot.db.commit()
             return count
         except Exception as ex:
             print("Stenobot class: " + str(sys.exc_info()[0]))
