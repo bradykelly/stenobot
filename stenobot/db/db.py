@@ -2,12 +2,9 @@
 # TODO Exception handling
 
 from stenobot.models.note import Note
-import sys
-import common
 from os import path
 from aiosqlite import connect
 from apscheduler.triggers.cron import CronTrigger
-from datetime import datetime
 
 
 class Database:
@@ -34,7 +31,6 @@ class Database:
     async def commit(self):
         if self.bot.ready.ok:
             await self.execute("UPDATE bot SET Value = CURRENT_TIMESTAMP WHERE Key = 'last commit'")
-
         await self.cxn.commit()
 
     async def close(self):

@@ -1,14 +1,12 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
+import discord
+import psutil
 import datetime as dt
 import typing as t
 import common
-from os import name
 from platform import python_version
 from time import time
-
-import discord
-import psutil
 from discord.ext import commands
 
 from stenobot.utils import (
@@ -17,7 +15,7 @@ from stenobot.utils import (
     SUCCESS_ICON,
     SUPPORT_GUILD_INVITE_LINK,
     checks,
-    chron,
+    time,
     menu
 )
 
@@ -115,23 +113,22 @@ class Meta(commands.Cog):
     async def on_ready(self):
         if not self.bot.ready.booted:
             self.developer = (await self.bot.application_info()).owner
-            # self.artist = await self.bot.grab_user(167803836839231488)
-            # self.testers = [
-            #     (await self.bot.grab_user(id_))
-            #     for id_ in (
-            #         116520426401693704,
-            #         300346872109989898,
-            #         135372594953060352,
-            #         287969892689379331,
-            #         254245982395564032,
-            #     )
-            # ]
             self.support_guild = self.bot.get_guild(765626249556262934) # Stenobot
             if self.support_guild is not None:
-                #TODO Look up id of help role. It will be different for each guild.
+                #TODO Look up id of helper role. It will be different for each guild.
                 self.helper_role = self.support_guild.get_role(765635385316737084) # @helper
 
             self.bot.ready.up(self) 
+
+    @commands.command(
+        name="prefix", 
+        help="Displays the bot's prefix in your server. Note that mentioning Solaris will always work."
+    )
+    async def prefix_command(self, ctx):
+        prefix = await self.bot.prefix(ctx.guild)
+        await ctx.send(
+            f"{self.bot.info} Solaris' prefix in this server is {prefix}. To change it, use `{prefix}config system prefix <new prefix>`."
+        )
 
     @commands.command(
         name="about",
@@ -191,18 +188,12 @@ class Meta(commands.Cog):
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
                     (
-                        "Primary link",
-                        f"To invite {common.BOT_NAME} with administrator privileges, click [here]({self.bot.admin_invite}).",
-                        False,
-                    ),
-                    (
                         "Secondary",
                         f"To invite {common.BOT_NAME} without administrator privileges, click [here]({self.bot.non_admin_invite}) (you may need to grant {common.BOT_NAME} some extra permissions in order to use some modules).",
                         False,
                     ),
                     ("Servers", f"{self.bot.guild_count:,}", True),
-                    ("Users", f"{self.bot.user_count:,}", True),
-                    ("Get started", "`>>setup`", True),
+                    ("Users", f"{self.bot.user_count:,}", True)
                 ),
             )
         )
@@ -310,10 +301,10 @@ class Meta(commands.Cog):
                         ("Bot version", f"{self.bot.version}", True),
                         ("Python version", f"{python_version()}", True),
                         ("discord.py version", f"{discord.__version__}", True),
-                        ("Uptime", chron.short_delta(dt.timedelta(seconds=uptime)), True),
+                        ("Uptime", time.short_delta(dt.timedelta(seconds=uptime)), True),
                         (
                             "CPU time",
-                            chron.short_delta(
+                            time.short_delta(
                                 dt.timedelta(seconds=cpu_times.system + cpu_times.user), milliseconds=True
                             ),
                             True,
@@ -338,13 +329,7 @@ class Meta(commands.Cog):
                 )
             )
 
-    @commands.command(
-        name="leave",
-        help=f"Utility to make {common.BOT_NAME} clean up before leaving the server. This involves deactivating all active modules and deleting the default log channel and the default admin role should they still exist.",
-    )
-    @checks.author_can_configure()
-    async def leave_command(self, ctx):
-        await LeavingMenu(ctx).start()
+    #TODO New 'Leave' command, without cleanup blah blah.
 
     @commands.command(name="shutdown")
     @commands.is_owner()

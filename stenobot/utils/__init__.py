@@ -26,6 +26,4 @@ SUPPORT_GUILD_INVITE_LINK = "https://discord.gg/Ck4MMy"
 from .embed import EmbedConstructor
 from .emoji import EmojiGetter
 from .loc import CodeCounter
-from .presence import PresenceSetter
 from .ready import Ready
-from .search import Search

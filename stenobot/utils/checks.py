@@ -2,8 +2,7 @@
 
 import common
 from discord.ext import commands
-from stenobot.utils import modules
-
+from stenobot.utils import settings
 
 class CustomCheckFailure(commands.CheckFailure):
     def __init__(self, message):
@@ -61,10 +60,9 @@ class FirstTimeSetupNotRun(CustomCheckFailure):
 
 def first_time_setup_has_run():
     async def predicate(ctx):
-        if not await modules.retrieve._system__runfts(ctx.bot, ctx.guild):
+        if not await settings.get_hasrun_runfts(ctx.guild.id):
             raise FirstTimeSetupNotRun(await ctx.bot.prefix(ctx.guild))
         return True
-
     return commands.check(predicate)
 
 
@@ -75,100 +73,9 @@ class FirstTimeSetupRun(CustomCheckFailure):
 
 def first_time_setup_has_not_run():
     async def predicate(ctx):
-        if await modules.retrieve._system__runfts(ctx.bot, ctx.guild):
+        if await settings.get_hasrun_runfts(ctx.guild.id):
             raise FirstTimeSetupRun()
         return True
-
-    return commands.check(predicate)
-
-
-class LogChannelNotSet(CustomCheckFailure):
-    def __init__(self):
-        super().__init__("The log channel has not been set.")
-
-
-def log_channel_is_set():
-    async def predicate(ctx):
-        if not await modules.retrieve.system__logchannel(ctx.bot, ctx.guild):
-            raise LogChannelNotSet()
-        return True
-
-    return commands.check(predicate)
-
-
-class AdminRoleNotSet(CustomCheckFailure):
-    def __init__(self):
-        super().__init__("The admin role has not been set.")
-
-
-def admin_role_is_set():
-    async def predicate(ctx):
-        if not await modules.retrieve.system__adminrole(ctx.bot, ctx.guild):
-            raise AdminRoleNotSet()
-        return True
-
-    return commands.check(predicate)
-
-
-class AuthorCanNotConfigure(CustomCheckFailure):
-    def __init__(self):
-        super().__init__(f"You are not able to configure {common.BOT_NAME}.")
-
-
-def author_can_configure():
-    async def predicate(ctx):
-        if not (
-            ctx.author.guild_permissions.administrator
-            or await modules.retrieve.system__adminrole(ctx.bot, ctx.guild) in ctx.author.roles
-        ):
-            raise AuthorCanNotConfigure()
-        return True
-
-    return commands.check(predicate)
-
-
-class AuthorCanNotWarn(CustomCheckFailure):
-    def __init__(self):
-        super().__init__("You are not able to warn other members.")
-
-
-def author_can_warn():
-    async def predicate(ctx):
-        if not (
-            ctx.author.guild_permissions.administrator
-            or await modules.retrieve.warn__warnrole(ctx.bot, ctx.guild) in ctx.author.roles
-        ):
-            raise AuthorCanNotWarn()
-        return True
-
-    return commands.check(predicate)
-
-
-class ModuleIsNotActive(CustomCheckFailure):
-    def __init__(self, module):
-        super().__init__(f"The {module} module is not active.")
-
-
-def module_is_active(module):
-    async def predicate(ctx):
-        if not await getattr(modules.retrieve, f"_{module}__active")(ctx.bot, ctx.guild):
-            raise ModuleIsNotActive(module)
-        return True
-
-    return commands.check(predicate)
-
-
-class ModuleIsActive(CustomCheckFailure):
-    def __init__(self, module):
-        super().__init__(f"The {module} module is already active.")
-
-
-def module_is_not_active(module):
-    async def predicate(ctx):
-        if await getattr(modules.retrieve, f"_{module}__active")(ctx.bot, ctx.guild):
-            raise ModuleIsActive(module)
-        return True
-
     return commands.check(predicate)
 
 
@@ -184,5 +91,4 @@ def guild_is_not_discord_bot_list():
         if ctx.guild.id == 264445053596991498:
             raise GuildIsDiscordBotList()
         return True
-
     return commands.check(predicate)

@@ -1,10 +1,6 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-import re
-
-import discord
 from discord.ext import commands
-from stenobot.utils import Search
 
 
 class User(commands.Converter):
@@ -39,31 +35,3 @@ class Command(commands.Converter):
                     return cmd
         raise commands.BadArgument
 
-
-class SearchedMember(commands.Converter):
-    async def convert(self, ctx, arg):
-        if (
-            member := discord.utils.get(
-                ctx.guild.members,
-                name=str(Search(arg, [m.display_name for m in ctx.guild.members]).best(min_accuracy=0.75)),
-            )
-        ) is None:
-            raise commands.BadArgument
-        return member
-
-
-class BannedUser(commands.Converter):
-    async def convert(self, ctx, arg):
-        if ctx.guild.me.guild_permissions.ban_members:
-            if arg.isdigit():
-                try:
-                    return (await ctx.guild.fetch_ban(discord.Object(id=int(arg)))).user
-                except discord.NotFound:
-                    raise commands.BadArgument
-
-            banned = [e.user for e in await ctx.guild.bans()]
-            if banned:
-                if (user := discord.utils.find(lambda u: str(u) == arg, banned)) is not None:
-                    return user
-                else:
-                    raise commands.BadArgument

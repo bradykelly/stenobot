@@ -2,8 +2,6 @@
 
 import common
 from stenobot.config import Config
-from stenobot import config
-from stenobot.utils.synchronise import Synchronise
 from discord.ext import commands
 
 

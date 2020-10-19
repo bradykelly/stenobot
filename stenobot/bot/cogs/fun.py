@@ -1,13 +1,9 @@
-from stenobot.utils.synchronise import Synchronise
 from aiohttp import request
 from typing import Optional
 from discord import Member, Embed
 from random import randint
-from discord import embeds
-from discord.errors import HTTPException
 from discord.ext.commands import Cog, BucketType
 from discord.ext.commands import command
-from discord.ext.commands import cooldowns
 from discord.ext.commands.cooldowns import Cooldown
 from discord.ext.commands.core import cooldown
 from discord.ext.commands.errors import BadArgument

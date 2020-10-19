@@ -4,7 +4,7 @@ import common
 from asyncio import TimeoutError
 from datetime import timedelta
 from stenobot.utils.emoji import ALTERNATIVES
-from stenobot.utils import emoji, chron
+from stenobot.utils import emoji, time
 
 
 class Selector:
@@ -55,7 +55,7 @@ class Selector:
         try:
             reaction, user = await self.menu.bot.wait_for("reaction_add", timeout=self.timeout, check=self.check)
         except TimeoutError:
-            await self.menu.timeout(chron.long_delta(timedelta(seconds=self.timeout)))
+            await self.menu.timeout(time.long_delta(timedelta(seconds=self.timeout)))
         else:
             r = self._resolve_selection(reaction.emoji)
             if r == "exit" and self.auto_exit:
@@ -145,7 +145,7 @@ class NumericalSelector(Selector):
         try:
             reaction, user = await self.menu.bot.wait_for("reaction_add", timeout=self.timeout, check=self.check)
         except TimeoutError:
-            await self.menu.timeout(chron.long_delta(timedelta(seconds=self.timeout)))
+            await self.menu.timeout(time.long_delta(timedelta(seconds=self.timeout)))
         else:
             r = self._resolve_selection(reaction.emoji)
             if r  == "exit":
@@ -239,7 +239,7 @@ class PageControls(Selector):
         try:
             reaction, user = await self.menu.bot.wait_for("reaction_add", timeout=self.timeout, check=self.check)
         except TimeoutError:
-            await self.menu.timeout(chron.long_delta(timedelta(seconds=self.timeout)))
+            await self.menu.timeout(time.long_delta(timedelta(seconds=self.timeout)))
         else:
             r = self._resolve_selection(reaction.emoji)
             if r == "exit":

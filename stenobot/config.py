@@ -17,12 +17,27 @@
 # Ethan Henderson
 # parafoxia@carberra.xyz
 
+import discord
 from os import getenv
 from typing import Final
-
 from dotenv import load_dotenv
 
 load_dotenv()
+
+MAX_PREFIX_LEN = 5
+
+MAX_MEMBER_ROLES = 3
+MAX_EXCEPTION_ROLES = 3
+MIN_TIMEOUT = 1
+MAX_TIMEOUT = 60
+MAX_GATETEXT_LEN = 250
+MAX_WGTEXT_LEN = 1000
+MAX_WGBOTTEXT_LEN = 500
+
+MIN_POINTS = 5
+MAX_POINTS = 99
+MIN_STRIKES = 1
+MAX_STRIKES = 9
 
 
 class Config:

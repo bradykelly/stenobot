@@ -1,13 +1,14 @@
 
 import discord
 from discord.ext.commands.errors import CommandNotFound
+import common
 from datetime import datetime
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
 
-class ChatNoteCommands(Cog):
+class StenobotBaseCog(Cog):
     '''
-    Base class for all cogs in the bot
+    Base class for application cogs in this bot
     '''
     def __init__(self, bot):
         self.bot = bot
@@ -26,7 +27,7 @@ class ChatNoteCommands(Cog):
         if title is None:
             title = f"Command Output"
         em = discord.Embed(title=title, description="```\n" + message + "\n```", colour=0xBD362F)
-        em.set_footer(text="ChatNote (c) 2020 Erisia")
+        em.set_footer(text="Stenobot (c) 2020 Erisia")
         em.timestamp = datetime.utcnow()
         await ctx.send(embed=em)
 

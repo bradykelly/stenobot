@@ -2,13 +2,13 @@ import common
 import discord
 from discord.ext.commands.errors import CommandNotFound, MissingRequiredArgument
 from discord.ext import commands
-from stenobot.bot.stenobot_cogs import StenobotBaseCog
+from stenobot.bot.stenobot_base import StenobotBaseCog
 from stenobot.utils.stenobot import Stenobot
 
 #TODO Show embeds for exceptions
 BOOKS_COMMANDS = ["list", "open", "del"]
 
-class Books(StenobotBaseCog, name="book"):
+class Books(StenobotBaseCog, name="books"):
     """Commands to manage your Stenobot notebooks"""
 
     def __init__(self, bot):

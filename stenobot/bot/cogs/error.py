@@ -1,17 +1,13 @@
 # From Solaris: https://github.com/parafoxia/Solaris
 
-import datetime as dt
-import json
-import common
-from datetime import datetime
-from os import path
-from traceback import format_exc
 
-import aiofiles
-import aiofiles.os  # This is necessary... :pepegaface:
+import datetime as dt
+import common
 import discord
+from datetime import datetime
+from traceback import format_exc
 from discord.ext import commands
-from stenobot.utils import chron, string
+from stenobot.utils import time, string
 
 
 class Error(commands.Cog):
@@ -24,7 +20,7 @@ class Error(commands.Cog):
             self.bot.ready.up(self)
 
     async def error(self, err, *args, **kwargs):
-        ref = await self.record_error(args[0] if len(args) > 0 else None)
+        ref = await self.log_error(args[0] if len(args) > 0 else None)
         hub = self.bot.get_cog("Hub")
 
         if (sc := getattr(hub, "stdout_channel", None)) is not None:
@@ -93,7 +89,7 @@ class Error(commands.Cog):
             }
             await ctx.send(
                 cooldown_texts[str(exc.cooldown.type)].format(
-                    self.bot.cross, chron.long_delta(dt.timedelta(seconds=exc.retry_after))
+                    self.bot.cross, time.long_delta(dt.timedelta(seconds=exc.retry_after))
                 )
             )
 
@@ -128,7 +124,7 @@ class Error(commands.Cog):
         else:
             raise exc
 
-    async def record_error(self, obj):
+    async def log_error(self, obj):
         obj = getattr(obj, "message", obj)
         if isinstance(obj, discord.Message):
             cause = f"{obj.content}\n{obj!r}"
@@ -141,22 +137,6 @@ class Error(commands.Cog):
             "INSERT INTO errors (Ref, errorTime, Cause, Traceback) VALUES (?, ?, ?, ?)", ref, datetime.now() , cause, tb
         )
         return ref
-
-    @commands.command(name="recallerror", aliases=["err"])
-    @commands.is_owner()
-    @commands.bot_has_permissions(send_messages=True, attach_files=True)
-    async def recallerror_command(self, ctx, ref: str):
-        cause, error_time, traceback = await self.bot.db.record(
-            "SELECT Cause, ErrorTime, Traceback FROM errors WHERE Ref = ?", ref
-        )
-
-        path = f"{self.bot._dynamic}/{ref}.txt"
-        async with aiofiles.open(path, "w", encoding="utf-8") as f:
-            text = f"Time of error:\n{error_time}\n\nCause:\n{cause}\n\n{traceback}"
-            await f.write(text)
-
-        await ctx.send(file=discord.File(path))
-        await aiofiles.os.remove(path)
 
 
 def setup(bot):

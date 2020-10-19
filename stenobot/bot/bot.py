@@ -3,16 +3,15 @@
 import time
 import discord
 import common
-import importlib
 from pathlib import Path
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord.ext import commands
 from stenobot.db import db
 from stenobot import utils
 from stenobot.config import Config
+from stenobot.utils import settings
 from stenobot.utils.emoji import EmojiGetter
 from stenobot.utils.loc import CodeCounter
-from stenobot.utils.presence import PresenceSetter
 from stenobot.utils.ready import Ready
 
 #TODO On startup, ensure HUB_GUILD is written to guild_config
@@ -21,27 +20,23 @@ class Bot(commands.Bot):
 
     def __init__(self, version, intents):
         self.version = version
-        self._cogs = [p.stem for p in Path(".").glob("stenobot/bot/cogs/*.py")]
-        self._dynamic = "./stenobot/data/dynamic"
-        self._static = "./stenobot/data/static"
+        self._cogs = [p.stem for p in Path(".").glob(f"{common.BOT_NAME.lower()}/bot/cogs/*.py")]
+        self._dynamic = f"./{common.BOT_NAME.lower()}/data/dynamic"
+        self._static = f"./{common.BOT_NAME.lower()}/data/static"
         self.scheduler = AsyncIOScheduler()
         self.db = db.Database(self)
+        self.settings = settings.Settings(self)
         self.embed = utils.EmbedConstructor(self)
         self.emoji = EmojiGetter(self)
         self.loc = CodeCounter()
-        self.presence = PresenceSetter(self)
         self.ready = Ready(self)
-
         self.loc.count()
-
         super().__init__(command_prefix=self.command_prefix, case_insensitive=True, status=discord.Status.dnd, intents=intents)
 
     def setup(self):
         print("Running setup...")
 
         for cog in self._cogs:
-            if cog.lower() in ["gateway"]:
-                continue
             try:
                 self.load_extension(f"stenobot.bot.cogs.{cog}")
             except Exception as ex:
@@ -112,8 +107,6 @@ class Bot(commands.Bot):
         else:
             print("Bot reconnected.")
 
-        await self.presence.set()
-
     async def on_error(self, err, *args, **kwargs):
         error = self.get_cog("Error")
         await error.error(err, *args, **kwargs)
@@ -125,6 +118,8 @@ class Bot(commands.Bot):
     async def prefix(self, guild):
         if guild is not None:
             prefix = await self.db.field("SELECT commandPrefix FROM guild_config WHERE GuildID = ?", guild.id)
+            if not prefix:
+                return Config.DEFAULT_PREFIX
             return prefix
 
     async def command_prefix(self, bot, msg):
@@ -161,19 +156,10 @@ class Bot(commands.Bot):
         return len(self.commands)
 
     @property
-    def admin_invite(self):
-        return discord.utils.oauth_url(self.client_id, permissions=discord.Permissions(administrator=True))
-
-    @property
     def non_admin_invite(self):
         return discord.utils.oauth_url(
             self.client_id,
             permissions=discord.Permissions(
-                manage_roles=True,
-                manage_channels=True,
-                kick_members=True,
-                ban_members=True,
-                manage_nicknames=True,
                 read_messages=True,
                 send_messages=True,
                 manage_messages=True,

@@ -2,33 +2,25 @@
 
 import datetime as dt
 from time import strftime
-
 from stenobot.utils import string
-
 
 def sys_time():
     return strftime("%H:%M:%S")
 
-
 def utc_time():
     return dt.datetime.utcnow().strftime("%H:%M:%S")
-
 
 def short_date(dt):
     return dt.strftime("%d/%m/%y")
 
-
 def short_date_and_time(dt):
     return dt.strftime("%d/%m/%y %H:%M:%S")
-
 
 def long_date(dt):
     return dt.strftime("%d %b %Y")
 
-
 def long_date_and_time(dt):
     return dt.strftime("%d %b %Y at %H:%M:%S")
-
 
 def short_delta(td, milliseconds=False):
     parts = []
@@ -51,7 +43,6 @@ def short_delta(td, milliseconds=False):
 
     return ", ".join(parts)
 
-
 def long_delta(td, milliseconds=False):
     parts = []
 
@@ -73,14 +64,12 @@ def long_delta(td, milliseconds=False):
 
     return string.list_of(parts)
 
-
 def from_iso(stamp):
     try:
         return dt.datetime.fromisoformat(stamp)
     except TypeError:
         # In case there's no records:
         return dt.datetime.min
-
 
 def to_iso(obj):
     return obj.isoformat(" ")

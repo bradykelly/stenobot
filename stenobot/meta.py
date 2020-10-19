@@ -11,15 +11,6 @@ import discord
 import psutil
 from discord.ext import commands
 
-from stenobot.utils import (
-    INFO_ICON,
-    LOADING_ICON,
-    SUCCESS_ICON,
-    SUPPORT_GUILD_INVITE_LINK,
-    checks,
-    chron,
-    menu
-)
 
 class DetailedServerInfoMenu(menu.MultiPageMenu):
     def __init__(self, ctx, table):
@@ -38,73 +29,6 @@ class DetailedServerInfoMenu(menu.MultiPageMenu):
         super().__init__(ctx, pagemaps, timeout=common.MENU_TIMEOUT2)
 
 
-class LeavingMenu(menu.SelectionMenu):
-    def __init__(self, ctx):
-        pagemap = {
-            "header": "Leave Wizard",
-            "title": "Leaving already?",
-            "description": (
-                f"If you remove {common.BOT_NAME} from your server, all server information {common.BOT_NAME} has stored, as well as any roles and channels {common.BOT_NAME} has created, will be deleted."
-                f"If you are having issues with {common.BOT_NAME}, consider joining the support server to try and find a resolution - select {ctx.bot.info} to get an invite link.\n\n"
-                f"Are you sure you want to remove {common.BOT_NAME} from your server?"
-            ),
-            "thumbnail": ctx.bot.user.avatar_url,
-        }
-        super().__init__(ctx, ["confirm", "cancel", "info"], pagemap, timeout=common.MENU_TIMEOUT2)
-
-    async def start(self):
-        r = await super().start()
-
-        if r == "confirm":
-            pagemap = {
-                "header": "Leave Wizard",
-                "description": "Please wait... This should only take a few seconds.",
-                "thumbnail": LOADING_ICON,
-            }
-            await self.switch(pagemap, clear_reactions=True)
-            await self.leave()
-        elif r == "cancel":
-            await self.stop()
-        elif r == "info":
-            pagemap = {
-                "header": "Leave Wizard",
-                "title": "Let's get to the bottom of this!",
-                "description": f"Click [here]({SUPPORT_GUILD_INVITE_LINK}) to join the support server.",
-                "thumbnail": INFO_ICON,
-            }
-            await self.switch(pagemap, clear_reactions=True)
-
-    async def leave(self):
-        dlc_id, dar_id = (
-            await self.bot.db.record(
-                "SELECT DefaultLogChannelID, DefaultAdminRoleID FROM system WHERE GuildID = ?", self.ctx.guild.id
-            )
-            or [None] * 2
-        )
-
-        await deactivate.everything(self.ctx)
-
-        if self.ctx.guild.me.guild_permissions.manage_roles and (dar := self.ctx.guild.get_role(dar_id)) is not None:
-            await dar.delete(reason=f"{common.BOT_NAME} is leaving the server.")
-
-        if (
-            self.ctx.guild.me.guild_permissions.manage_channels
-            and (dlc := self.ctx.guild.get_channel(dlc_id)) is not None
-        ):
-            await dlc.delete(reason=f"{common.BOT_NAME} is leaving the server.")
-
-        pagemap = {
-            "header": "Leave Wizard",
-            "title": "Sorry to see you go!",
-            "description": (
-                f"If you ever wish to reinvite {common.BOT_NAME}, you can do so by clicking [here]({self.bot.admin_invite}) (recommended permissions), or [here]({self.bot.non_admin_invite}) (minimum required permissions).\n\n"
-                f"The {common.BOT_NAME} team wish you and your server all the best."
-            ),
-        }
-        await self.switch(pagemap)
-        await self.ctx.guild.leave()
-
-
 class Meta(commands.Cog):
     """Commands for retrieving information regarding this bot, from invitation links to detailed bot statistics."""
 
@@ -115,20 +39,8 @@ class Meta(commands.Cog):
     async def on_ready(self):
         if not self.bot.ready.booted:
             self.developer = (await self.bot.application_info()).owner
-            # self.artist = await self.bot.grab_user(167803836839231488)
-            # self.testers = [
-            #     (await self.bot.grab_user(id_))
-            #     for id_ in (
-            #         116520426401693704,
-            #         300346872109989898,
-            #         135372594953060352,
-            #         287969892689379331,
-            #         254245982395564032,
-            #     )
-            # ]
             self.support_guild = self.bot.get_guild(765626249556262934) # Stenobot
             self.helper_role = self.support_guild.get_role(765635385316737084) # @helper
-
             self.bot.ready.up(self)
 
     @commands.command(
@@ -189,18 +101,12 @@ class Meta(commands.Cog):
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
                     (
-                        "Primary link",
-                        f"To invite {common.BOT_NAME} with administrator privileges, click [here]({self.bot.admin_invite}).",
-                        False,
-                    ),
-                    (
                         "Secondary",
                         f"To invite {common.BOT_NAME} without administrator privileges, click [here]({self.bot.non_admin_invite}) (you may need to grant {common.BOT_NAME} some extra permissions in order to use some modules).",
                         False,
                     ),
                     ("Servers", f"{self.bot.guild_count:,}", True),
-                    ("Users", f"{self.bot.user_count:,}", True),
-                    ("Get started", "`>>setup`", True),
+                    ("Users", f"{self.bot.user_count:,}", True)
                 ),
             )
         )
@@ -308,10 +214,10 @@ class Meta(commands.Cog):
                         ("Bot version", f"{self.bot.version}", True),
                         ("Python version", f"{python_version()}", True),
                         ("discord.py version", f"{discord.__version__}", True),
-                        ("Uptime", chron.short_delta(dt.timedelta(seconds=uptime)), True),
+                        ("Uptime", time.short_delta(dt.timedelta(seconds=uptime)), True),
                         (
                             "CPU time",
-                            chron.short_delta(
+                            time.short_delta(
                                 dt.timedelta(seconds=cpu_times.system + cpu_times.user), milliseconds=True
                             ),
                             True,
