@@ -15,7 +15,7 @@ from stenobot.utils import (
     SUCCESS_ICON,
     SUPPORT_GUILD_INVITE_LINK,
     checks,
-    time,
+    chron,
     menu
 )
 
@@ -34,73 +34,6 @@ class DetailedServerInfoMenu(menu.MultiPageMenu):
             pagemaps.append(pm)
 
         super().__init__(ctx, pagemaps, timeout=common.MENU_TIMEOUT2)
-
-
-class LeavingMenu(menu.SelectionMenu):
-    def __init__(self, ctx):
-        pagemap = {
-            "header": "Leave Wizard",
-            "title": "Leaving already?",
-            "description": (
-                f"If you remove {common.BOT_NAME} from your server, all server information {common.BOT_NAME} has stored, as well as any roles and channels {common.BOT_NAME} has created, will be deleted."
-                f"If you are having issues with {common.BOT_NAME}, consider joining the support server to try and find a resolution - select {ctx.bot.info} to get an invite link.\n\n"
-                f"Are you sure you want to remove {common.BOT_NAME} from your server?"
-            ),
-            "thumbnail": ctx.bot.user.avatar_url,
-        }
-        super().__init__(ctx, ["confirm", "cancel", "info"], pagemap, timeout=common.MENU_TIMEOUT2)
-
-    async def start(self):
-        r = await super().start()
-
-        if r == "confirm":
-            pagemap = {
-                "header": "Leave Wizard",
-                "description": "Please wait... This should only take a few seconds.",
-                "thumbnail": LOADING_ICON,
-            }
-            await self.switch(pagemap, clear_reactions=True)
-            await self.leave()
-        elif r == "cancel":
-            await self.stop()
-        elif r == "info":
-            pagemap = {
-                "header": "Leave Wizard",
-                "title": "Let's get to the bottom of this!",
-                "description": f"Click [here]({SUPPORT_GUILD_INVITE_LINK}) to join the support server.",
-                "thumbnail": INFO_ICON,
-            }
-            await self.switch(pagemap, clear_reactions=True)
-
-    async def leave(self):
-        dlc_id, dar_id = (
-            await self.bot.db.record(
-                "SELECT DefaultLogChannelID, DefaultAdminRoleID FROM system WHERE GuildID = ?", self.ctx.guild.id
-            )
-            or [None] * 2
-        )
-
-        await deactivate.everything(self.ctx)
-
-        if self.ctx.guild.me.guild_permissions.manage_roles and (dar := self.ctx.guild.get_role(dar_id)) is not None:
-            await dar.delete(reason=f"{common.BOT_NAME} is leaving the server.")
-
-        if (
-            self.ctx.guild.me.guild_permissions.manage_channels
-            and (dlc := self.ctx.guild.get_channel(dlc_id)) is not None
-        ):
-            await dlc.delete(reason=f"{common.BOT_NAME} is leaving the server.")
-
-        pagemap = {
-            "header": "Leave Wizard",
-            "title": "Sorry to see you go!",
-            "description": (
-                f"If you ever wish to reinvite {common.BOT_NAME}, you can do so by clicking [here]({self.bot.admin_invite}) (recommended permissions), or [here]({self.bot.non_admin_invite}) (minimum required permissions).\n\n"
-                f"The {common.BOT_NAME} team wish you and your server all the best."
-            ),
-        }
-        await self.switch(pagemap)
-        await self.ctx.guild.leave()
 
 
 class Meta(commands.Cog):
@@ -127,7 +60,7 @@ class Meta(commands.Cog):
     async def prefix_command(self, ctx):
         prefix = await self.bot.prefix(ctx.guild)
         await ctx.send(
-            f"{self.bot.info} Solaris' prefix in this server is {prefix}. To change it, use `{prefix}config system prefix <new prefix>`."
+            f"{self.bot.info} The {common.BOT_NAME} prefix in this server is {prefix}. To change it, use `{prefix}prefix <new prefix>`."
         )
 
     @commands.command(
@@ -144,11 +77,7 @@ class Meta(commands.Cog):
                 title=f"About {common.BOT_NAME}",
                 description=f"Use `{prefix}botinfo` for detailed statistics.",
                 thumbnail=self.bot.user.avatar_url,
-                fields=(
-                    ("Developer", self.developer.mention, False)
-                    # ("Avatar Designer", self.artist.mention, False),
-                    # ("Testers", string.list_of([t.mention for t in self.testers]), False),
-                ),
+                fields=[("Developer", self.developer.mention, False)]
             )
         )
 
@@ -188,7 +117,7 @@ class Meta(commands.Cog):
                 thumbnail=self.bot.user.avatar_url,
                 fields=(
                     (
-                        "Secondary",
+                        "Invite",
                         f"To invite {common.BOT_NAME} without administrator privileges, click [here]({self.bot.non_admin_invite}) (you may need to grant {common.BOT_NAME} some extra permissions in order to use some modules).",
                         False,
                     ),
@@ -198,7 +127,10 @@ class Meta(commands.Cog):
             )
         )
 
-    @commands.command(name="source", aliases=["src"], help=f"Provides a link to {common.BOT_NAME} source code.")
+    @commands.command(
+        name="source", 
+        aliases=["src"], 
+        help=f"Provides a link to {common.BOT_NAME} source code.")
     async def source_command(self, ctx):
         await ctx.send(
             embed=self.bot.embed.build(
@@ -301,10 +233,10 @@ class Meta(commands.Cog):
                         ("Bot version", f"{self.bot.version}", True),
                         ("Python version", f"{python_version()}", True),
                         ("discord.py version", f"{discord.__version__}", True),
-                        ("Uptime", time.short_delta(dt.timedelta(seconds=uptime)), True),
+                        ("Uptime", chron.short_delta(dt.timedelta(seconds=uptime)), True),
                         (
                             "CPU time",
-                            time.short_delta(
+                            chron.short_delta(
                                 dt.timedelta(seconds=cpu_times.system + cpu_times.user), milliseconds=True
                             ),
                             True,

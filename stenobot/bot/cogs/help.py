@@ -6,7 +6,7 @@ import common
 from collections import defaultdict
 from discord.ext import commands
 from discord.ext.commands.cog import Cog
-from stenobot.utils import time, converters, menu, string
+from stenobot.utils import chron, converters, menu, string
 
 
 class HelpMenu(menu.MultiPageMenu):
@@ -90,7 +90,7 @@ class Help(commands.Cog):
                         ),
                         (
                             "On cooldown?",
-                            f"Yes, for {time.long_delta(dt.timedelta(seconds=s))}."
+                            f"Yes, for {chron.long_delta(dt.timedelta(seconds=s))}."
                             if (s := cmd.get_cooldown_retry_after(ctx))
                             else "No",
                             False,

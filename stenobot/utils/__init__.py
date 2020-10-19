@@ -20,7 +20,7 @@ INFO_ICON = "https://cdn.discordapp.com/attachments/710177462989881415/711348122
 LOADING_ICON = "https://cdn.discordapp.com/attachments/710177462989881415/742505284408443010/loading500.gif"
 ROOT_DIR = Path(__file__).parent.parent.parent
 SUCCESS_ICON = "https://cdn.discordapp.com/attachments/710177462989881415/738066048640876544/confirm.png"
-SUPPORT_GUILD_INVITE_LINK = "https://discord.gg/Ck4MMy"
+SUPPORT_GUILD_INVITE_LINK = "https://discord.gg/ZZA3Sw"
 
 # Dependant on constants above.
 from .embed import EmbedConstructor

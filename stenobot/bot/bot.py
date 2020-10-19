@@ -25,7 +25,7 @@ class Bot(commands.Bot):
         self._static = f"./{common.BOT_NAME.lower()}/data/static"
         self.scheduler = AsyncIOScheduler()
         self.db = db.Database(self)
-        self.settings = settings.Settings(self)
+        #self.settings = settings.Settings(self)
         self.embed = utils.EmbedConstructor(self)
         self.emoji = EmojiGetter(self)
         self.loc = CodeCounter()

@@ -7,7 +7,7 @@ import discord
 from datetime import datetime
 from traceback import format_exc
 from discord.ext import commands
-from stenobot.utils import time, string
+from stenobot.utils import chron, string
 
 
 class Error(commands.Cog):
@@ -89,7 +89,7 @@ class Error(commands.Cog):
             }
             await ctx.send(
                 cooldown_texts[str(exc.cooldown.type)].format(
-                    self.bot.cross, time.long_delta(dt.timedelta(seconds=exc.retry_after))
+                    self.bot.cross, chron.long_delta(dt.timedelta(seconds=exc.retry_after))
                 )
             )
 

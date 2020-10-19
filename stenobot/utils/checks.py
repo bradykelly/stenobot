@@ -51,34 +51,6 @@ def bot_is_ready():
     return commands.check(predicate)
 
 
-class FirstTimeSetupNotRun(CustomCheckFailure):
-    def __init__(self, prefix=">>", /):
-        super().__init__(
-            f"The first time setup needs to be run before you can do that. Use `{prefix}setup` to do this."
-        )
-
-
-def first_time_setup_has_run():
-    async def predicate(ctx):
-        if not await settings.get_hasrun_runfts(ctx.guild.id):
-            raise FirstTimeSetupNotRun(await ctx.bot.prefix(ctx.guild))
-        return True
-    return commands.check(predicate)
-
-
-class FirstTimeSetupRun(CustomCheckFailure):
-    def __init__(self):
-        super().__init__("The first time setup has already been run.")
-
-
-def first_time_setup_has_not_run():
-    async def predicate(ctx):
-        if await settings.get_hasrun_runfts(ctx.guild.id):
-            raise FirstTimeSetupRun()
-        return True
-    return commands.check(predicate)
-
-
 class GuildIsDiscordBotList(CustomCheckFailure):
     def __init__(self):
         super().__init__(
