@@ -26,7 +26,7 @@ class Books(StenobotBaseCog, name="books"):
         title="Commands to help you manage your Stenobot notebooks",
         help="List or delete notebooks.",
         brief="Manage your notebooks",
-        usage= f"[list | del]"
+        usage= f"[list|open|del]"
     )
     async def books(self, ctx):
         if ctx.invoked_subcommand is None or (ctx.invoked_subcommand is not None and ctx.invoked_subcommand.name not in BOOKS_COMMANDS):

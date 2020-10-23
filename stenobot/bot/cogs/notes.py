@@ -25,27 +25,20 @@ class Notes(StenobotBaseCog, name="note"):
         title="Commands to help you manage your Stenobot notes",
         help=f"Add, list or delete notes",
         brief="Use your notebook",
-        usage= f"add <note-text> \nnote list \nnote del <note-number>]"
+        usage= f"[add <note-text>][list][del <note-number>]"
     )
     async def note(self, ctx):
-        '''
-        The root command for the Note command group i.e. 'note'
-        '''
         if ctx.invoked_subcommand is None or (ctx.invoked_subcommand is not None and ctx.invoked_subcommand.name not in NOTE_COMMANDS):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
 
     @note.error
     async def note_handler(self, ctx, error):
-        '''
-        Error handler for all commands in the 'note' group
-        '''
         if isinstance(error, CommandNotFound):
             await self.show_message_codeblock(ctx, self.format_usage(ctx), "Usage")
 
-    # 'add' command
     @note.command(
         name="add",
-        help="Add <text-to-add> to your current notebook",
+        help="Add <text> to your current notebook",
         brief="Add a note",
         description="<text-to-add>"
     )

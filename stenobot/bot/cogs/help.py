@@ -83,18 +83,6 @@ class Help(commands.Cog):
                     fields=(
                         ("Syntax (<required> • [optional])", self.full_syntax(ctx, cmd, prefix), False),
                         ("Command Prefix:", prefix, False),
-                        (
-                            "Parent",
-                            self.full_syntax(ctx, p, prefix) if (p := cmd.parent) is not None else "None",
-                            False,
-                        ),
-                        (
-                            "On cooldown?",
-                            f"Yes, for {chron.long_delta(dt.timedelta(seconds=s))}."
-                            if (s := cmd.get_cooldown_retry_after(ctx))
-                            else "No",
-                            False,
-                        ),
                     ),
                 )
             )

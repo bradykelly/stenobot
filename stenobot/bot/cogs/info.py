@@ -36,7 +36,7 @@ class DetailedServerInfoMenu(menu.MultiPageMenu):
         super().__init__(ctx, pagemaps, timeout=common.MENU_TIMEOUT2)
 
 
-class Meta(commands.Cog):
+class Info(commands.Cog):
     """Commands for retrieving information regarding this bot, from invitation links to detailed bot statistics."""
 
     def __init__(self, bot):
@@ -140,7 +140,7 @@ class Meta(commands.Cog):
                 fields=(
                     (
                         "Available under the GPLv3 license",
-                        "Click [here](https://github.com/parafoxia/Solaris) to view.",
+                        "Click [here](https://github.com/bradykelly/stenobot) to view.",
                         False,
                     ),
                 ),
@@ -163,12 +163,12 @@ class Meta(commands.Cog):
                     (
                         # TODO Fix all urls
                         "View all known bugs",
-                        "Click [here](https://github.com/parafoxia/Solaris/issues?q=is%3Aissue+is%3Aopen+label%3Abug).",
+                        "Click [here](https://github.com/bradykelly/stenobot/issues?q=is%3Aopen+is%3Aissue+label%3Abug).",
                         False,
                     ),
                     (
                         "View all planned features",
-                        "Click [here](https://github.com/parafoxia/Solaris/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement).",
+                        "Click [here](https://github.com/bradykelly/stenobot/issues?q=is%3Aopen+is%3Aissue+label%3Aenhancement).",
                         False,
                     ),
                 ),
@@ -182,9 +182,9 @@ class Meta(commands.Cog):
     )
     async def changelog_command(self, ctx, version: t.Optional[str]):
         url = (
-            "https://github.com/parafoxia/Solaris/releases"
+            "https://github.com/bradykelly/stenobot/releases"
             if not version
-            else f"https://github.com/parafoxia/Solaris/releases/tag/v{version}"
+            else f"https://github.com/bradykelly/stenobot/releases/tag/v{version}"
         )
         version_info = f"version {version}" if version else "all versions"
         await ctx.send(
@@ -272,4 +272,4 @@ class Meta(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Meta(bot))
+    bot.add_cog(Info(bot))
