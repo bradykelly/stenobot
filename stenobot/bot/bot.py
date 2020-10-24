@@ -115,17 +115,12 @@ class Bot(commands.Bot):
         error = self.get_cog("Error")
         await error.command_error(ctx, exc)
 
-    async def prefix(self, guild, prefix=None):
-        dbFix = await self.db.field("SELECT commandPrefix FROM guild_config WHERE GuildId = ?", guild.id)
-        if prefix is None:                     
-            if not dbFix:
+    async def prefix(self, guild):
+        if guild is not None:
+            prefix = await self.db.field("SELECT commandPrefix FROM guild_config WHERE GuildID = ?", guild.id)
+            if not prefix:
                 return Config.DEFAULT_PREFIX
-            return dbFix
-        else:
-            if not dbFix:
-                if len(prefix) = 0 or len(prefix) > 5:
-                    ctx.senf("The command prefix must be between 1 and 5 characters long")
-                await self.db.execute("UPDATE guild_config SET commandPrefix = ? WHERE GuildId = ?", prefix, guild.id)
+            return prefix
 
     async def command_prefix(self, bot, msg):
         prefix = await self.prefix(msg.guild)
